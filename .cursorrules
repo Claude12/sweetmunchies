@@ -1,0 +1,259 @@
+# .cursorrules — WordPress ACF Theme Development
+
+## Design Source of Truth
+- Reference the design artifact at https://claude.ai/code/artifact/1c02bcb5-f44b-4b70-8d6d-687c17e185c6?org=41ad3a15-ecd2-4a86-b036-ce0d96dba095 for all visual/structural decisions
+- Extracted design folder here - @wp-content/themes/design
+- Compare rendered blocks against the design for spacing, colour, typography, responsive behaviour
+- Flag any design ambiguities before building (don't guess)
+
+---
+
+## ACF Block Architecture
+
+- All blocks are flexible content blocks
+
+---
+
+## PHP Standards & Security
+
+### File Headers
+Every PHP file must start with:
+```php
+<?php
+declare(strict_types=1);
+
+/**
+ * Block: [Block Name]
+ * Description of what this block does
+ */
+```
+
+### Inside Block Templates
+- ONLY use `get_sub_field()` inside flexible content loops — NEVER `get_field()`
+- Always escape output:
+  - Text/HTML: `esc_html()` or `wp_kses_post()`
+  - URLs: `esc_url()`
+  - Attributes: `esc_attr()`
+  - Data attributes: `wp_json_encode()` then `esc_attr()`
+- Example:
+```php
+  <?php
+  $heading = get_sub_field('heading');
+  $image = get_sub_field('background_image');
+  ?>
+  <section class="block block--hero">
+    <h1 class="block__heading"><?php echo esc_html($heading); ?></h1>
+    <img 
+      src="<?php echo esc_url($image['url']); ?>" 
+      alt="<?php echo esc_attr($image['alt']); ?>"
+      class="block__image"
+    />
+  </section>
+```
+
+### Forbidden Actions — STOP & ASK
+- Do NOT modify `wp-config.php`, `.htaccess` without explicit approval
+- Do NOT create custom post types, taxonomies, or metaboxes
+- Do NOT install new plugins
+- Do NOT modify git remote URLs or commit version numbers automatically
+- Do NOT add inline styles (use CSS classes only)
+- Do NOT use `eval()`, `extract()`, or variable variables
+
+---
+
+## JavaScript Standards
+
+### File Structure
+- Block-specific JS: `assets/js/blocks/[block-name].js`
+- Shared utilities: `assets/js/lib/[utility-name].js`
+- Main entry point: `assets/js/main.js` (imports and initializes all blocks)
+- Enqueue block JS via ACF `enqueue_assets` callback (same as CSS)
+
+### Vanilla JS Only
+- NO jQuery, NO frameworks, NO build tools beyond SCSS
+- Use native DOM APIs: `querySelector`, `addEventListener`, `classList`
+- ES6+ syntax OK (const, let, arrow functions, destructuring)
+- Avoid polyfills for modern browsers
+
+---
+
+## SCSS/CSS Standards
+
+### Structure
+- Design tokens in `_variables.scss`
+- Colours in `_colors.scss` (reference these ONLY)
+- Block styles in `assets/scss/components/`
+
+### BEM Naming
+- Block: `.block`, `.block--[name]` (e.g., `.block--hero-section`)
+- Element: `.block__[element]` (e.g., `.block__heading`, `.block__image`)
+- Modifier: `.block--[modifier]` (e.g., `.block--hero-section--dark`)
+- NO utility classes, NO nested selectors deeper than 2 levels
+- Example:
+```scss
+  .block--hero-section {
+    padding: var(--spacing-lg);
+    background-color: var(--color-primary);
+
+    &__heading {
+      font-size: var(--font-size-xl);
+      color: var(--color-text-light);
+    }
+
+    &__image {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+```
+
+### Responsive Breakpoints
+- Use SCSS variables only: `@media (max-width: var(--breakpoint-tablet))`
+- Breakpoints defined in `_variables.scss`:
+  - `--breakpoint-mobile`: 576px
+  - `--breakpoint-tablet`: 768px
+  - `--breakpoint-desktop`: 1024px
+  - `--breakpoint-wide`: 1440px
+- Mobile-first: base styles are mobile, add `@media` for larger screens
+- Never hardcode pixel values for spacing/font-size — use CSS variables
+
+---
+
+## Block Development Workflow
+
+### Before Building
+- Look at design artifact and desing folder (assets are also there) for the component
+
+### Template Build Steps
+1. Write ACF fields
+2. Create block template
+3. Create SCSS file
+4. Add SCSS import to style.scss
+5. Register enqueue callback for block-specific assets
+6. Test in WordPress admin - https://localhost/sweetmunchies_wordpresscms/ (create page - if not existing, add the block, fill fields)
+7. Verify on mobile, tablet, desktop breakpoints
+8. Compare rendered output to design artifact
+
+### Field Group Registration Checklist
+- [ ] Block name in kebab-case
+- [ ] ACF field group created with correct location rule
+- [ ] All fields have clear labels and help text
+- [ ] Field names match design intent (e.g., if design shows "CTA Button", field is `cta_link`)
+- [ ] Required fields marked appropriately
+- [ ] Repeater fields have min/max counts (if applicable)
+- [ ] Flexible content layout slug matches block name
+
+### Template Checklist
+- [ ] get_sub_field() used ONLY (never get_field())
+- [ ] All text output escaped (esc_html, esc_url, etc.)
+- [ ] CSS classes follow BEM strictly
+- [ ] No inline styles
+- [ ] No hardcoded colours/spacing (use CSS variables)
+- [ ] Responsive attributes set (e.g., width, height, srcset)
+- [ ] Images have alt text (pulled from ACF image field)
+- [ ] No console errors when rendered
+
+### SCSS Checklist
+- [ ] Uses only colours from _colors.scss
+- [ ] Uses only spacing from _variables.scss
+- [ ] Responsive breakpoints use @media (max-width: var(--breakpoint-X))
+- [ ] Mobile-first approach (base styles first, media queries for larger screens)
+- [ ] BEM naming followed strictly
+- [ ] Max nesting depth: 2 levels
+- [ ] All selectors namespaced under .block--[name]
+
+---
+
+## Common Mistakes — PREVENTION MODE
+
+### Mistake: Using get_field() inside flexible content loop
+**WRONG:**
+```php
+<?php
+while (have_rows('page_content')) : the_row();
+  $heading = get_field('heading'); // ❌ WRONG
+endwhile;
+?>
+```
+**RIGHT:**
+```php
+<?php
+while (have_rows('page_content')) : the_row();
+  $heading = get_sub_field('heading'); // ✅ CORRECT
+endwhile;
+?>
+```
+
+### Mistake: Hardcoding colours or spacing
+**WRONG:**
+```scss
+.block--hero {
+  padding: 32px 16px; // ❌ Hardcoded
+  background-color: #0066cc; // ❌ Hardcoded
+}
+```
+**RIGHT:**
+```scss
+.block--hero {
+  padding: var(--spacing-lg) var(--spacing-sm);
+  background-color: var(--color-primary);
+}
+```
+
+### Mistake: Forgetting to escape output
+**WRONG:**
+```php
+<h1><?php echo $heading; ?></h1> <!-- ❌ XSS vulnerability -->
+```
+**RIGHT:**
+```php
+<h1><?php echo esc_html($heading); ?></h1>
+```
+
+### Mistake: Deep nesting in SCSS
+**WRONG:**
+```scss
+.block--hero {
+  .container {
+    .row {
+      .col {
+        padding: 1rem; // ❌ 4 levels deep
+      }
+    }
+  }
+}
+```
+**RIGHT:**
+```scss
+.block--hero {
+  padding: var(--spacing-md);
+
+  &__content {
+    padding: var(--spacing-md); // ✅ Max 2 levels
+  }
+}
+```
+
+---
+
+## Git Commits
+
+- One block per commit
+- Commit message format: `feat(blocks): Add [block-name] block with ACF fields`
+- Include both PHP and SCSS changes in same commit
+- Never auto-bump version numbers
+- Never push I will do it myself
+
+---
+
+## Success Criteria
+
+A block is "done" when:
+- ✅ ACF field group is registered and editable
+- ✅ Block template renders without errors
+- ✅ Output matches design artifact (spacing, colours, typography)
+- ✅ Responsive on mobile (576px), tablet (768px), desktop (1024px+)
+- ✅ All text escaped, no inline styles, no console errors
+- ✅ Reference block pattern followed (ACF registration, template structure, SCSS organization)
+- ✅ Code reviewed by human (you)
+- ✅ Committed with clear message

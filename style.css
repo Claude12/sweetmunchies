@@ -1,0 +1,28 @@
+/*!
+Theme Name: Sweet Munchies
+Theme URI: https://sweetmunchies.com
+Author: Sweet Munchies
+Description: Custom WordPress theme for Sweet Munchies, built on ACF Pro flexible content and WooCommerce.
+Version: 1.0.0
+Requires at least: 6.4
+Tested up to: 6.5
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: sweetmunchies
+Tags: custom-menu, featured-images, translation-ready, woocommerce
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned.
+
+sweetmunchies is based on Underscores https://underscores.me/, (C) 2012-2020 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+*/
+
+/*
+This file exists only so WordPress can read the theme metadata above — it is
+never enqueued. All real styles are authored in assets/scss/ and compiled to
+dist/css/style.css (see functions.php: sweetmunchies_scripts()). Run
+`cd assets && npm install && gulp build` (or `gulp watch` while developing) to
+generate it. See README.md for the full build/setup walkthrough.
+*/

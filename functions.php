@@ -1,0 +1,271 @@
+<?php
+/**
+ * sweetmunchies functions and definitions
+ *
+ * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ *
+ * @package sweetmunchies
+ */
+
+if (!defined('_S_VERSION')) {
+	// Replace the version number of the theme on each release.
+	define('_S_VERSION', '1.0.0');
+}
+
+/**
+ * Sets up theme defaults and registers support for various WordPress features.
+ *
+ * Note that this function is hooked into the after_setup_theme hook, which
+ * runs before the init hook. The init hook is too late for some features, such
+ * as indicating support for post thumbnails.
+ */
+function sweetmunchies_setup()
+{
+	/*
+	 * Make theme available for translation.
+	 * Translations can be filed in the /languages/ directory.
+	 * If you're building a theme based on sweetmunchies, use a find and replace
+	 * to change 'sweetmunchies' to the name of your theme in all the template files.
+	 */
+	load_theme_textdomain('sweetmunchies', get_template_directory() . '/languages');
+
+	// Add default posts and comments RSS feed links to head.
+	add_theme_support('automatic-feed-links');
+
+	/*
+	 * Let WordPress manage the document title.
+	 * By adding theme support, we declare that this theme does not use a
+	 * hard-coded <title> tag in the document head, and expect WordPress to
+	 * provide it for us.
+	 */
+	add_theme_support('title-tag');
+
+	/*
+	 * Enable support for Post Thumbnails on posts and pages.
+	 *
+	 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
+	 */
+	add_theme_support('post-thumbnails');
+
+	// This theme uses wp_nav_menu() in one location.
+	register_nav_menus(
+		array(
+			'menu-1' => esc_html__('Primary', 'sweetmunchies'),
+			'menu-2' => esc_html__('Footer', 'sweetmunchies'),
+		)
+	);
+
+	/*
+	 * Switch default core markup for search form, comment form, and comments
+	 * to output valid HTML5.
+	 */
+	add_theme_support(
+		'html5',
+		array(
+			'search-form',
+			'comment-form',
+			'comment-list',
+			'gallery',
+			'caption',
+			'style',
+			'script',
+		)
+	);
+
+	// Add theme support for selective refresh for widgets.
+	add_theme_support('customize-selective-refresh-widgets');
+
+	/**
+	 * WooCommerce.
+	 *
+	 * @link https://github.com/woocommerce/woocommerce/wiki/Declaring-WooCommerce-support-in-themes
+	 */
+	add_theme_support('woocommerce');
+	add_theme_support('wc-product-gallery-zoom');
+	add_theme_support('wc-product-gallery-lightbox');
+	add_theme_support('wc-product-gallery-slider');
+}
+add_action('after_setup_theme', 'sweetmunchies_setup');
+
+/**
+ * Set the content width in pixels, based on the theme's design and stylesheet.
+ *
+ * Priority 0 to make it available to lower priority callbacks.
+ *
+ * @global int $content_width
+ */
+function sweetmunchies_content_width()
+{
+	$GLOBALS['content_width'] = apply_filters('sweetmunchies_content_width', 640);
+}
+add_action('after_setup_theme', 'sweetmunchies_content_width', 0);
+
+/**
+ * Register widget area.
+ *
+ * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
+ */
+function sweetmunchies_widgets_init()
+{
+	register_sidebar(
+		array(
+			'name' => esc_html__('Sidebar', 'sweetmunchies'),
+			'id' => 'sidebar-1',
+			'description' => esc_html__('Add widgets here.', 'sweetmunchies'),
+			'before_widget' => '<section id="%1$s" class="widget %2$s">',
+			'after_widget' => '</section>',
+			'before_title' => '<h2 class="widget-title">',
+			'after_title' => '</h2>',
+		)
+	);
+}
+add_action('widgets_init', 'sweetmunchies_widgets_init');
+
+/**
+ * Enqueue scripts and styles.
+ */
+function sweetmunchies_scripts()
+{
+	$css_version = filemtime(get_template_directory() . '/dist/css/style.css');
+	$js_version  = filemtime(get_template_directory() . '/dist/js/main.js');
+
+	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array(), $css_version);
+
+	// jQuery is bundled via webpack externals — WP's own copy is used as the global.
+	wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/main.js', array('jquery'), $js_version, true);
+
+	// Splide: only load on pages that opt-in — uncomment when a carousel block is built.
+	// if (sweetmunchies_needs_splide()) {
+	// 	wp_enqueue_style('splide-css', get_template_directory_uri() . '/dist/vendor/splide.min.css', array(), null);
+	// 	wp_enqueue_style('splide-default-theme', get_template_directory_uri() . '/dist/vendor/splide-default.min.css', array('splide-css'), null);
+	// 	wp_enqueue_script('splide-js', get_template_directory_uri() . '/dist/vendor/splide.min.js', array(), null, true);
+	// }
+}
+add_action('wp_enqueue_scripts', 'sweetmunchies_scripts');
+
+/**
+ * Splide opt-in system.
+ *
+ * Block templates run AFTER wp_head() fires wp_enqueue_scripts, so they
+ * cannot call an enqueue function directly. Instead, detection runs on the
+ * 'wp' action (before wp_head) by scanning the page's ACF layouts.
+ *
+ * To add Splide support to a new block, add its acf_fc_layout key to the
+ * $splide_layouts array below.
+ */
+add_action('wp', function () {
+	// Add any acf_fc_layout key whose block template initialises Splide.
+	$splide_layouts = [];
+
+	// Skip the DB query entirely until at least one layout is registered.
+	if (empty($splide_layouts) || !is_singular() || !function_exists('get_field')) return;
+
+	$sections = get_field('content_sections');
+	if (!$sections || !is_array($sections)) return;
+
+	foreach ($sections as $section) {
+		if (in_array($section['acf_fc_layout'], $splide_layouts, true)) {
+			$GLOBALS['sweetmunchies_needs_splide'] = true;
+			return;
+		}
+	}
+});
+
+function sweetmunchies_needs_splide(): bool
+{
+	return !empty($GLOBALS['sweetmunchies_needs_splide']);
+}
+
+/**
+ * Custom template tags for this theme.
+ */
+require get_template_directory() . '/inc/template-tags.php';
+
+/**
+ * Functions which enhance the theme by hooking into WordPress.
+ */
+require get_template_directory() . '/inc/template-functions.php';
+
+/**
+ * ACF setup: options pages, flexible-content helpers, admin dependency notice.
+ */
+require get_template_directory() . '/inc/acf.php';
+
+/**
+ * WooCommerce integration.
+ */
+if (class_exists('WooCommerce')) {
+	require get_template_directory() . '/inc/woocommerce.php';
+}
+
+/**
+ * Load Jetpack compatibility file.
+ */
+if (defined('JETPACK__VERSION')) {
+	require get_template_directory() . '/inc/jetpack.php';
+}
+
+/**
+ * Remove the default content editor from pages and posts — all content is
+ * managed via ACF flexible content blocks.
+ */
+add_action( 'init', function () {
+	remove_post_type_support( 'page', 'editor' );
+	remove_post_type_support( 'post', 'editor' );
+} );
+
+/**
+ * Performance: disable WordPress emoji scripts/styles — unused on this site
+ * and they add a DNS prefetch hint + inline JS to every page.
+ */
+add_action('init', function () {
+	remove_action('wp_head', 'print_emoji_detection_script', 7);
+	remove_action('wp_print_styles', 'print_emoji_styles');
+	remove_action('admin_print_scripts', 'print_emoji_detection_script');
+	remove_action('admin_print_styles', 'print_emoji_styles');
+	remove_filter('the_content_feed', 'wp_staticize_emoji');
+	remove_filter('comment_text_rss', 'wp_staticize_emoji');
+	remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+	add_filter('tiny_mce_plugins', function ($plugins) {
+		return array_diff($plugins, ['wpemoji']);
+	});
+	add_filter('wp_resource_hints', function ($urls, $relation_type) {
+		if ('dns-prefetch' === $relation_type) {
+			return array_filter($urls, fn($url) => strpos((string) $url, 'emoji') === false);
+		}
+		return $urls;
+	}, 10, 2);
+});
+
+/**
+ * Performance: strip low-value <head> tags — EditURI, Windows Live Writer
+ * manifest, WP version generator, shortlink, adjacent-post links, REST
+ * discovery link, and oEmbed discovery. None are needed on a public site.
+ */
+remove_action('wp_head', 'rsd_link');
+remove_action('wp_head', 'wlwmanifest_link');
+remove_action('wp_head', 'wp_generator');
+remove_action('wp_head', 'wp_shortlink_wp_head', 10);
+remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10);
+remove_action('wp_head', 'rest_output_link_wp_head', 10);
+remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+
+// Splide defer strategy — re-enable alongside the enqueue block above when a carousel block is built.
+// add_action('wp_enqueue_scripts', function () {
+// 	wp_script_add_data('splide-js', 'strategy', 'defer');
+// }, 20);
+
+/**
+ * Security Headers.
+ */
+function sweetmunchies_security_headers()
+{
+	header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+	header("X-Content-Type-Options: nosniff");
+	header("X-Frame-Options: SAMEORIGIN");
+	header("Referrer-Policy: no-referrer-when-downgrade");
+	header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+	header("Cross-Origin-Opener-Policy: same-origin");
+	header("X-XSS-Protection: 1; mode=block");
+}
+add_action('send_headers', 'sweetmunchies_security_headers');

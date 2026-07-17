@@ -1,0 +1,37 @@
+@use "abstracts/functions" as *;
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+@use "base/colors" as *;
+
+// WooCommerce's own stylesheet is disabled (see inc/woocommerce.php) so the
+// plugin's default markup is unstyled by default — build up product/cart/
+// checkout styles here as those pages get designed.
+
+.woocommerce {
+  ul.products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacer-24;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .star-rating {
+    color: $color-primary;
+  }
+
+  .button,
+  a.button,
+  button.button,
+  input.button {
+    display: inline-block;
+    border: 0;
+    border-radius: 4px;
+    background: $color-primary;
+    color: #fff;
+    padding: $spacer-8 $spacer-16;
+    cursor: pointer;
+    text-decoration: none;
+  }
+}

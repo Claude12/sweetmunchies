@@ -1,0 +1,29 @@
+@use "abstracts/functions" as *;
+@use "abstracts/variables" as *;
+@use "abstracts/mixins" as *;
+@use "base/colors" as *;
+
+ul {
+  margin: 0;
+}
+
+.container {
+  padding-left: $mobile-gutter;
+  padding-right: $mobile-gutter;
+  max-width: 1140px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.d-grid {
+  display: grid;
+}
+
+.d-none {
+  display: none;
+}
