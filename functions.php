@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * sweetmunchies functions and definitions
  *
@@ -131,49 +134,86 @@ function sweetmunchies_scripts()
 
 	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array(), $css_version);
 
-	// jQuery is bundled via webpack externals — WP's own copy is used as the global.
-	wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/main.js', array('jquery'), $js_version, true);
+	wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/main.js', array(), $js_version, true);
 
-	// Splide: only load on pages that opt-in — uncomment when a carousel block is built.
-	// if (sweetmunchies_needs_splide()) {
-	// 	wp_enqueue_style('splide-css', get_template_directory_uri() . '/dist/vendor/splide.min.css', array(), null);
-	// 	wp_enqueue_style('splide-default-theme', get_template_directory_uri() . '/dist/vendor/splide-default.min.css', array('splide-css'), null);
-	// 	wp_enqueue_script('splide-js', get_template_directory_uri() . '/dist/vendor/splide.min.js', array(), null, true);
-	// }
+	foreach (sweetmunchies_needed_block_assets() as $layout) {
+		$assets = sweetmunchies_block_assets()[$layout] ?? array();
+
+		foreach ($assets['styles'] ?? array() as $style) {
+			wp_enqueue_style(
+				$style['handle'],
+				get_template_directory_uri() . $style['src'],
+				$style['deps'] ?? array(),
+				null
+			);
+		}
+
+		foreach ($assets['scripts'] ?? array() as $script) {
+			wp_enqueue_script(
+				$script['handle'],
+				get_template_directory_uri() . $script['src'],
+				$script['deps'] ?? array(),
+				null,
+				$script['in_footer'] ?? true
+			);
+		}
+	}
 }
 add_action('wp_enqueue_scripts', 'sweetmunchies_scripts');
 
 /**
- * Splide opt-in system.
+ * Per-block conditional asset registry.
  *
+ * Some flexible-content layouts need extra CSS/JS (e.g. a carousel library)
+ * that most pages don't — this keeps that weight off pages that don't use
+ * the layout, instead of loading it site-wide via sweetmunchies_scripts().
+ *
+ * Add a block's assets by adding its acf_fc_layout key here, e.g.:
+ *
+ *   'gallery_carousel' => [
+ *       'styles' => [
+ *           ['handle' => 'splide-css', 'src' => '/dist/vendor/splide.min.css'],
+ *       ],
+ *       'scripts' => [
+ *           ['handle' => 'splide-js', 'src' => '/dist/vendor/splide.min.js'],
+ *       ],
+ *   ],
+ */
+function sweetmunchies_block_assets(): array
+{
+	return array();
+}
+
+/**
  * Block templates run AFTER wp_head() fires wp_enqueue_scripts, so they
  * cannot call an enqueue function directly. Instead, detection runs on the
- * 'wp' action (before wp_head) by scanning the page's ACF layouts.
- *
- * To add Splide support to a new block, add its acf_fc_layout key to the
- * $splide_layouts array below.
+ * 'wp' action (before wp_head) by scanning the page's ACF layouts against
+ * sweetmunchies_block_assets(), and sweetmunchies_scripts() enqueues
+ * whatever the current page's layouts asked for.
  */
 add_action('wp', function () {
-	// Add any acf_fc_layout key whose block template initialises Splide.
-	$splide_layouts = [];
+	$registry = sweetmunchies_block_assets();
 
 	// Skip the DB query entirely until at least one layout is registered.
-	if (empty($splide_layouts) || !is_singular() || !function_exists('get_field')) return;
+	if (empty($registry) || !is_singular() || !function_exists('get_field')) return;
 
 	$sections = get_field('content_sections');
 	if (!$sections || !is_array($sections)) return;
 
+	$needed = array();
 	foreach ($sections as $section) {
-		if (in_array($section['acf_fc_layout'], $splide_layouts, true)) {
-			$GLOBALS['sweetmunchies_needs_splide'] = true;
-			return;
+		$layout = $section['acf_fc_layout'] ?? null;
+		if ($layout && isset($registry[$layout])) {
+			$needed[$layout] = true;
 		}
 	}
+
+	$GLOBALS['sweetmunchies_needed_block_assets'] = array_keys($needed);
 });
 
-function sweetmunchies_needs_splide(): bool
+function sweetmunchies_needed_block_assets(): array
 {
-	return !empty($GLOBALS['sweetmunchies_needs_splide']);
+	return $GLOBALS['sweetmunchies_needed_block_assets'] ?? array();
 }
 
 /**

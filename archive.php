@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * The template for displaying archive pages
  *

@@ -1,11 +1,7 @@
-import jQuery from 'jquery';
-window.$ = window.jQuery = jQuery;
+import smoothScroll from './lib/smooth-scroll';
+import animations from './lib/animations';
 
-
-import smoothScroll from './smooth-scroll';
-import animations from './animations';
-
-jQuery(() => {
+document.addEventListener('DOMContentLoaded', () => {
   smoothScroll();
   animations();
 });

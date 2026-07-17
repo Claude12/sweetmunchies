@@ -1,59 +1,32 @@
-// Media query breakpoints
+@use "sass:map";
+
+// Media query breakpoints (.cursorrules tiers)
 $breakpoints: (
-  xs: 320px,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1400px,
+  mobile: 576px,
+  tablet: 768px,
+  desktop: 1024px,
+  wide: 1440px,
 );
 
 /**
- * Mixin: breakpoint
- * This mixin allows you to apply styles based on different screen sizes.
+ * Mixin: min-breakpoint
+ * Mobile-first media query helper — base (unwrapped) styles are the
+ * smallest/mobile layout; this mixin adds styles from a breakpoint up.
  *
- * @param {String} $point - The breakpoint name. It can be 'xs', 'sm', 'md', 'lg', 'xl', or 'xxl'.
+ * @param {String} $point - One of 'mobile', 'tablet', 'desktop', 'wide'.
  *
  * Usage:
- * @include breakpoint(sm) {
- *   // Styles for small screens (min-width: 576px)
- * }
- *
- * @include breakpoint(md) {
- *   // Styles for medium screens (min-width: 768px)
- * }
- *
- * @include breakpoint(lg) {
- *   // Styles for large screens (min-width: 992px)
+ * @include min-breakpoint(tablet) {
+ *   // Styles from 768px up
  * }
  */
 @mixin min-breakpoint($point) {
-  @if $point == xs {
-    @media (min-width: 320px) {
-      @content;
-    }
-  } @else if $point == sm {
-    @media (min-width: 576px) {
-      @content;
-    }
-  } @else if $point == md {
-    @media (min-width: 768px) {
-      @content;
-    }
-  } @else if $point == lg {
-    @media (min-width: 992px) {
-      @content;
-    }
-  } @else if $point == xl {
-    @media (min-width: 1200px) {
-      @content;
-    }
-  } @else if $point == xxl {
-    @media (min-width: 1400px) {
-      @content;
-    }
-  } @else {
+  @if not map.has-key($breakpoints, $point) {
     @warn "No value found for breakpoint: #{$point}";
+  } @else {
+    @media (min-width: map.get($breakpoints, $point)) {
+      @content;
+    }
   }
 }
 

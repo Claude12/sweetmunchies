@@ -23,7 +23,7 @@ sweetmunchies/
 ├── acf-json/              ACF Local JSON — field group source of truth, synced to/from wp-admin
 ├── assets/                Front-end source (SCSS, JS) + build tooling, NOT enqueued directly
 │   ├── scss/              7-1-style architecture: abstracts/base/components/layout/utilities
-│   ├── js/                Source JS, bundled by webpack via gulp
+│   ├── js/                Vanilla JS, bundled by webpack via gulp — main.js, lib/, blocks/
 │   └── gulpfile.js         Build pipeline (see Front-end build below)
 ├── dist/                  Compiled CSS/JS — THIS is what functions.php enqueues, and it IS committed
 ├── inc/
@@ -58,12 +58,21 @@ template of the same name (hyphens) in `inc/blocks/`, e.g. layout
 
 1. Add a layout to the `content_sections` field group in wp-admin (ACF UI) —
    saving with Local JSON sync on writes the change straight to `acf-json/`.
-2. Create `inc/blocks/{layout-name}.php` (hyphenated). Inside it, `$section`
-   and `$block_index` are available as query vars — set by the renderer,
-   not by the template itself.
+2. Create `inc/blocks/{layout-name}.php` (hyphenated). The renderer runs each
+   layout through ACF's `have_rows()`/`the_row()` loop before including the
+   template, so **use `get_sub_field()`** for every field in the block, never
+   `get_field()` — `get_sub_field()` only reads from the row ACF currently has
+   open, and only works inside that loop. `$block_index` (0-based, set via
+   `set_query_var()`) is available via `get_query_var('block_index')`, handy
+   for things like eager-loading only the first block's image.
 3. Add a matching SCSS partial under `assets/scss/components/_{name}.scss`
    and `@use` it from `assets/scss/style.scss`.
-4. `cd assets && gulp build` (or leave `gulp watch` running).
+4. If the block needs its own JS, add `assets/js/blocks/{name}.js` and import
+   it from `assets/js/main.js`; if it needs extra CSS/JS assets that shouldn't
+   load site-wide (e.g. a carousel library), register them in
+   `sweetmunchies_block_assets()` in `functions.php` under the layout's
+   `acf_fc_layout` key — only pages using that layout will get them enqueued.
+5. `cd assets && gulp build` (or leave `gulp watch` running).
 
 Currently there is one layout: **50/50 Block** (`image_text_block`) — a
 two-column image/text section with a color picker background, used by
@@ -120,18 +129,71 @@ gulp watch   # rebuild on save while developing
 SCSS follows a 7-1-style structure:
 
 - `abstracts/` — `_variables.scss` (spacers, gutters, transitions, a `z()`
-  z-index scale), `_functions.scss` (`rem()` etc.), `_mixins.scss` (breakpoints)
+  z-index scale), `_functions.scss` (`rem()` etc.), `_mixins.scss` (the
+  `min-breakpoint()` mobile-first media query mixin)
 - `base/` — `_reset.scss`, `_typography.scss`, `_colors.scss` (brand + neutral
-  + semantic color tokens), `_global.scss`
+  + semantic color tokens as SCSS variables), `_global.scss` (emits the `:root`
+  CSS custom properties, see below)
 - `components/`, `layout/`, `utilities/` — one partial per component/region,
-  BEM class naming (`.block__element--modifier`)
+  BEM class naming only (`.block__element--modifier`) — **no utility classes**
+  (no `.d-flex`, `.color-primary`, etc.); one-off layout needs stay scoped
+  inside the component that needs them
 
-`_colors.scss` currently defines the real brand color (`$color-primary`)
-plus a neutral greyscale and semantic aliases (`$color-text`,
-`$color-background`, `$color-border`, `$color-success/error/warning`) as a
-placeholder scaffold — swap the neutrals/aliases for the client's actual
-palette once one exists; components should reference the semantic names, not
-raw hex values, so a re-theme only touches this one file.
+`_colors.scss` and `_variables.scss` define colors and spacers as SCSS
+variables — these are the single source of truth, but components should
+almost never reference them (`$color-primary`, `$spacer-24`) directly.
+Instead `base/_global.scss` mirrors every one of them onto a `:root { }` block
+as a real CSS custom property (`--color-primary`, `--spacer-24`, …), and
+components use `var(--color-primary)` / `var(--spacer-24)`. This keeps colors/
+spacing runtime-readable (future customizer options, JS, browser devtools)
+while still having one file to edit for a re-theme.
+
+Breakpoints (`mobile`/`tablet`/`desktop`/`wide` = 576/768/1024/1440px) stay
+SCSS-only, via the `min-breakpoint()` mixin (`@include min-breakpoint(tablet) { … }`)
+— **CSS custom properties cannot be used inside an `@media` condition** in any
+browser (`@media (min-width: var(--x))` is invalid CSS), so breakpoints can't
+follow the same var()-everywhere pattern as colors/spacing. `--breakpoint-*`
+custom properties are still exposed on `:root` for JS (`matchMedia`/
+`getComputedStyle`) to read, just never for use inside `@media` itself.
+
+Swap the neutrals/aliases in `_colors.scss` for the client's actual palette
+once one exists (see [Design reference](#design-reference) below) — components
+should reference the semantic custom properties (`var(--color-text)`), not
+raw hex values, so a re-theme only touches `_colors.scss`.
+
+JS is vanilla only — no jQuery, no frameworks — bundled by webpack via gulp
+(Babel for syntax, no polyfills beyond what `browserslist` targets):
+
+- `assets/js/main.js` — entry point; imports and initializes everything
+- `assets/js/lib/` — shared utilities used across the whole site (currently
+  `smooth-scroll.js`, `animations.js`)
+- `assets/js/blocks/` — one file per block that needs its own JS, imported
+  from `main.js` (empty for now — `image_text_block` doesn't need JS)
+
+## Design reference
+
+`wp-content/themes/design/` (sibling to this theme, outside the theme's own
+git repo) holds the exported design: `Sweet Munchies.dc.html` /
+`ProductCard.dc.html` (rendered design-canvas exports), product/logo images
+under `uploads/`, and a brief (`uploads/Sweet Munchies.docx`). Treat the
+`.dc.html` files as the visual source of truth for spacing, color, type and
+responsive behaviour — compare rendered blocks against them rather than
+guessing, per `.cursorrules`. A quick scan of the export shows the real brand
+palette is a pink/red (`#D2144C`, darker `#A80F3D`) on cream/neutral
+backgrounds (`#FBF4E9`, `#EDE1D2`), with `Poppins` (body/UI) and `Caveat`
+(script accents) as the type family — none of that is wired into `_colors.scss`
+or the font `<link>`s in `header.php` yet (both are still placeholder/starter
+values), and it shouldn't be guessed in wholesale; treat matching them up as
+its own task once a block is actually being built against a given design
+section.
+
+## PHP conventions
+
+Every PHP file starts with `declare(strict_types=1);` (first statement after
+the `<?php` tag) plus a short docblock — this is enforced by `.cursorrules`
+for anything added going forward. `strict_types` only affects type coercion
+for calls made *from* that file, so it's safe to add file-by-file without
+touching behaviour elsewhere.
 
 ## Style.css note
 
@@ -151,11 +213,21 @@ every request via `send_headers`.
 - `screenshot.png` is still a placeholder — replace with an actual theme
   screenshot (1200×900) before launch.
 - `assets/scss/layout/_header.scss` and `_footer.scss` are empty stubs (just
-  the `@use` imports) — no header/footer visual design has been built yet;
-  this is intentional, waiting on the new design.
+  the `@use` imports) — no header/footer visual design has been built yet.
+  The design export is now available (see [Design reference](#design-reference))
+  so this is no longer "waiting on a design", just not yet built.
+- `_colors.scss` and the Google Fonts `<link>`s in `header.php` still hold
+  starter/placeholder values (teal `$color-primary`, Lato/Poppins) — the real
+  design uses a pink/red palette and Poppins/Caveat. Not swapped in yet; see
+  [Design reference](#design-reference).
 - The `socials` links in `header.php`/`footer.php` currently render as plain
   text links (WhatsApp/LinkedIn/Facebook) — no icon graphics, by design, so
   they can be rebuilt against whatever icon treatment the new design uses.
 - Comments and the widgetized sidebar (`sidebar.php`, `comments.php`) are
   left as-is from the starter theme and untouched by this cleanup — remove
   them if the site won't use blog comments or a sidebar.
+- WooCommerce's "Coming soon" mode (Settings → Site visibility) is currently
+  **off** — it was left on from initial plugin setup and made the whole site
+  render WooCommerce's default coming-soon page instead of this theme's
+  templates. Worth knowing if the site ever appears to "lose" the theme
+  again — check that setting first.

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * ACF setup: local JSON path, flexible-content renderer, admin dependency notice.
  *
@@ -19,33 +22,37 @@ if (! function_exists('sweetmunchies_render_flexible_content')) :
 	/**
 	 * Renders the "content_sections" ACF flexible content field for a post.
 	 *
-	 * Each layout's `acf_fc_layout` key (underscores) maps to a template file
-	 * of the same name (hyphens) in inc/blocks/, e.g. `image_text_block` =>
-	 * inc/blocks/image-text-block.php. Add a new block by: (1) adding a layout
-	 * to the `content_sections` field group in ACF, (2) creating the matching
-	 * inc/blocks/{name}.php template, (3) adding a matching SCSS partial under
-	 * assets/scss/components/ and @use-ing it in style.scss.
+	 * Runs the field through ACF's own have_rows()/the_row() loop (rather than
+	 * pulling the raw array via get_field()) so ACF's row context is active
+	 * inside each block template — that's what makes get_sub_field() work
+	 * there, per .cursorrules. Each layout name (underscores) maps to a
+	 * template file of the same name (hyphens) in inc/blocks/, e.g.
+	 * `image_text_block` => inc/blocks/image-text-block.php.
 	 *
-	 * @param int|null $post_id Post ID to read the field from. Defaults to the current post.
+	 * Add a new block by: (1) adding a layout to the `content_sections` field
+	 * group in ACF, (2) creating the matching inc/blocks/{name}.php template
+	 * (using get_sub_field() for every field), (3) adding a matching SCSS
+	 * partial under assets/scss/components/ and @use-ing it in style.scss.
+	 *
+	 * @param int|string|null $post_id Post ID to read the field from. Defaults to the current post.
 	 */
-	function sweetmunchies_render_flexible_content($post_id = null)
+	function sweetmunchies_render_flexible_content($post_id = null): void
 	{
-		if (! function_exists('get_field')) {
+		if (! function_exists('have_rows')) {
 			return;
 		}
 
-		$sections = get_field('content_sections', $post_id);
+		$block_index = 0;
 
-		if (! $sections || ! is_array($sections)) {
-			return;
-		}
+		while (have_rows('content_sections', $post_id)) :
+			the_row();
 
-		foreach ($sections as $block_index => $section) {
-			$template = str_replace('_', '-', $section['acf_fc_layout']);
-			set_query_var('section', $section);
+			$template = str_replace('_', '-', (string) get_row_layout());
 			set_query_var('block_index', $block_index);
 			get_template_part('inc/blocks/' . $template);
-		}
+
+			$block_index++;
+		endwhile;
 	}
 endif;
 

@@ -1,19 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 /**
- * ACF: Flexible Content > Layouts > Image/Text Block ("50/50 Block" in ACF UI)
+ * Block: 50/50 Block
+ * ACF flexible content layout `image_text_block` — two-column image/text
+ * section with an optional background colour. Rendered inside the
+ * have_rows()/the_row() loop in sweetmunchies_render_flexible_content()
+ * (see inc/acf.php), so get_sub_field() reads from the current row.
  *
  * @package sweetmunchies
  */
 
-$background_color = $section['background_color'];
-$left_type        = $section['left_type'];
-$img_loading      = get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
-$left_image       = $section['left_image'];
-$left_text        = $section['left_text'];
-$right_type       = $section['right_type'];
-$right_image      = $section['right_image'];
-$right_text       = $section['right_text'];
+$background_color = get_sub_field('background_color');
+$left_type         = get_sub_field('left_type');
+$left_image        = get_sub_field('left_image');
+$left_text         = get_sub_field('left_text');
+$right_type        = get_sub_field('right_type');
+$right_image       = get_sub_field('right_image');
+$right_text        = get_sub_field('right_text');
+$img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
 ?>
 
 <section class="image-text-block"<?php echo $background_color ? ' style="background-color: ' . esc_attr($background_color) . ';"' : ''; ?>>

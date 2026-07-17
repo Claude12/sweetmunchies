@@ -1,26 +1,23 @@
-@use "abstracts/functions" as *;
-@use "abstracts/variables" as *;
 @use "abstracts/mixins" as *;
-@use "base/colors" as *;
 
 .image-text-block {
   &__content {
     display: flex;
     align-items: center;
-    gap: $spacer-24;
+    gap: var(--spacer-24);
     flex-wrap: wrap;
     width: 100%;
 
-    @include min-breakpoint(md) {
+    @include min-breakpoint(tablet) {
       flex-wrap: nowrap;
-      gap: $spacer-48;
+      gap: var(--spacer-48);
     }
   }
 
   &__side {
     width: 100%;
 
-    @include min-breakpoint(md) {
+    @include min-breakpoint(tablet) {
       width: 50%;
     }
 

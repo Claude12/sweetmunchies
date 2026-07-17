@@ -1,7 +1,44 @@
-@use "abstracts/functions" as *;
 @use "abstracts/variables" as *;
-@use "abstracts/mixins" as *;
 @use "base/colors" as *;
+
+// Runtime CSS custom properties — reference these (var(--x)) in component
+// SCSS instead of the SCSS variables above, so values can still be read/
+// overridden at runtime (e.g. a future WP customizer colour option). The
+// SCSS variables above stay the single source of truth for what feeds in
+// here. Breakpoints are exposed too for JS (matchMedia/getComputedStyle)
+// but must NOT be used inside @media conditions — var() doesn't resolve
+// there in any browser, so @media keeps using the min-breakpoint() mixin.
+:root {
+  --color-primary: #{$color-primary};
+  --color-white: #{$color-white};
+  --color-black: #{$color-black};
+  --color-grey-100: #{$color-grey-100};
+  --color-grey-300: #{$color-grey-300};
+  --color-grey-500: #{$color-grey-500};
+  --color-grey-700: #{$color-grey-700};
+  --color-grey-900: #{$color-grey-900};
+  --color-text: #{$color-text};
+  --color-text-muted: #{$color-text-muted};
+  --color-background: #{$color-background};
+  --color-border: #{$color-border};
+  --color-success: #{$color-success};
+  --color-error: #{$color-error};
+  --color-warning: #{$color-warning};
+
+  --spacer-4: #{$spacer-4};
+  --spacer-8: #{$spacer-8};
+  --spacer-16: #{$spacer-16};
+  --spacer-24: #{$spacer-24};
+  --spacer-32: #{$spacer-32};
+  --spacer-48: #{$spacer-48};
+  --spacer-64: #{$spacer-64};
+  --spacer-96: #{$spacer-96};
+
+  --breakpoint-mobile: 576px;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+}
 
 ul {
   margin: 0;
@@ -13,17 +50,4 @@ ul {
   max-width: 1140px;
   width: 100%;
   margin: 0 auto;
-}
-
-.d-flex {
-  display: flex;
-  align-items: center;
-}
-
-.d-grid {
-  display: grid;
-}
-
-.d-none {
-  display: none;
 }

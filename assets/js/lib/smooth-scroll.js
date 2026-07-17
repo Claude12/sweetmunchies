@@ -19,7 +19,7 @@ function smoothScroll() {
       let target;
       try {
         target = document.querySelector(hash);
-      } catch (_) {
+      } catch {
         return;
       }
       if (!target) return;
