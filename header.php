@@ -14,8 +14,12 @@ declare(strict_types=1);
 
 // Global settings from ACF Options Page
 $site_logo = get_field('site_logo', 'option'); // Logo stored in options
-$nav_cta = get_field('nav_cta', 'option'); // Call-to-action stored in options
-$socials = get_field('socials', 'option'); // Social links stored in options
+$promo_text = get_field('promo_text', 'option');
+
+$cart_count = 0;
+if (function_exists('WC') && WC()->cart) {
+	$cart_count = WC()->cart->get_cart_contents_count();
+}
 ?>
 
 <!doctype html>
@@ -35,11 +39,11 @@ $socials = get_field('socials', 'option'); // Social links stored in options
 
 	<!-- Fonts (async load, noscript fallback) -->
 	<link rel="preload"
-		href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@500;600;700&display=swap"
+		href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@400;700&display=swap"
 		as="style" onload="this.onload=null;this.rel='stylesheet'" />
 	<noscript>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@500;600;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@400;700&display=swap"
 			rel="stylesheet" />
 	</noscript>
 
@@ -49,6 +53,10 @@ $socials = get_field('socials', 'option'); // Social links stored in options
 	<?php wp_body_open(); ?>
 	<div id="page" class="site">
 
+		<?php if ($promo_text): ?>
+			<div class="promo-strip"><?php echo wp_kses_post($promo_text); ?></div>
+		<?php endif; ?>
+
 		<header class="header">
 			<div class="header__container">
 				<div class="header__logo">
@@ -56,61 +64,108 @@ $socials = get_field('socials', 'option'); // Social links stored in options
 						<?php if ($site_logo): ?>
 							<img src="<?php echo esc_url($site_logo['url']); ?>"
 								alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
-								width="46" height="46" class="header__logo-image"
+								class="header__logo-image"
 								decoding="async" />
 						<?php endif; ?>
-						<span class="header__title"><?php bloginfo('name'); ?></span>
 					</a>
 				</div>
-				<!-- Hamburger Toggle Button -->
-				<div class="header__menu menu">
-					<div class="menu__icon">
-						<span></span>
-					</div>
 
-					<nav data-sub_menu_auto_close="true" class="menu__body">
-						<?php
-						wp_nav_menu(
-							array(
-								'theme_location' => 'menu-1',
-								'menu_id' => 'primary-menu',
-							)
-						);
-						?>
-						<div class="header__menu-cta d-mobile-only">
-							<?php if ($socials): ?>
-								<ul class="social-links">
-									<?php if (!empty($socials['whatsapp'])): ?>
-										<li>
-											<a href="https://wa.me/<?php echo esc_attr($socials['whatsapp']); ?>"
-												target="_blank" rel="noopener noreferrer">WhatsApp</a>
-										</li>
-									<?php endif; ?>
-									<?php if (!empty($socials['linkedin'])): ?>
-										<li>
-											<a href="<?php echo esc_url($socials['linkedin']); ?>" target="_blank"
-												rel="noopener noreferrer">LinkedIn</a>
-										</li>
-									<?php endif; ?>
-									<?php if (!empty($socials['facebook'])): ?>
-										<li>
-											<a href="<?php echo esc_url($socials['facebook']); ?>" target="_blank"
-												rel="noopener noreferrer">Facebook</a>
-										</li>
-									<?php endif; ?>
-								</ul>
-							<?php endif; ?>
-						</div>
-					</nav>
+				<nav class="header__nav" aria-label="<?php esc_attr_e('Primary', 'sweetmunchies'); ?>">
+					<?php
+					wp_nav_menu(
+						array(
+							'theme_location' => 'menu-1',
+							'menu_id' => 'primary-menu-desktop',
+							'menu_class' => 'header__nav-list',
+							'container' => false,
+						)
+					);
+					?>
+				</nav>
 
-				</div>
+				<div class="header__actions">
+					<button type="button" class="header__icon-btn" data-search-toggle
+						aria-label="<?php esc_attr_e('Search', 'sweetmunchies'); ?>" aria-expanded="false">
+						<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+							<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
+							<path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+						</svg>
+					</button>
 
-				<div class="header__menu-cta d-desktop-only">
-					<?php if ($nav_cta): ?>
-						<a href="<?php echo esc_url($nav_cta['url']); ?>" class="button button--primary">
-							<?php echo esc_html($nav_cta['title']); ?>
-						</a>
-					<?php endif; ?>
+					<a href="<?php echo esc_url(function_exists('wc_get_cart_url') ? wc_get_cart_url() : home_url('/')); ?>"
+						class="header__icon-btn" aria-label="<?php esc_attr_e('Cart', 'sweetmunchies'); ?>">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+							<path d="M6 7h13l-1.5 9.5a2 2 0 0 1-2 1.7H8.7a2 2 0 0 1-2-1.7L5 4H2" stroke="currentColor"
+								stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+							<circle cx="9.5" cy="20.5" r="1.4" fill="currentColor" />
+							<circle cx="17" cy="20.5" r="1.4" fill="currentColor" />
+						</svg>
+						<?php if ($cart_count > 0): ?>
+							<span class="header__cart-count"><?php echo esc_html((string) $cart_count); ?></span>
+						<?php endif; ?>
+					</a>
+
+					<button type="button" class="header__icon-btn header__hamburger" data-menu-toggle
+						aria-label="<?php esc_attr_e('Menu', 'sweetmunchies'); ?>" aria-expanded="false"
+						aria-controls="mobile-drawer">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+							<path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8"
+								stroke-linecap="round" />
+						</svg>
+					</button>
 				</div>
 			</div>
 		</header>
+
+		<div class="mobile-drawer" id="mobile-drawer" data-mobile-nav>
+			<div class="mobile-drawer__backdrop" data-menu-close></div>
+			<div class="mobile-drawer__panel">
+				<div class="mobile-drawer__top">
+					<?php if ($site_logo): ?>
+						<img src="<?php echo esc_url($site_logo['url']); ?>"
+							alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+							class="mobile-drawer__logo"
+							decoding="async" />
+					<?php endif; ?>
+					<button type="button" class="mobile-drawer__close" data-menu-close
+						aria-label="<?php esc_attr_e('Close menu', 'sweetmunchies'); ?>">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+							<path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+						</svg>
+					</button>
+				</div>
+
+				<nav class="mobile-drawer__nav" aria-label="<?php esc_attr_e('Mobile', 'sweetmunchies'); ?>">
+					<?php
+					wp_nav_menu(
+						array(
+							'theme_location' => 'menu-1',
+							'menu_id' => 'primary-menu-mobile',
+							'menu_class' => 'mobile-drawer__list',
+							'container' => false,
+						)
+					);
+					?>
+				</nav>
+			</div>
+		</div>
+
+		<div class="search-overlay" data-search-overlay>
+			<div class="search-overlay__backdrop" data-search-close></div>
+			<div class="search-overlay__panel">
+				<div class="search-overlay__inner">
+					<form role="search" method="get" class="search-overlay__form" action="<?php echo esc_url(home_url('/')); ?>">
+						<svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
+							<path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+						</svg>
+						<label class="screen-reader-text" for="search-overlay-input"><?php esc_html_e('Search', 'sweetmunchies'); ?></label>
+						<input type="search" id="search-overlay-input" name="s" autocomplete="off"
+							placeholder="<?php esc_attr_e('Search snack boxes…', 'sweetmunchies'); ?>"
+							value="<?php echo esc_attr(get_search_query()); ?>" />
+						<input type="hidden" name="post_type" value="product" />
+						<button type="button" class="search-overlay__close" data-search-close aria-label="<?php esc_attr_e('Close', 'sweetmunchies'); ?>">&times;</button>
+					</form>
+				</div>
+			</div>
+		</div>

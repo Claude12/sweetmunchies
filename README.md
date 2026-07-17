@@ -178,14 +178,20 @@ git repo) holds the exported design: `Sweet Munchies.dc.html` /
 under `uploads/`, and a brief (`uploads/Sweet Munchies.docx`). Treat the
 `.dc.html` files as the visual source of truth for spacing, color, type and
 responsive behaviour — compare rendered blocks against them rather than
-guessing, per `.cursorrules`. A quick scan of the export shows the real brand
-palette is a pink/red (`#D2144C`, darker `#A80F3D`) on cream/neutral
-backgrounds (`#FBF4E9`, `#EDE1D2`), with `Poppins` (body/UI) and `Caveat`
-(script accents) as the type family — none of that is wired into `_colors.scss`
-or the font `<link>`s in `header.php` yet (both are still placeholder/starter
-values), and it shouldn't be guessed in wholesale; treat matching them up as
-its own task once a block is actually being built against a given design
-section.
+guessing, per `.cursorrules`. The real brand palette — pink/red (`#D2144C`, darker `#A80F3D`), a dark green
+secondary (`#15321B`), gold accent (`#FBBD2B`), on cream backgrounds
+(`#FBF4E9`, `#EDE1D2`) — plus type (`Poppins` for body/UI, `Caveat` for script
+accents) is now wired in: see `assets/scss/base/_colors.scss` for the full
+token set and `assets/scss/base/_typography.scss` for the font-size/weight/
+line-height scale, both extracted directly from the `.dc.html` export. The
+Google Fonts `<link>`s in `header.php` load the real families/weights
+(Poppins 400/500/600/700/800, Caveat 400/700). Border-radius and box-shadow
+values from the export were **not** turned into global tokens yet — the
+export uses a wide, ad-hoc spread of both (radii from 8px to a 100px pill,
+several distinct shadow tints) rather than a clean scale, so those are left
+as a per-component decision to make once a given section is actually being
+built against the design, rather than forcing a token scale that doesn't
+match what's there.
 
 ## PHP conventions
 
@@ -216,10 +222,10 @@ every request via `send_headers`.
   the `@use` imports) — no header/footer visual design has been built yet.
   The design export is now available (see [Design reference](#design-reference))
   so this is no longer "waiting on a design", just not yet built.
-- `_colors.scss` and the Google Fonts `<link>`s in `header.php` still hold
-  starter/placeholder values (teal `$color-primary`, Lato/Poppins) — the real
-  design uses a pink/red palette and Poppins/Caveat. Not swapped in yet; see
-  [Design reference](#design-reference).
+- `_colors.scss`/`_typography.scss` and the Google Fonts `<link>`s in
+  `header.php` now hold the real extracted palette/type — see
+  [Design reference](#design-reference). Border-radius and box-shadow are
+  still not tokenized (deliberately — see that section for why).
 - The `socials` links in `header.php`/`footer.php` currently render as plain
   text links (WhatsApp/LinkedIn/Facebook) — no icon graphics, by design, so
   they can be rebuilt against whatever icon treatment the new design uses.

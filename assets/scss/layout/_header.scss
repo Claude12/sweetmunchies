@@ -2,3 +2,444 @@
 @use "abstracts/variables" as *;
 @use "abstracts/mixins" as *;
 @use "base/colors" as *;
+@use "base/typography" as *;
+
+.promo-strip {
+  background: var(--color-secondary);
+  color: var(--color-green-tint);
+  text-align: center;
+  padding: 9px 16px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  letter-spacing: 0.02em;
+
+  strong {
+    color: var(--color-accent);
+  }
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: z(header);
+  background: rgba(251, 244, 233, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--color-border);
+  overflow: visible;
+}
+
+.header__container {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px $mobile-gutter;
+  gap: var(--spacer-16);
+  overflow: visible;
+}
+
+.header__logo {
+  position: relative;
+  width: 100px;
+  height: 1px;
+  flex-shrink: 0;
+
+  @include min-breakpoint(tablet) {
+    width: 160px;
+  }
+}
+
+.header__logo-image {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  z-index: 5;
+
+  @include min-breakpoint(tablet) {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.header__nav {
+  display: none;
+
+  @include min-breakpoint(desktop) {
+    display: flex;
+  }
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacer-24);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    position: relative;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-text);
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-base;
+    transition: color 0.15s;
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .current-menu-item > a {
+    color: var(--color-primary);
+  }
+
+  // Second-level dropdown — parent items get a caret; children shown on
+  // hover/focus so keyboard users (Tab) can reach the submenu too.
+  .menu-item-has-children > a::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-right: 1.6px solid currentColor;
+    border-bottom: 1.6px solid currentColor;
+    transform: rotate(45deg);
+    margin-top: -3px;
+    opacity: 0.6;
+  }
+
+  .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    min-width: 200px;
+    background: var(--color-white);
+    border-radius: 14px;
+    box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.25);
+    list-style: none;
+    padding: 8px;
+    z-index: z(dropdown);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+
+    li {
+      position: relative;
+    }
+
+    a {
+      display: block;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+      white-space: nowrap;
+
+      &::after {
+        display: none;
+      }
+
+      &:hover {
+        background: var(--color-pink-tint);
+      }
+    }
+
+    // Third-level (and beyond) flies out to the side rather than stacking
+    // further down, keeping the pattern usable at any nesting depth.
+    .sub-menu {
+      top: 0;
+      left: 100%;
+      margin-top: 0;
+      margin-left: 6px;
+    }
+  }
+
+  .menu-item-has-children:hover > .sub-menu,
+  .menu-item-has-children:focus-within > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacer-16);
+}
+
+.header__icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  color: var(--color-text);
+  border-radius: 10px;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--color-pink-tint);
+  }
+}
+
+.header__cart-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: $font-weight-bold;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header__hamburger {
+  @include min-breakpoint(desktop) {
+    display: none;
+  }
+}
+
+// Mobile nav — a side-drawer overlay (backdrop + sliding panel), matching
+// the search overlay's interaction pattern. Toggled via assets/js/lib/header.js.
+@keyframes mobileDrawerBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mobileDrawerPanelIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.mobile-drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: z(modal);
+
+  &.is-open {
+    display: block;
+  }
+
+  @include min-breakpoint(desktop) {
+    display: none !important;
+  }
+}
+
+.mobile-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 28, 26, 0.45);
+  animation: mobileDrawerBackdropIn 0.2s ease;
+}
+
+.mobile-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: var(--color-cream);
+  box-shadow: -12px 0 30px -14px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: mobileDrawerPanelIn 0.25s ease;
+}
+
+.mobile-drawer__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px $mobile-gutter;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mobile-drawer__logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.mobile-drawer__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--color-text);
+  border-radius: 10px;
+
+  &:hover {
+    background: var(--color-pink-tint);
+  }
+}
+
+.mobile-drawer__nav {
+  padding: 8px $mobile-gutter 24px;
+}
+
+.mobile-drawer__list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  li {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  > li:last-child {
+    border-bottom: none;
+  }
+
+  a {
+    display: block;
+    padding: 14px 4px;
+    font-weight: $font-weight-semibold;
+    color: var(--color-text);
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  .current-menu-item > a {
+    color: var(--color-primary);
+  }
+
+  // Submenus render as an inline accordion (no hover on touch) — expanded
+  // via the toggle button assets/js/lib/header.js injects for each parent.
+  .menu-item-has-children {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    > a {
+      flex: 1;
+    }
+  }
+
+  .submenu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    color: var(--color-text-muted);
+
+    svg {
+      display: block;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  .menu-item-has-children.is-expanded > .submenu-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .sub-menu {
+    flex-basis: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 8px 14px;
+    display: none;
+
+    a {
+      padding: 10px 4px;
+      font-weight: $font-weight-medium;
+      font-size: $font-size-sm;
+    }
+  }
+
+  .menu-item-has-children.is-expanded .sub-menu {
+    display: block;
+  }
+}
+
+// Search overlay — triggered by the header search icon (assets/js/lib/header.js)
+.search-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: z(modal);
+
+  &.is-open {
+    display: block;
+  }
+}
+
+.search-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(36, 28, 26, 0.4);
+}
+
+.search-overlay__panel {
+  position: relative;
+  background: var(--color-white);
+  box-shadow: 0 12px 30px -14px rgba(0, 0, 0, 0.25);
+}
+
+.search-overlay__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px $mobile-gutter;
+}
+
+.search-overlay__form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-cream);
+  border-radius: 100px;
+  padding: 10px 18px;
+  color: var(--color-text-muted);
+
+  input[type="search"] {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 16px;
+    font-family: $font-body;
+    color: var(--color-text);
+  }
+}
+
+.search-overlay__close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 4px;
+}

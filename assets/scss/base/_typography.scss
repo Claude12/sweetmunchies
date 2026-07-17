@@ -3,4 +3,43 @@
 @use "abstracts/mixins" as *;
 @use "base/colors" as *;
 
-// Typography Styles
+// Typography Styles — extracted from wp-content/themes/design/Sweet Munchies.dc.html
+
+// Font families
+$font-body: "Poppins", sans-serif; // body copy, UI, headings
+$font-script: "Caveat", cursive; // script accents only (callouts, badges) — never body copy
+
+// Font sizes — the design uses fluid clamp() sizing for headings; the tiers
+// below approximate the sizes actually used across the export. Treat these
+// as a starting scale, not a hard limit — a heading can still use its own
+// clamp() when the design calls for a size between tiers.
+$font-size-xs: 12px; // meta text, tags
+$font-size-sm: 13px; // secondary labels, badges
+$font-size-base: 15px; // body copy
+$font-size-md: 18px; // large body / small subheading
+$font-size-lg: 22px; // subheading
+$font-size-xl: 26px; // section heading
+$font-size-2xl: clamp(26px, 4vw, 38px); // large section heading
+$font-size-3xl: clamp(34px, 5.4vw, 58px); // hero heading
+
+// Font weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-black: 800;
+
+// Line heights
+$line-height-tight: 1.4; // headings
+$line-height-base: 1.6; // body copy
+
+// Letter spacing
+$letter-spacing-wide: 0.06em; // uppercase labels/badges
+$letter-spacing-tight: -0.01em; // large display headings
+
+body {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $color-text;
+}

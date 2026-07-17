@@ -1,23 +1,35 @@
-// Brand — swap $color-primary for the client's palette once branding is set.
-$color-primary: #00bea3;
+// Brand — extracted from wp-content/themes/design/Sweet Munchies.dc.html
+$color-primary: #d2144c; // pink/red — links, primary buttons, CTAs
+$color-primary-dark: #a80f3d; // hover/active state for primary
+$color-secondary: #15321b; // dark green — secondary brand accent (nav/footer, headings)
+$color-accent: #fbbd2b; // gold — badges, highlights, star ratings
 
 // Neutrals
 $color-white: #fff;
 $color-black: #000;
 $color-grey-100: #f5f5f5;
-$color-grey-300: #d9d9d9;
-$color-grey-500: #8c8c8c;
-$color-grey-700: #4d4d4d;
-$color-grey-900: #1a1a1a;
+$color-grey-300: #ede1d2; // cream border/alt-background tone from the design
+$color-grey-500: #b7a99f; // muted taupe
+$color-grey-700: #6b5f58; // muted brown-grey — secondary/meta text
+$color-grey-900: #241c1a; // near-black warm — primary text
+
+// Cream/tint backgrounds used for page and section backgrounds in the design
+$color-cream: #fbf4e9; // page background
+$color-cream-alt: #ede1d2; // card borders, alt section background
+$color-pink-tint: #f5e6ec; // soft pink section background
+$color-green-tint: #eef3e9; // soft green section background
 
 // Semantic aliases — reference these in components, not the raw palette above,
 // so a future re-theme only means updating this file.
 $color-text: $color-grey-900;
 $color-text-muted: $color-grey-700;
-$color-background: $color-white;
+$color-background: $color-cream;
 $color-border: $color-grey-300;
 
 // Feedback (WooCommerce notices, form validation)
 $color-success: #2a9d5c;
 $color-error: #d64545;
 $color-warning: #d69e2e;
+
+// Brand-specific one-off — WhatsApp CTA button only, not part of the core scale
+$color-whatsapp: #25d366;

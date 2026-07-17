@@ -10,6 +10,9 @@
 // there in any browser, so @media keeps using the min-breakpoint() mixin.
 :root {
   --color-primary: #{$color-primary};
+  --color-primary-dark: #{$color-primary-dark};
+  --color-secondary: #{$color-secondary};
+  --color-accent: #{$color-accent};
   --color-white: #{$color-white};
   --color-black: #{$color-black};
   --color-grey-100: #{$color-grey-100};
@@ -17,6 +20,10 @@
   --color-grey-500: #{$color-grey-500};
   --color-grey-700: #{$color-grey-700};
   --color-grey-900: #{$color-grey-900};
+  --color-cream: #{$color-cream};
+  --color-cream-alt: #{$color-cream-alt};
+  --color-pink-tint: #{$color-pink-tint};
+  --color-green-tint: #{$color-green-tint};
   --color-text: #{$color-text};
   --color-text-muted: #{$color-text-muted};
   --color-background: #{$color-background};
@@ -24,6 +31,7 @@
   --color-success: #{$color-success};
   --color-error: #{$color-error};
   --color-warning: #{$color-warning};
+  --color-whatsapp: #{$color-whatsapp};
 
   --spacer-4: #{$spacer-4};
   --spacer-8: #{$spacer-8};
@@ -42,6 +50,26 @@
 
 ul {
   margin: 0;
+}
+
+// Applied to <body> while the search overlay or mobile drawer is open
+// (assets/js/lib/header.js) so the page behind them doesn't scroll.
+body.no-scroll {
+  overflow: hidden;
+}
+
+// Visually hides text for screen readers only — an accessibility primitive
+// (WP core convention), not a decorative utility class.
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .container {

@@ -64,6 +64,27 @@
             "allow_in_bindings": 1
         },
         {
+            "key": "field_688a2c0158f30",
+            "label": "Promo Strip Text",
+            "name": "promo_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown in the thin bar above the header. Basic HTML (e.g. <strong>SWEET10</strong>) is allowed. Leave blank to hide the bar.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Limited time: 10% off your first order — code <strong>SWEET10</strong> · Free delivery within Mutare CBD",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_675f29e12fe5c",
             "label": "Socials",
             "name": "socials",
@@ -138,6 +159,48 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
+                },
+                {
+                    "key": "field_688a1a0158f20",
+                    "label": "Instagram",
+                    "name": "instagram",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_688a1a0258f21",
+                    "label": "TikTok",
+                    "name": "tiktok",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
                 }
             ]
         },
@@ -161,8 +224,29 @@
         },
         {
             "key": "field_6853104d58f19",
-            "label": "Site Note",
-            "name": "site_note",
+            "label": "Footer Tagline",
+            "name": "footer_tagline",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Short brand line under the footer logo.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Little Packs. Big Smiles. Mobile gifting & snack boxes, made in Mutare.",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_688a2c0458f33",
+            "label": "Footer Thank You Note",
+            "name": "footer_thanks",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -173,12 +257,154 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "",
+            "default_value": "Thank you for supporting local.",
             "maxlength": "",
             "allow_in_bindings": 0,
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_688a2c0258f31",
+            "label": "Payment Methods (\"We accept\")",
+            "name": "payment_badges",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Shown as badges in the footer \"We accept\" column.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Payment Method",
+            "rows_per_page": 20,
+            "pagination": 0,
+            "sub_fields": [
+                {
+                    "key": "field_688a2c0358f32",
+                    "label": "Label",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_688a2c0558f34",
+            "label": "Contact Info",
+            "name": "contact_info",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Shown in the footer \"Get in touch\" column.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_688a2c0658f35",
+                    "label": "Phone (display format)",
+                    "name": "phone_display",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "e.g. 0776 620 294 — shown as text; the WhatsApp link itself uses the Socials → WhatsApp number.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_688a2c0758f36",
+                    "label": "Email",
+                    "name": "email",
+                    "aria-label": "",
+                    "type": "email",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "allow_in_bindings": 0
+                },
+                {
+                    "key": "field_688a2c0858f37",
+                    "label": "Location",
+                    "name": "location",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_688a2d0158f38",
+            "label": "Footer Credit Link",
+            "name": "footer_credit",
+            "aria-label": "",
+            "type": "link",
+            "instructions": "Only this link text is clickable — it appears after the fixed \"Website designed and developed by\" label at the bottom of the footer. Leave blank to hide the whole line.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "allow_in_bindings": 0
         }
     ],
     "location": [
@@ -202,5 +428,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784294687
+    "modified": 1784304900
 }
