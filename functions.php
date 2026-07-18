@@ -54,6 +54,9 @@ function sweetmunchies_setup()
 	// 4:3 crop used across the homepage product grids.
 	add_image_size('sweetmunchies_product_card', 480, 360, true);
 
+	// Interior page banner background (see inc/template-parts/page-banner.php).
+	add_image_size('sweetmunchies_page_banner', 1600, 520, true);
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(

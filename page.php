@@ -22,6 +22,11 @@ get_header();
 	<?php
 	while (have_posts()):
 		the_post();
+
+		if (!is_front_page()) {
+			get_template_part('inc/template-parts/page-banner');
+		}
+
 		sweetmunchies_render_flexible_content();
 	endwhile; // End of the loop.
 	?>

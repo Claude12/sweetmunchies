@@ -21,6 +21,7 @@ $right_image       = get_sub_field('right_image');
 $right_text        = get_sub_field('right_text');
 $eyebrow           = get_sub_field('eyebrow');
 $cta               = get_sub_field('cta');
+$stats             = get_sub_field('stats');
 $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
 ?>
 
@@ -41,6 +42,16 @@ $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'la
                         <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>
                     <?php endif; ?>
                     <div class="rte"><?php echo wp_kses_post($left_text); ?></div>
+                    <?php if ($stats): ?>
+                        <ul class="image-text-block__stats">
+                            <?php foreach ($stats as $stat): ?>
+                                <li class="image-text-block__stat">
+                                    <span class="image-text-block__stat-number"><?php echo esc_html($stat['number']); ?></span>
+                                    <span class="image-text-block__stat-label"><?php echo esc_html($stat['label']); ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <?php if (!empty($cta['url'])): ?>
                         <a href="<?php echo esc_url($cta['url']); ?>" class="image-text-block__cta"
                             target="<?php echo esc_attr($cta['target'] ?: '_self'); ?>">
@@ -63,6 +74,16 @@ $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'la
                         <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>
                     <?php endif; ?>
                     <div class="rte"><?php echo wp_kses_post($right_text); ?></div>
+                    <?php if ($stats): ?>
+                        <ul class="image-text-block__stats">
+                            <?php foreach ($stats as $stat): ?>
+                                <li class="image-text-block__stat">
+                                    <span class="image-text-block__stat-number"><?php echo esc_html($stat['number']); ?></span>
+                                    <span class="image-text-block__stat-label"><?php echo esc_html($stat['label']); ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <?php if (!empty($cta['url'])): ?>
                         <a href="<?php echo esc_url($cta['url']); ?>" class="image-text-block__cta"
                             target="<?php echo esc_attr($cta['target'] ?: '_self'); ?>">

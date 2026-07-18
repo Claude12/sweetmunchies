@@ -1,0 +1,46 @@
+@use "abstracts/mixins" as *;
+
+.cta-banner {
+  padding: 60px 0;
+
+  &__inner {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--color-secondary);
+    border-radius: 26px;
+    padding: clamp(28px, 5vw, 48px);
+    text-align: center;
+  }
+
+  &__heading {
+    color: var(--color-white);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  &__subtext {
+    color: var(--color-cta-box-text);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 20px;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: var(--color-primary-dark);
+    }
+  }
+}

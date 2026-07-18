@@ -7,6 +7,7 @@
 @use "base/colors";
 @use "base/global";
 
+@use "components/page-banner";
 @use "components/image-text-block";
 @use "components/home-hero";
 @use "components/trust-bar";
@@ -15,6 +16,10 @@
 @use "components/testimonials";
 @use "components/ig-strip";
 @use "components/whatsapp-cta";
+@use "components/feature-grid";
+@use "components/cta-banner";
+@use "components/contact-info";
+@use "components/faq-accordion";
 @use "components/woocommerce";
 @use "components/toast";
 

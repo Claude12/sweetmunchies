@@ -152,18 +152,10 @@ if (function_exists('WC') && WC()->cart) {
 			<div class="search-overlay__backdrop" data-search-close></div>
 			<div class="search-overlay__panel">
 				<div class="search-overlay__inner">
-					<form role="search" method="get" class="search-overlay__form" action="<?php echo esc_url(home_url('/')); ?>">
-						<svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-							<circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
-							<path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-						</svg>
-						<label class="screen-reader-text" for="search-overlay-input"><?php esc_html_e('Search', 'sweetmunchies'); ?></label>
-						<input type="search" id="search-overlay-input" name="s" autocomplete="off"
-							placeholder="<?php esc_attr_e('Search snack boxes…', 'sweetmunchies'); ?>"
-							value="<?php echo esc_attr(get_search_query()); ?>" />
-						<input type="hidden" name="post_type" value="product" />
-						<button type="button" class="search-overlay__close" data-search-close aria-label="<?php esc_attr_e('Close', 'sweetmunchies'); ?>">&times;</button>
-					</form>
+					<?php if (shortcode_exists('fibosearch')): ?>
+						<?php echo do_shortcode('[fibosearch style="solaris" layout="classic" submit_btn="off"]'); ?>
+					<?php endif; ?>
+					<button type="button" class="search-overlay__close" data-search-close aria-label="<?php esc_attr_e('Close', 'sweetmunchies'); ?>">&times;</button>
 				</div>
 			</div>
 		</div>
