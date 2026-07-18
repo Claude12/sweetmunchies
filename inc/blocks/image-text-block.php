@@ -19,10 +19,12 @@ $left_text         = get_sub_field('left_text');
 $right_type        = get_sub_field('right_type');
 $right_image       = get_sub_field('right_image');
 $right_text        = get_sub_field('right_text');
+$eyebrow           = get_sub_field('eyebrow');
+$cta               = get_sub_field('cta');
 $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
 ?>
 
-<section class="image-text-block"<?php echo $background_color ? ' style="background-color: ' . esc_attr($background_color) . ';"' : ''; ?>>
+<section class="image-text-block"<?php echo $background_color ? ' style="background-color: var(--color-' . esc_attr($background_color) . ');"' : ''; ?>>
     <div class="container">
         <div class="image-text-block__content" animate="slide-in-up">
             <div class="image-text-block__side">
@@ -35,7 +37,16 @@ $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'la
                         loading="<?php echo esc_attr($img_loading); ?>"
                         decoding="async" />
                 <?php elseif ($left_type === 'text' && $left_text): ?>
+                    <?php if ($eyebrow): ?>
+                        <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>
+                    <?php endif; ?>
                     <div class="rte"><?php echo wp_kses_post($left_text); ?></div>
+                    <?php if (!empty($cta['url'])): ?>
+                        <a href="<?php echo esc_url($cta['url']); ?>" class="image-text-block__cta"
+                            target="<?php echo esc_attr($cta['target'] ?: '_self'); ?>">
+                            <?php echo esc_html($cta['title']); ?>
+                        </a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <div class="image-text-block__side">
@@ -48,7 +59,16 @@ $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'la
                         loading="<?php echo esc_attr($img_loading); ?>"
                         decoding="async" />
                 <?php elseif ($right_type === 'text' && $right_text): ?>
+                    <?php if ($eyebrow): ?>
+                        <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>
+                    <?php endif; ?>
                     <div class="rte"><?php echo wp_kses_post($right_text); ?></div>
+                    <?php if (!empty($cta['url'])): ?>
+                        <a href="<?php echo esc_url($cta['url']); ?>" class="image-text-block__cta"
+                            target="<?php echo esc_attr($cta['target'] ?: '_self'); ?>">
+                            <?php echo esc_html($cta['title']); ?>
+                        </a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>

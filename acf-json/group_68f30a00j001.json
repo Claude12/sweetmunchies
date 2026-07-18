@@ -1,0 +1,91 @@
+{
+    "key": "group_68f30a00j001",
+    "title": "Product Card Details",
+    "fields": [
+        {
+            "key": "field_68f30a00j011",
+            "label": "Badge",
+            "name": "badge_label",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional small badge shown on the product card, e.g. \"New\" or \"Bestseller\". Leave blank to hide.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f30a00j012",
+            "label": "Servings (short)",
+            "name": "servings_short",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown on the product card, e.g. \"4 servings\".",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f30a00j013",
+            "label": "Treats Count",
+            "name": "treats_count",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown on the product card, e.g. \"12 treats\".",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "product"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1784310000
+}

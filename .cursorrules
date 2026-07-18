@@ -8,6 +8,28 @@
 
 ---
 
+## CRITICAL: Build One Block Per Session
+
+### Workflow (NON-NEGOTIABLE)
+1. Build ONE block only (ACF registration + template + SCSS + JS if needed)
+2. STOP and wait for explicit approval from human
+3. Wait for human to:
+   - Review the code
+   - Test in WordPress admin
+   - Verify on mobile/tablet/desktop
+   - Confirm the design matches
+4. Only after human says "build next" proceed to the next block
+
+### Never Do This
+- ❌ Build multiple blocks in one response
+- ❌ Assume all blocks follow the same pattern without testing
+- ❌ Skip testing/review cycle
+- ❌ Auto-commit without human review
+
+**Do NOT proceed to the next block until human explicitly says "build [next block name]"**
+
+---
+
 ## ACF Block Architecture
 
 - All blocks are flexible content blocks

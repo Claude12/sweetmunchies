@@ -14,8 +14,6 @@
   --color-secondary: #{$color-secondary};
   --color-accent: #{$color-accent};
   --color-white: #{$color-white};
-  --color-black: #{$color-black};
-  --color-grey-100: #{$color-grey-100};
   --color-grey-300: #{$color-grey-300};
   --color-grey-500: #{$color-grey-500};
   --color-grey-700: #{$color-grey-700};
@@ -32,6 +30,12 @@
   --color-error: #{$color-error};
   --color-warning: #{$color-warning};
   --color-whatsapp: #{$color-whatsapp};
+  --color-promo-text: #{$color-promo-text};
+  --color-secondary-hover-bg: #{$color-secondary-hover-bg};
+  --color-border-light: #{$color-border-light};
+  --color-cta-box-text: #{$color-cta-box-text};
+  --color-footer-tagline: #{$color-footer-tagline};
+  --color-footer-muted: #{$color-footer-muted};
 
   --spacer-4: #{$spacer-4};
   --spacer-8: #{$spacer-8};
@@ -75,7 +79,7 @@ body.no-scroll {
 .container {
   padding-left: $mobile-gutter;
   padding-right: $mobile-gutter;
-  max-width: 1140px;
+  max-width: 1180px;
   width: 100%;
   margin: 0 auto;
 }

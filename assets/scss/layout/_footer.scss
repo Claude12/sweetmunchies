@@ -34,6 +34,7 @@
   background: var(--color-secondary);
   color: var(--color-green-tint);
   padding: 0 $mobile-gutter 30px;
+  margin-top: 71px;
 }
 
 .footer__logo-wrap {
@@ -71,14 +72,14 @@
 .footer__tagline {
   font-size: $font-size-sm;
   line-height: $line-height-base;
-  color: #d3e0cc;
+  color: var(--color-footer-tagline);
   max-width: 240px;
   margin: 0 0 16px;
 }
 
 .footer__thanks {
   font-size: $font-size-xs;
-  color: #c4d3bc;
+  color: var(--color-footer-muted);
   margin: 0 0 12px;
 }
 
@@ -120,8 +121,13 @@
     color: var(--color-green-tint);
   }
 
-  a:hover {
-    color: var(--color-white);
+  a {
+    text-decoration: none;
+    text-underline-offset: 3px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -145,17 +151,19 @@
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 22px;
   font-size: 12.5px;
-  color: #c4d3bc;
+  color: var(--color-footer-muted);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
 
   a {
-    color: #c4d3bc;
+    color: var(--color-footer-muted);
+    text-decoration: none;
+    text-underline-offset: 3px;
 
     &:hover {
-      color: var(--color-green-tint);
+      text-decoration: underline;
     }
   }
 }

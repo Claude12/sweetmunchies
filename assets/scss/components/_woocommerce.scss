@@ -30,3 +30,82 @@
     text-decoration: none;
   }
 }
+
+// ProductCard quick-add button (see woocommerce/loop/add-to-cart.php) — a
+// round icon button that cycles idle → loading → added purely from the
+// .loading/.added classes WooCommerce's own wc-add-to-cart.js toggles during
+// its AJAX request. No custom JS.
+.add_to_cart_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 0;
+  transition: background-color 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 14px -4px rgba(210, 20, 76, 0.45);
+  }
+
+  &.added {
+    background: var(--color-secondary);
+
+    &:hover {
+      box-shadow: 0 6px 14px -4px rgba(21, 50, 27, 0.45);
+    }
+  }
+
+  .product-card__quick-add-icon {
+    display: none;
+    line-height: 0;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  .product-card__quick-add-icon--idle {
+    display: block;
+  }
+
+  &.loading {
+    .product-card__quick-add-icon--idle {
+      display: none;
+    }
+
+    .product-card__quick-add-icon--loading {
+      display: block;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+
+  &.added {
+    .product-card__quick-add-icon--idle,
+    .product-card__quick-add-icon--loading {
+      display: none;
+    }
+
+    .product-card__quick-add-icon--added {
+      display: block;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// WooCommerce injects a "View cart" link next to the button after a
+// successful AJAX add — the toast (see assets/js/lib/toast.js) already
+// confirms the add, so this redundant link is hidden rather than restyled.
+.product-card__quick-add .added_to_cart {
+  display: none;
+}

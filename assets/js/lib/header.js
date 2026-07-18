@@ -25,7 +25,36 @@ function lockBodyScroll(shouldLock) {
   document.body.classList.toggle('no-scroll', shouldLock);
 }
 
+// The desktop dropdown works on pure CSS :hover/:focus-within, but the gap
+// between the trigger link and the absolutely-positioned .sub-menu (see
+// margin-top in _header.scss) sits outside that hoverable area — moving the
+// cursor diagonally through it can drop :hover before the panel is reached,
+// snapping the dropdown shut early. This layers a short close delay on top
+// via an .is-open class so intentional moves into the panel survive the gap.
+function setupDesktopDropdowns(navList) {
+  if (!navList) return;
+
+  const CLOSE_DELAY = 250;
+
+  navList.querySelectorAll(':scope > li.menu-item-has-children').forEach((item) => {
+    let closeTimer = null;
+
+    item.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+      item.classList.add('is-open');
+    });
+
+    item.addEventListener('mouseleave', () => {
+      closeTimer = setTimeout(() => {
+        item.classList.remove('is-open');
+      }, CLOSE_DELAY);
+    });
+  });
+}
+
 function header() {
+  setupDesktopDropdowns(document.querySelector('.header__nav-list'));
+
   const menuToggle = document.querySelector('[data-menu-toggle]');
   const mobileDrawer = document.querySelector('[data-mobile-nav]');
   const menuClosers = document.querySelectorAll('[data-menu-close]');

@@ -8,7 +8,15 @@
 @use "base/global";
 
 @use "components/image-text-block";
+@use "components/home-hero";
+@use "components/trust-bar";
+@use "components/product-grid";
+@use "components/shop-by-occasion";
+@use "components/testimonials";
+@use "components/ig-strip";
+@use "components/whatsapp-cta";
 @use "components/woocommerce";
+@use "components/toast";
 
 @use "layout/header";
 @use "layout/footer";

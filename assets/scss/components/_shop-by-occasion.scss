@@ -1,0 +1,85 @@
+.shop-by-occasion {
+  padding: 60px 0;
+
+  &__header {
+    margin-bottom: 26px;
+  }
+
+  &__heading {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin: 0 0 6px;
+  }
+
+  &__subtext {
+    color: var(--color-text-muted);
+    font-size: 15px;
+    margin: 0;
+  }
+
+  &__scroll {
+    position: relative;
+
+    // Fades the right edge so the row visibly reads as scrollable rather
+    // than looking like a cut-off, complete-in-frame layout.
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: var(--spacer-8);
+      width: 56px;
+      background: linear-gradient(to right, transparent, var(--color-cream));
+      pointer-events: none;
+    }
+  }
+
+  &__list {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    list-style: none;
+    padding: 0 0 var(--spacer-8);
+    margin: 0;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    li {
+      scroll-snap-align: start;
+      flex: 0 0 auto;
+    }
+  }
+
+  &__card {
+    display: block;
+    min-width: 150px;
+    border-radius: 18px;
+    padding: 20px 18px;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: transform 0.15s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  &__icon {
+    display: block;
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  &__name {
+    display: block;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-text);
+  }
+}

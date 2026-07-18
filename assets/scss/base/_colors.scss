@@ -6,8 +6,6 @@ $color-accent: #fbbd2b; // gold — badges, highlights, star ratings
 
 // Neutrals
 $color-white: #fff;
-$color-black: #000;
-$color-grey-100: #f5f5f5;
 $color-grey-300: #ede1d2; // cream border/alt-background tone from the design
 $color-grey-500: #b7a99f; // muted taupe
 $color-grey-700: #6b5f58; // muted brown-grey — secondary/meta text
@@ -33,3 +31,14 @@ $color-warning: #d69e2e;
 
 // Brand-specific one-off — WhatsApp CTA button only, not part of the core scale
 $color-whatsapp: #25d366;
+
+// Pale green/cream tints — the design uses several near-identical but
+// distinct shades for text/backgrounds on or near dark-green surfaces.
+// Each is tied to one specific usage found in the design; do not
+// substitute $color-green-tint for these, they are not interchangeable.
+$color-promo-text: #f3efe6; // promo strip text (sits on --color-secondary bg)
+$color-secondary-hover-bg: #e7eee1; // secondary/outline button hover background
+$color-border-light: #f3eee6; // search-results row border / placeholder-image bg
+$color-cta-box-text: #e3edde; // paragraph text inside dark-green CTA boxes (newsletter/cart-drawer subtext)
+$color-footer-tagline: #d3e0cc; // footer tagline paragraph text
+$color-footer-muted: #c4d3bc; // footer "thank you" text + bottom-bar copyright/link text

@@ -50,6 +50,10 @@ function sweetmunchies_setup()
 	 */
 	add_theme_support('post-thumbnails');
 
+	// Product card image (see woocommerce/content-product.php) — matches the
+	// 4:3 crop used across the homepage product grids.
+	add_image_size('sweetmunchies_product_card', 480, 360, true);
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
@@ -132,7 +136,14 @@ function sweetmunchies_scripts()
 	$css_version = filemtime(get_template_directory() . '/dist/css/style.css');
 	$js_version  = filemtime(get_template_directory() . '/dist/js/main.js');
 
-	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array(), $css_version);
+	wp_enqueue_style(
+		'google-fonts',
+		'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array('google-fonts'), $css_version);
 
 	wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/main.js', array(), $js_version, true);
 

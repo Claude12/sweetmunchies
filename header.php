@@ -100,9 +100,7 @@ if (function_exists('WC') && WC()->cart) {
 							<circle cx="9.5" cy="20.5" r="1.4" fill="currentColor" />
 							<circle cx="17" cy="20.5" r="1.4" fill="currentColor" />
 						</svg>
-						<?php if ($cart_count > 0): ?>
-							<span class="header__cart-count"><?php echo esc_html((string) $cart_count); ?></span>
-						<?php endif; ?>
+						<span class="header__cart-count<?php echo $cart_count > 0 ? '' : ' is-hidden'; ?>"><?php echo esc_html((string) $cart_count); ?></span>
 					</a>
 
 					<button type="button" class="header__icon-btn header__hamburger" data-menu-toggle

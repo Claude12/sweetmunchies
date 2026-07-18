@@ -6,7 +6,7 @@
 
 .promo-strip {
   background: var(--color-secondary);
-  color: var(--color-green-tint);
+  color: var(--color-promo-text);
   text-align: center;
   padding: 9px 16px;
   font-size: $font-size-sm;
@@ -93,10 +93,11 @@
     color: var(--color-text);
     font-weight: $font-weight-semibold;
     font-size: $font-size-base;
-    transition: color 0.15s;
+    text-decoration: none;
+    text-underline-offset: 4px;
 
     &:hover {
-      color: var(--color-primary);
+      text-decoration: underline;
     }
   }
 
@@ -165,8 +166,13 @@
     }
   }
 
+  // :hover/:focus-within keep this working with no JS; .is-open (toggled by
+  // assets/js/lib/header.js) layers a hover-intent close delay on top so the
+  // dropdown doesn't snap shut while the cursor crosses the gap below the
+  // trigger link on its way down into the panel.
   .menu-item-has-children:hover > .sub-menu,
-  .menu-item-has-children:focus-within > .sub-menu {
+  .menu-item-has-children:focus-within > .sub-menu,
+  .menu-item-has-children.is-open > .sub-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -210,6 +216,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &.is-hidden {
+    display: none;
+  }
 }
 
 .header__hamburger {
@@ -326,9 +336,11 @@
     padding: 14px 4px;
     font-weight: $font-weight-semibold;
     color: var(--color-text);
+    text-decoration: none;
+    text-underline-offset: 4px;
 
     &:hover {
-      color: var(--color-primary);
+      text-decoration: underline;
     }
   }
 
@@ -442,4 +454,9 @@
   cursor: pointer;
   color: var(--color-text-muted);
   padding: 4px;
+  border-radius: 10px;
+
+  &:hover {
+    background: var(--color-pink-tint);
+  }
 }

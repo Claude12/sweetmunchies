@@ -1,0 +1,67 @@
+@use "abstracts/mixins" as *;
+
+.testimonials {
+  background: var(--color-pink-tint);
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+
+  &__deco {
+    position: absolute;
+    top: 20px;
+    right: 6%;
+    width: 130px;
+    opacity: 0.15;
+    transform: rotate(20deg);
+    pointer-events: none;
+  }
+
+  &__heading {
+    text-align: center;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    margin: 0 0 var(--spacer-32);
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    @include min-breakpoint(tablet) {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
+
+  &__item {
+    background: var(--color-white);
+    border-radius: 18px;
+    padding: 26px;
+    box-shadow: 0 8px 24px -12px rgba(36, 63, 28, 0.15);
+  }
+
+  &__stars {
+    display: flex;
+    gap: 2px;
+    color: var(--color-accent);
+    margin-bottom: var(--spacer-8);
+  }
+
+  &__quote {
+    font-family: "Caveat", cursive;
+    font-size: 20px;
+    color: var(--color-text);
+    line-height: 1.4;
+    margin: 0 0 14px;
+  }
+
+  &__name {
+    margin: 0;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--color-secondary);
+  }
+}

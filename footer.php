@@ -120,26 +120,14 @@ $footer_credit = get_field('footer_credit', 'option');
 			<h4 class="footer__col-title">Get in touch</h4>
 			<div class="footer__links">
 				<?php if (!empty($socials['whatsapp']) && !empty($contact_info['phone_display'])): ?>
-					<a href="https://wa.me/<?php echo esc_attr($socials['whatsapp']); ?>" target="_blank" rel="noopener noreferrer">
-						<?php
-						printf(
-							/* translators: %s: phone number */
-							esc_html__('Phone: %s', 'sweetmunchies'),
-							esc_html($contact_info['phone_display'])
-						);
-						?>
-					</a>
+					<span>
+						<?php esc_html_e('Phone: ', 'sweetmunchies'); ?><a href="https://wa.me/<?php echo esc_attr($socials['whatsapp']); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html($contact_info['phone_display']); ?></a>
+					</span>
 				<?php endif; ?>
 				<?php if (!empty($contact_info['email'])): ?>
-					<a href="mailto:<?php echo esc_attr($contact_info['email']); ?>">
-						<?php
-						printf(
-							/* translators: %s: email address */
-							esc_html__('Email: %s', 'sweetmunchies'),
-							esc_html($contact_info['email'])
-						);
-						?>
-					</a>
+					<span>
+						<?php esc_html_e('Email: ', 'sweetmunchies'); ?><a href="mailto:<?php echo esc_attr($contact_info['email']); ?>"><?php echo esc_html($contact_info['email']); ?></a>
+					</span>
 				<?php endif; ?>
 				<?php if (!empty($contact_info['location'])): ?>
 					<span>

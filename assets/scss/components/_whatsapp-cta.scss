@@ -1,0 +1,62 @@
+@use "abstracts/mixins" as *;
+
+.whatsapp-cta {
+  padding: 60px 20px;
+
+  &__inner {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--color-secondary);
+    border-radius: 26px;
+    padding: clamp(28px, 5vw, 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacer-24);
+
+    @include min-breakpoint(tablet) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+  }
+
+  &__text {
+    max-width: 480px;
+  }
+
+  &__heading {
+    color: var(--color-white);
+    font-size: clamp(20px, 2.4vw, 26px);
+    font-weight: 800;
+    margin: 0 0 8px;
+  }
+
+  &__subtext {
+    color: var(--color-cta-box-text);
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacer-8);
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--color-whatsapp);
+    color: var(--color-white);
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}
