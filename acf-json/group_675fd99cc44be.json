@@ -736,12 +736,12 @@
                             "append": ""
                         },
                         {
-                            "key": "field_68f30500e013",
-                            "label": "Occasions",
-                            "name": "occasions",
+                            "key": "field_68f7c200p021",
+                            "label": "Categories",
+                            "name": "featured_categories",
                             "aria-label": "",
-                            "type": "repeater",
-                            "instructions": "",
+                            "type": "taxonomy",
+                            "instructions": "Pick which categories show as tiles. Only categories with at least one product are selectable. Leave empty to automatically show every category that currently has products.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -749,90 +749,15 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "layout": "block",
-                            "min": 0,
-                            "max": 0,
-                            "collapsed": "",
-                            "button_label": "Add Occasion",
-                            "rows_per_page": 20,
-                            "pagination": 0,
-                            "sub_fields": [
-                                {
-                                    "key": "field_68f30500e021",
-                                    "label": "Category",
-                                    "name": "term",
-                                    "aria-label": "",
-                                    "type": "taxonomy",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "taxonomy": "product_cat",
-                                    "field_type": "select",
-                                    "allow_null": 0,
-                                    "add_term": 0,
-                                    "save_terms": 0,
-                                    "load_terms": 0,
-                                    "return_format": "id",
-                                    "multiple": 0,
-                                    "allow_in_bindings": 0
-                                },
-                                {
-                                    "key": "field_68f30500e022",
-                                    "label": "Icon",
-                                    "name": "icon",
-                                    "aria-label": "",
-                                    "type": "text",
-                                    "instructions": "An emoji works well here.",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "default_value": "\ud83c\udf89",
-                                    "maxlength": "",
-                                    "allow_in_bindings": 0,
-                                    "placeholder": "",
-                                    "prepend": "",
-                                    "append": ""
-                                },
-                                {
-                                    "key": "field_68f30500e023",
-                                    "label": "Background",
-                                    "name": "bg_color",
-                                    "aria-label": "",
-                                    "type": "select",
-                                    "instructions": "",
-                                    "required": 0,
-                                    "conditional_logic": 0,
-                                    "wrapper": {
-                                        "width": "",
-                                        "class": "",
-                                        "id": ""
-                                    },
-                                    "choices": {
-                                        "pink-tint": "Pink",
-                                        "green-tint": "Green",
-                                        "cream-alt": "Cream"
-                                    },
-                                    "default_value": "pink-tint",
-                                    "return_format": "value",
-                                    "multiple": 0,
-                                    "allow_null": 0,
-                                    "allow_in_bindings": 0,
-                                    "ui": 0,
-                                    "ajax": 0,
-                                    "placeholder": "",
-                                    "create_options": 0,
-                                    "save_options": 0
-                                }
-                            ]
+                            "taxonomy": "product_cat",
+                            "field_type": "checkbox",
+                            "allow_null": 1,
+                            "add_term": 0,
+                            "save_terms": 0,
+                            "load_terms": 0,
+                            "return_format": "id",
+                            "multiple": 0,
+                            "allow_in_bindings": 0
                         }
                     ]
                 },
@@ -1637,5 +1562,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784341083
+    "modified": 1784387678
 }

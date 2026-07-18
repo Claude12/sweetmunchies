@@ -56,6 +56,24 @@ function sweetmunchies_get_featured_products(int $limit = 4): array
 }
 
 /**
+ * Related products for the single product page's "You may also like" grid
+ * (see woocommerce/content-single-product.php).
+ */
+function sweetmunchies_get_related_products(int $product_id, int $limit = 4): array
+{
+	$related_ids = wc_get_related_products($product_id, $limit);
+
+	if (!$related_ids) {
+		return array();
+	}
+
+	return wc_get_products(array(
+		'status'  => 'publish',
+		'include' => $related_ids,
+	));
+}
+
+/**
  * WooCommerce's cart-fragments script is normally only enqueued by the
  * classic Cart Widget, which this theme doesn't use — load it directly so
  * the header cart badge (see header.php + the fragments filter below) can

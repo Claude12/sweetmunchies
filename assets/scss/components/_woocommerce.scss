@@ -1,3 +1,5 @@
+@use "abstracts/mixins" as *;
+
 // WooCommerce's own stylesheet is disabled (see inc/woocommerce.php) so the
 // plugin's default markup is unstyled by default — build up product/cart/
 // checkout styles here as those pages get designed.
@@ -35,7 +37,14 @@
 // round icon button that cycles idle → loading → added purely from the
 // .loading/.added classes WooCommerce's own wc-add-to-cart.js toggles during
 // its AJAX request. No custom JS.
-.add_to_cart_button {
+//
+// Scoped under .product-card__quick-add, and qualified with the "a" type
+// selector, so its specificity (0,2,1) matches .woocommerce a.button's
+// (0,2,1) — WooCommerce core always adds the plain "button" class alongside
+// "add_to_cart_button" on this same <a>, so a plain class-only selector here
+// (0,2,0) still lost to that rule; matching its specificity and declaring
+// this rule later lets source order settle the tie in our favor.
+.product-card__quick-add a.add_to_cart_button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,9 +112,935 @@
   }
 }
 
-// WooCommerce injects a "View cart" link next to the button after a
-// successful AJAX add — the toast (see assets/js/lib/toast.js) already
-// confirms the add, so this redundant link is hidden rather than restyled.
-.product-card__quick-add .added_to_cart {
+// Quote-on-request products (no price — see woocommerce/loop/add-to-cart.php)
+// get a plain link to the product page instead of the icon quick-add button.
+.product-card__quick-add-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: var(--color-white);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 14px -4px rgba(21, 50, 27, 0.45);
+  }
+}
+
+// WooCommerce injects a "View cart" link next to the button after any
+// successful AJAX add (product cards and the single-product form alike) —
+// the toast (see assets/js/lib/toast.js) already confirms the add and links
+// to the cart itself, so this redundant native link is hidden everywhere.
+.added_to_cart.wc-forward {
   display: none;
+}
+
+// Single product page (see woocommerce/content-single-product.php).
+.product-page {
+  padding-bottom: var(--spacer-96);
+
+  // :not() keeps this from also matching the breadcrumb strip (see
+  // inc/template-parts/page-banner.php) — it's a ".container" too, and a
+  // direct child of this same <main>, which would otherwise win over its
+  // own padding-top with higher specificity.
+  > .container:not(.page-banner__breadcrumb) {
+    padding-top: var(--spacer-24);
+  }
+}
+
+.product-page__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacer-32);
+
+  @include min-breakpoint(tablet) {
+    grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr);
+    gap: 44px;
+  }
+}
+
+.product-page__main-image {
+  border-radius: 22px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 12px;
+  background: var(--color-cream);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.product-page__thumbs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.product-page__thumb {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid var(--color-border);
+  padding: 0;
+  background: none;
+  transition: border-color 0.15s;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &.is-active {
+    border-color: var(--color-primary);
+  }
+}
+
+.product-page__badge {
+  display: inline-block;
+  background: var(--color-accent);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+
+.product-page__title {
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.product-page__tagline {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  margin: 0 0 14px;
+}
+
+.product-page__price-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.product-page__price {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.product-page__price--poa {
+  color: var(--color-text-muted);
+  font-size: 20px;
+}
+
+.product-page__meta {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.product-page__info-box {
+  background: var(--color-cream);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-page__info-row {
+  display: flex;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-text);
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--color-primary);
+  }
+}
+
+.product-page__gift-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+  }
+}
+
+.product-page__gift-message {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.product-page__gift-hint {
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+// Quote-on-request products (see woocommerce/content-single-product.php) —
+// a description textarea + WhatsApp button in place of the cart form.
+.product-page__poa-label {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.product-page__poa-message {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 14px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.product-page__poa-button {
+  width: 100%;
+  background: var(--color-whatsapp);
+  color: var(--color-white);
+  border: none;
+  padding: 17px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.product-page__qty-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+
+.product-page__qty-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.product-page__qty-btn {
+  width: 38px;
+  height: 38px;
+  border: none;
+  background: var(--color-white);
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color 0.15s;
+
+  &:hover {
+    background: var(--color-pink-tint);
+  }
+}
+
+.product-page__qty-input {
+  width: 36px;
+  text-align: center;
+  font-weight: 700;
+  border: none;
+  background: none;
+  -moz-appearance: textfield;
+  font-size: 14px;
+  color: var(--color-text);
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.product-page__total {
+  color: var(--color-text-muted);
+  font-size: 14px;
+
+  strong {
+    color: var(--color-text);
+  }
+}
+
+.product-page__add-to-cart {
+  width: 100%;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 17px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: var(--color-primary-dark);
+  }
+
+  &.is-added {
+    background: var(--color-secondary);
+  }
+
+  .product-page__add-to-cart-icon {
+    display: none;
+    line-height: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &.is-loading .product-page__add-to-cart-icon--loading {
+    display: block;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &.is-added .product-page__add-to-cart-icon--added {
+    display: block;
+  }
+}
+
+.product-page__trust {
+  display: flex;
+  gap: 14px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+  color: var(--color-text-muted);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.product-page__tabs {
+  margin-top: 34px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 22px;
+}
+
+.product-page__tab-list {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.product-page__tab {
+  background: none;
+  border: none;
+  padding: 0 0 12px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &.is-active {
+    color: var(--color-text);
+    border-bottom-color: var(--color-primary);
+  }
+}
+
+.product-page__tab-panel {
+  display: none;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  font-size: 14.5px;
+
+  &.is-active {
+    display: block;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.product-page__inside-list {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.9;
+}
+
+.product-page__related {
+  margin-top: 70px;
+
+  // Overrides .product-grid__list's auto-fit columns, which stretch a single
+  // related product to the full row width — pin to a fixed 4-column grid so
+  // cards stay card-sized regardless of how many related products there are.
+  .product-grid__list {
+    grid-template-columns: repeat(1, 1fr);
+
+    @include min-breakpoint(tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include min-breakpoint(desktop) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
+
+.product-page__related-heading {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 22px;
+}
+
+.product-page__sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  z-index: 45;
+  box-shadow: 0 -8px 24px -12px rgba(0, 0, 0, 0.15);
+
+  @include min-breakpoint(tablet) {
+    display: none;
+  }
+}
+
+.product-page__sticky-cta-total {
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--color-primary);
+}
+
+.product-page__sticky-cta-name {
+  font-size: 11.5px;
+  color: var(--color-text-muted);
+}
+
+.product-page__sticky-cta-button {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 13px 26px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+// Cart page — WhatsApp order flow, no checkout (see page-cart.php).
+.cart-page {
+  padding-bottom: var(--spacer-96);
+}
+
+.cart-page__heading {
+  font-size: clamp(26px, 3.4vw, 34px);
+  font-weight: 800;
+  margin: var(--spacer-24) 0 6px;
+}
+
+.cart-page__subtext {
+  color: var(--color-text-muted);
+  font-size: 15px;
+  margin: 0 0 var(--spacer-24);
+}
+
+.cart-page__empty {
+  text-align: center;
+  padding: var(--spacer-48) 0;
+
+  .cart-page__heading {
+    margin-top: 0;
+  }
+}
+
+.cart-page__items {
+  background: var(--color-white);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px -18px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.cart-page__item {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.cart-page__item-image {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-cream);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.cart-page__item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-page__item-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cart-page__item-name {
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 15px;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.cart-page__item-remove {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: color 0.15s;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.cart-page__item-tag {
+  display: inline-block;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.cart-page__item-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.cart-page__qty-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.cart-page__qty-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: var(--color-white);
+  font-size: 15px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color 0.15s;
+
+  &:hover {
+    background: var(--color-pink-tint);
+  }
+}
+
+.cart-page__qty-input {
+  width: 30px;
+  text-align: center;
+  font-weight: 700;
+  border: none;
+  background: none;
+  -moz-appearance: textfield;
+  font-size: 13.5px;
+  color: var(--color-text);
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.cart-page__item-price {
+  font-weight: 800;
+  color: var(--color-primary);
+  font-size: 15px;
+}
+
+.cart-page__totals {
+  background: var(--color-white);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px -18px rgba(0, 0, 0, 0.18);
+  padding: 20px 22px;
+  margin-top: var(--spacer-24);
+}
+
+.cart-page__totals-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14.5px;
+  color: var(--color-text-muted);
+
+  &--total {
+    border-top: 1px dashed var(--color-border);
+    margin-top: 6px;
+    padding-top: 14px;
+    font-weight: 800;
+    font-size: 17px;
+    color: var(--color-text);
+
+    span:last-child {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.cart-page__whatsapp {
+  background: var(--color-secondary);
+  color: var(--color-white);
+  border-radius: 18px;
+  padding: 34px 26px;
+  margin-top: var(--spacer-32);
+  text-align: center;
+}
+
+.cart-page__whatsapp-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-whatsapp);
+  margin-bottom: 14px;
+}
+
+.cart-page__whatsapp-heading {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.cart-page__whatsapp-text {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  max-width: 440px;
+  margin: 0 auto 22px;
+  line-height: 1.6;
+}
+
+.cart-page__whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacer-8);
+  padding: 15px 30px;
+  border-radius: 999px;
+  background: var(--color-whatsapp);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.cart-page__whatsapp-note {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin: 18px 0 0;
+}
+
+.cart-page__continue {
+  display: block;
+  text-align: center;
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: var(--spacer-24);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &--outline {
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    padding: 13px;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &--solid {
+    display: inline-block;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 100px;
+    padding: 13px 32px;
+
+    &:hover {
+      background: var(--color-primary-dark);
+      color: var(--color-white);
+    }
+  }
+}
+
+// Shop archive + product-category archives (see woocommerce/archive-product.php).
+.shop-page {
+  // :not() keeps this from also matching the breadcrumb strip (see
+  // inc/template-parts/page-banner.php) — it's a ".container" too, and a
+  // direct child of this same <main>, which would otherwise win over its
+  // own padding-top with higher specificity.
+  > .container:not(.page-banner__breadcrumb) {
+    padding-top: var(--spacer-24);
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto var(--spacer-24);
+  }
+
+  &__heading {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin: 0 0 var(--spacer-8);
+  }
+
+  &__subtext {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  &__delivery-banner {
+    background: var(--color-pink-tint);
+    color: var(--color-text);
+    border-radius: 100px;
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    max-width: fit-content;
+    margin: 0 auto var(--spacer-32);
+  }
+
+  &__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacer-16);
+    margin-bottom: var(--spacer-32);
+  }
+
+  &__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  &__pill {
+    display: inline-block;
+    border: 1px solid var(--color-border);
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover {
+      border-color: var(--color-primary);
+    }
+
+    &.is-active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-white);
+    }
+  }
+
+  &__sort {
+    .woocommerce-ordering {
+      margin: 0;
+    }
+
+    select.orderby {
+      appearance: none;
+      -webkit-appearance: none;
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      padding: 8px 40px 8px 16px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-text);
+      background: var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23241C1A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 16px center;
+      cursor: pointer;
+    }
+  }
+
+  .product-grid__list {
+    grid-template-columns: repeat(1, 1fr);
+
+    @include min-breakpoint(tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include min-breakpoint(desktop) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .woocommerce-pagination {
+    margin-top: var(--spacer-48);
+
+    ul {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a,
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 8px;
+      border-radius: 100px;
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+
+      &:hover {
+        border-color: var(--color-primary);
+      }
+    }
+
+    span.current {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--color-white);
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    padding: var(--spacer-48) 0;
+    color: var(--color-text-muted);
+  }
+
+  &__empty-link {
+    display: inline-block;
+    margin-top: var(--spacer-16);
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-primary-dark);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 {
     "key": "group_68f30a00j001",
-    "title": "Product Card Details",
+    "title": "Product Details",
     "fields": [
         {
             "key": "field_68f30a00j011",
@@ -64,6 +64,93 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_68f30a00j015",
+            "label": "Allergens",
+            "name": "allergens",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown in the info box on the single product page, e.g. \"Contains nuts, dairy, gluten\".",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f30a00j016",
+            "label": "Lead Time",
+            "name": "lead_time",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown in the info box on the single product page, e.g. \"Ready in 24-48 hrs\".",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f30a00j017",
+            "label": "What's Inside",
+            "name": "whats_inside",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Bullet list shown in the \"What's Inside\" tab on the single product page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_68f30a00j021",
+            "button_label": "Add Item",
+            "rows_per_page": 20,
+            "pagination": 0,
+            "sub_fields": [
+                {
+                    "key": "field_68f30a00j021",
+                    "label": "Item",
+                    "name": "item",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
         }
     ],
     "location": [
@@ -87,5 +174,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784310000
+    "modified": 1784369284
 }

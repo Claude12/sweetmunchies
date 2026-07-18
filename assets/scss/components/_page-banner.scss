@@ -44,7 +44,19 @@
 }
 
 .page-banner__breadcrumb {
-  padding: 16px 20px 0;
+  padding: 16px 20px 12px;
+
+  // Without a hero image behind it, the breadcrumb sits directly on the
+  // page background — where the header logo's deliberate overhang (see
+  // .header__logo-image) would otherwise clip the breadcrumb text. Push
+  // it down far enough to clear the logo at each breakpoint instead.
+  &--no-hero {
+    padding-top: var(--spacer-32);
+
+    @include min-breakpoint(tablet) {
+      padding-top: var(--spacer-64);
+    }
+  }
 
   .rank-math-breadcrumb {
     font-size: 13.5px;

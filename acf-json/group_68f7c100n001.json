@@ -1,0 +1,49 @@
+{
+    "key": "group_68f7c100n001",
+    "title": "Category Icon",
+    "fields": [
+        {
+            "key": "field_68f7c100n011",
+            "label": "Icon",
+            "name": "category_icon",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Shown on this category's tile in the homepage \"Shop by Occasion\" section. An emoji works well here, e.g. 🎂. The tile only appears once this category has at least one published product.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "🎉",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "product_cat"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1784387273
+}

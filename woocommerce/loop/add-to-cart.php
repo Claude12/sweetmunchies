@@ -25,6 +25,21 @@ global $product;
 // so static analysis and any direct include of this file don't warn/notice.
 $args = $args ?? array();
 
+// Products with no price (quote-on-request — see woocommerce/
+// content-single-product.php) aren't purchasable, so core only ever passes a
+// plain "button" class here (no add_to_cart_button/ajax_add_to_cart) and
+// points the link at the product permalink with "Read more" text. Render
+// that as a plain link instead of the idle/loading/added icon button, since
+// none of those states apply without a cart action.
+if (!$product->is_purchasable()) {
+    printf(
+        '<a href="%s" class="product-card__quick-add-link" aria-label="%s"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></a>',
+        esc_url(get_permalink($product->get_id())),
+        esc_attr__('View product', 'sweetmunchies')
+    );
+    return;
+}
+
 $aria_describedby = isset($args['aria-describedby_text'])
     ? sprintf('aria-describedby="woocommerce_loop_add_to_cart_link_describedby_%s"', esc_attr($product->get_id()))
     : '';

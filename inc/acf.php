@@ -57,6 +57,18 @@ if (! function_exists('sweetmunchies_render_flexible_content')) :
 endif;
 
 /**
+ * Restrict the "Shop by Occasion" block's Categories field (see
+ * inc/blocks/shop-by-occasion.php) to product categories that currently
+ * have at least one product — an empty category can't be selected as a
+ * tile.
+ */
+add_filter('acf/fields/taxonomy/query/key=field_68f7c200p021', function ($args) {
+	$args['hide_empty'] = true;
+
+	return $args;
+});
+
+/**
  * Warn admins in wp-admin if Advanced Custom Fields Pro isn't active — every
  * template in this theme reads its content via ACF fields and will render
  * blank without it.

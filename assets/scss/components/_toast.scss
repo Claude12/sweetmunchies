@@ -1,13 +1,20 @@
+@use "abstracts/mixins" as *;
+
 // Add-to-cart confirmation toast — created/shown by assets/js/lib/toast.js
 // in response to WooCommerce's native `added_to_cart` event.
 .toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
+  width: max-content;
+  max-width: calc(100vw - var(--spacer-32));
+  display: flex;
+  align-items: center;
+  gap: var(--spacer-16);
   transform: translate(-50%, 14px);
   background: var(--color-text);
   color: var(--color-white);
-  padding: 12px 22px;
+  padding: 12px 14px 12px 22px;
   border-radius: 100px;
   font-size: 13.5px;
   font-weight: 600;
@@ -19,11 +26,53 @@
   &.is-visible {
     opacity: 1;
     transform: translate(-50%, 0);
+    pointer-events: auto;
   }
 
   &.is-hiding {
     opacity: 0;
     transform: translate(-50%, 8px);
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 20px;
+  }
+}
+
+// Extra clearance above the single-product page's fixed sticky Add to Cart
+// bar (see .product-page__sticky-cta), which only renders below tablet
+// width — the modifier class is added by toast.js when that bar exists in
+// the DOM.
+.toast--has-sticky-cta {
+  bottom: 88px;
+
+  @include min-breakpoint(tablet) {
+    bottom: 24px;
+  }
+}
+
+.toast__message {
+  min-width: 0;
+}
+
+.toast__link {
+  flex-shrink: 0;
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  &[hidden] {
+    display: none;
   }
 }
 

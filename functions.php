@@ -57,6 +57,9 @@ function sweetmunchies_setup()
 	// Interior page banner background (see inc/template-parts/page-banner.php).
 	add_image_size('sweetmunchies_page_banner', 1600, 520, true);
 
+	// Single product page hero image — 4:5 crop (see woocommerce/content-single-product.php).
+	add_image_size('sweetmunchies_product_hero', 960, 1200, true);
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
@@ -250,6 +253,7 @@ require get_template_directory() . '/inc/acf.php';
  */
 if (class_exists('WooCommerce')) {
 	require get_template_directory() . '/inc/woocommerce.php';
+	require get_template_directory() . '/inc/woocommerce-cart.php';
 }
 
 /**

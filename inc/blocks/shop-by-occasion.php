@@ -9,14 +9,39 @@ declare(strict_types=1);
  * Rendered inside the have_rows()/the_row() loop in
  * sweetmunchies_render_flexible_content() (see inc/acf.php).
  *
+ * The "Categories" field lets an editor pick specific categories to
+ * feature (choices are restricted to categories with products — see the
+ * acf/fields/taxonomy/query filter in inc/acf.php); left empty, it falls
+ * back to showing every category that currently has products. Either way,
+ * tiles always render in alphabetical order. Each category's icon comes
+ * from its own "Icon" field on the category edit screen (see
+ * acf-json/group_68f7c100n001.json, attached to the product_cat taxonomy).
+ *
  * @package sweetmunchies
  */
 
-$heading   = get_sub_field('heading');
-$subtext   = get_sub_field('subtext');
-$occasions = get_sub_field('occasions');
+$heading  = get_sub_field('heading');
+$subtext  = get_sub_field('subtext');
+$selected = get_sub_field('featured_categories');
 
-if (!$occasions) {
+if ($selected) {
+    $categories = array_filter(array_map(
+        fn ($term_id) => get_term($term_id, 'product_cat'),
+        $selected
+    ), fn ($term) => $term && !is_wp_error($term) && $term->count > 0);
+} else {
+    $categories = get_terms([
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => true,
+    ]);
+    $categories = is_wp_error($categories) ? [] : $categories;
+}
+
+$categories = array_values($categories);
+usort($categories, fn ($a, $b) => strcasecmp($a->name, $b->name));
+$bg_colors = ['pink-tint', 'green-tint', 'cream-alt'];
+
+if (!$categories) {
     return;
 }
 ?>
@@ -34,19 +59,18 @@ if (!$occasions) {
 
         <div class="shop-by-occasion__scroll">
             <ul class="shop-by-occasion__list">
-                <?php foreach ($occasions as $occasion): ?>
+                <?php foreach ($categories as $index => $category): ?>
                     <?php
-                    $term = !empty($occasion['term']) ? get_term($occasion['term'], 'product_cat') : null;
-                    if (!$term || is_wp_error($term)) continue;
-                    $bg_color = $occasion['bg_color'] ?: 'pink-tint';
+                    $icon     = get_field('category_icon', $category);
+                    $bg_color = $bg_colors[$index % count($bg_colors)];
                     ?>
                     <li>
-                        <a href="<?php echo esc_url(get_term_link($term)); ?>" class="shop-by-occasion__card"
+                        <a href="<?php echo esc_url(get_term_link($category)); ?>" class="shop-by-occasion__card"
                             style="background-color: var(--color-<?php echo esc_attr($bg_color); ?>);">
-                            <?php if (!empty($occasion['icon'])): ?>
-                                <span class="shop-by-occasion__icon" aria-hidden="true"><?php echo esc_html($occasion['icon']); ?></span>
+                            <?php if ($icon): ?>
+                                <span class="shop-by-occasion__icon" aria-hidden="true"><?php echo esc_html($icon); ?></span>
                             <?php endif; ?>
-                            <span class="shop-by-occasion__name"><?php echo esc_html($term->name); ?></span>
+                            <span class="shop-by-occasion__name"><?php echo esc_html($category->name); ?></span>
                         </a>
                     </li>
                 <?php endforeach; ?>

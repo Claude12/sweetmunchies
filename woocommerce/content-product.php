@@ -42,7 +42,7 @@ $meta_parts      = array_filter([$servings_short, $treats_count]);
         </div>
     </a>
     <div class="product-card__footer">
-        <span class="product-card__price"><?php echo wp_kses_post($product->get_price_html()); ?></span>
+        <span class="product-card__price"><?php echo $product->get_price_html() ? wp_kses_post($product->get_price_html()) : esc_html__('POA', 'sweetmunchies'); ?></span>
         <div class="product-card__quick-add">
             <?php woocommerce_template_loop_add_to_cart(); ?>
         </div>

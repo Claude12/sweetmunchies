@@ -77,7 +77,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Limited time: 10% off your first order — code <strong>SWEET10</strong> · Free delivery within Mutare CBD",
+            "default_value": "Limited time: 10% off your first order \u2014 code <strong>SWEET10</strong> \u00b7 Free delivery within Mutare CBD",
             "maxlength": "",
             "allow_in_bindings": 1,
             "placeholder": "",
@@ -205,6 +205,68 @@
             ]
         },
         {
+            "key": "field_6a5a2d276ee21",
+            "label": "Shop",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_6a5a2d386ee22",
+            "label": "Gift Message Price",
+            "name": "gift_message_price",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Flat surcharge added per item when a customer selects \"Add a photo & message\" on the product page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 2,
+            "min": 0,
+            "max": "",
+            "step": "0.01",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "$",
+            "append": ""
+        },
+        {
+            "key": "field_6a5a2d486ee23",
+            "label": "Delivery & Care Text",
+            "name": "delivery_care_text",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Shown in the \"Delivery & Care\" tab on every single product page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Free delivery within Mutare CBD. Home delivery outside CBD from $2. Nationwide delivery available via courier or bus \u2014 transport cost covered by the customer.",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "new_lines": "",
+            "rows": 4
+        },
+        {
             "key": "field_6853103f58f18",
             "label": "Footer",
             "name": "",
@@ -270,7 +332,7 @@
             "name": "payment_badges",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Shown as badges in the footer \"We accept\" column.",
+            "instructions": "Shown as badges in the footer \"We accept\" column. The label is what's used sitewide; the icon field is not currently rendered anywhere (reserved for future use).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -306,6 +368,32 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": ""
+                },
+                {
+                    "key": "field_6a5a2d586ee24",
+                    "label": "Icon",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Not currently displayed anywhere \u2014 reserved for future use.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "allow_in_bindings": 0,
+                    "preview_size": "medium"
                 }
             ]
         },
@@ -331,7 +419,7 @@
                     "name": "phone_display",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "e.g. 0776 620 294 — shown as text; the WhatsApp link itself uses the Socials → WhatsApp number.",
+                    "instructions": "e.g. 0776 620 294 \u2014 shown as text; the WhatsApp link itself uses the Socials \u2192 WhatsApp number.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -395,7 +483,7 @@
             "name": "footer_credit",
             "aria-label": "",
             "type": "link",
-            "instructions": "Only this link text is clickable — it appears after the fixed \"Website designed and developed by\" label at the bottom of the footer. Leave blank to hide the whole line.",
+            "instructions": "Only this link text is clickable \u2014 it appears after the fixed \"Website designed and developed by\" label at the bottom of the footer. Leave blank to hide the whole line.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -428,5 +516,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784304900
+    "modified": 1784369285
 }
