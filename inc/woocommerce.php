@@ -18,18 +18,16 @@ declare(strict_types=1);
 add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
 /**
- * Swap WooCommerce's default content wrapper for the theme's <main> markup.
- * woocommerce.php calls woocommerce_content() between these two hooks.
+ * There is no on-site checkout or account area — orders are confirmed over
+ * WhatsApp (see page-cart.php). WooCommerce still requires its Checkout and
+ * My Account pages to exist, but page.php only renders ACF content sections,
+ * so both would render blank — send anyone who lands on them to the cart.
  */
-remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
-remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
-
-add_action('woocommerce_before_main_content', function () {
-	echo '<main id="primary" class="site-main woocommerce-page">';
-});
-
-add_action('woocommerce_after_main_content', function () {
-	echo '</main><!-- #main -->';
+add_action('template_redirect', function () {
+	if (is_checkout() || is_account_page()) {
+		wp_safe_redirect(wc_get_page_permalink('cart'));
+		exit;
+	}
 });
 
 /**

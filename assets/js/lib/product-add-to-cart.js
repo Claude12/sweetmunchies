@@ -1,3 +1,5 @@
+import { showToast } from './toast';
+
 function productAddToCart() {
   const form = document.querySelector('.product-page__form');
 
@@ -86,6 +88,12 @@ function productAddToCart() {
       });
       const data = await response.json();
 
+      // WC's add_to_cart endpoint reports failure (e.g. out of stock, since
+      // stock management is enabled) as {error: true} — not an HTTP error.
+      if (!response.ok || data?.error || !data?.fragments) {
+        throw new Error('add_to_cart failed');
+      }
+
       submitButton.classList.remove('is-loading');
       submitButton.classList.add('is-added');
       if (labelEl) {
@@ -107,6 +115,7 @@ function productAddToCart() {
       if (labelEl) {
         labelEl.textContent = originalLabel;
       }
+      showToast('Sorry — this item couldn\'t be added to your cart right now.', { cartUrl: '' });
     }
   };
 

@@ -33,7 +33,10 @@ add_filter('woocommerce_add_cart_item_data', function (array $cart_item_data): a
 		return $cart_item_data;
 	}
 
-	$message = isset($_POST['gift_message']) ? sanitize_textarea_field(wp_unslash($_POST['gift_message'])) : '';
+	// 500-char cap matches the textarea's maxlength (see
+	// content-single-product.php) — enforced here too so a hand-crafted POST
+	// can't store an oversized message in the session.
+	$message = isset($_POST['gift_message']) ? mb_substr(sanitize_textarea_field(wp_unslash($_POST['gift_message'])), 0, 500) : '';
 
 	$cart_item_data['gift_message'] = $message;
 	$cart_item_data['unique_key']   = md5(microtime() . wp_rand());
@@ -96,7 +99,9 @@ add_action('woocommerce_checkout_create_order_line_item', function (WC_Order_Ite
  */
 add_action('wc_ajax_sweetmunchies_update_cart_item', function (): void {
 	$cart_item_key = isset($_POST['cart_item_key']) ? wc_clean(wp_unslash($_POST['cart_item_key'])) : '';
-	$quantity      = isset($_POST['quantity']) ? absint($_POST['quantity']) : 0;
+	// 99 cap matches the qty inputs' max (see content-single-product.php /
+	// page-cart.php) — enforced here too for hand-crafted POSTs.
+	$quantity      = isset($_POST['quantity']) ? min(absint($_POST['quantity']), 99) : 0;
 
 	if ($cart_item_key && $quantity > 0) {
 		WC()->cart->set_quantity($cart_item_key, $quantity, true);

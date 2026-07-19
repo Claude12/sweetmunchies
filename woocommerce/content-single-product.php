@@ -27,7 +27,8 @@ $lead_time      = get_field('lead_time', $product_id);
 $whats_inside   = get_field('whats_inside', $product_id);
 $meta_parts     = array_filter([$servings_short, $treats_count]);
 $gift_price         = sweetmunchies_gift_message_price();
-$gift_price_display = '$' . rtrim(rtrim(number_format($gift_price, 2), '0'), '.');
+$gift_price_display = html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES)
+    . rtrim(rtrim(number_format($gift_price, 2), '0'), '.');
 
 // Products with no price set (e.g. fully custom/made-to-order boxes) are
 // quote-on-request — WooCommerce marks a simple product non-purchasable when
@@ -177,6 +178,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                             name="gift_message"
                             class="product-page__gift-message"
                             placeholder="<?php esc_attr_e('Write your gift message here...', 'sweetmunchies'); ?>"
+                            maxlength="500"
                             hidden
                         ></textarea>
                         <p class="product-page__gift-hint" hidden><?php esc_html_e("You'll be able to send the photo on WhatsApp when you confirm your order — just add your message here for now.", 'sweetmunchies'); ?></p>
@@ -184,7 +186,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                         <div class="product-page__qty-row">
                             <div class="product-page__qty-stepper">
                                 <button type="button" class="product-page__qty-btn" data-qty-decrease aria-label="<?php esc_attr_e('Decrease quantity', 'sweetmunchies'); ?>">&minus;</button>
-                                <input type="number" name="quantity" class="product-page__qty-input" value="1" min="1" inputmode="numeric" />
+                                <input type="number" name="quantity" class="product-page__qty-input" value="1" min="1" max="99" inputmode="numeric" />
                                 <button type="button" class="product-page__qty-btn" data-qty-increase aria-label="<?php esc_attr_e('Increase quantity', 'sweetmunchies'); ?>">+</button>
                             </div>
                             <span class="product-page__total"><?php esc_html_e('Total:', 'sweetmunchies'); ?> <strong data-total-display><?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?></strong></span>
@@ -210,19 +212,19 @@ $related_products = function_exists('sweetmunchies_get_related_products')
 
                 <div class="product-page__tabs">
                     <div class="product-page__tab-list" role="tablist">
-                        <button type="button" class="product-page__tab is-active" role="tab" data-tab="description"><?php esc_html_e('Description', 'sweetmunchies'); ?></button>
+                        <button type="button" class="product-page__tab is-active" role="tab" id="product-tab-description" aria-controls="product-tab-panel-description" aria-selected="true" data-tab="description"><?php esc_html_e('Description', 'sweetmunchies'); ?></button>
                         <?php if ($whats_inside): ?>
-                            <button type="button" class="product-page__tab" role="tab" data-tab="inside"><?php esc_html_e("What's Inside", 'sweetmunchies'); ?></button>
+                            <button type="button" class="product-page__tab" role="tab" id="product-tab-inside" aria-controls="product-tab-panel-inside" aria-selected="false" data-tab="inside"><?php esc_html_e("What's Inside", 'sweetmunchies'); ?></button>
                         <?php endif; ?>
-                        <button type="button" class="product-page__tab" role="tab" data-tab="delivery"><?php esc_html_e('Delivery & Care', 'sweetmunchies'); ?></button>
+                        <button type="button" class="product-page__tab" role="tab" id="product-tab-delivery" aria-controls="product-tab-panel-delivery" aria-selected="false" data-tab="delivery"><?php esc_html_e('Delivery & Care', 'sweetmunchies'); ?></button>
                     </div>
 
-                    <div class="product-page__tab-panel is-active" data-tab-panel="description">
+                    <div class="product-page__tab-panel is-active" role="tabpanel" id="product-tab-panel-description" aria-labelledby="product-tab-description" data-tab-panel="description">
                         <?php echo wp_kses_post(wc_format_content($product->get_description())); ?>
                     </div>
 
                     <?php if ($whats_inside): ?>
-                        <div class="product-page__tab-panel" data-tab-panel="inside">
+                        <div class="product-page__tab-panel" role="tabpanel" id="product-tab-panel-inside" aria-labelledby="product-tab-inside" data-tab-panel="inside">
                             <ul class="product-page__inside-list">
                                 <?php foreach ($whats_inside as $row): ?>
                                     <?php if (!empty($row['item'])): ?>
@@ -233,7 +235,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                         </div>
                     <?php endif; ?>
 
-                    <div class="product-page__tab-panel" data-tab-panel="delivery">
+                    <div class="product-page__tab-panel" role="tabpanel" id="product-tab-panel-delivery" aria-labelledby="product-tab-delivery" data-tab-panel="delivery">
                         <p><?php echo esc_html($delivery_care_text); ?></p>
                     </div>
                 </div>

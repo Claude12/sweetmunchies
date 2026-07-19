@@ -44,7 +44,13 @@ $products = array_values(array_filter(array_map(
                         <?php esc_html_e('All', 'sweetmunchies'); ?>
                     </a>
                     <?php foreach ($categories as $category): ?>
-                        <a href="<?php echo esc_url(get_term_link($category)); ?>" class="shop-page__pill<?php echo ($queried_term && $queried_term->term_id === $category->term_id) ? ' is-active' : ''; ?>">
+                        <?php
+                        $term_link = get_term_link($category);
+                        if (is_wp_error($term_link)) {
+                            continue;
+                        }
+                        ?>
+                        <a href="<?php echo esc_url($term_link); ?>" class="shop-page__pill<?php echo ($queried_term && $queried_term->term_id === $category->term_id) ? ' is-active' : ''; ?>">
                             <?php echo esc_html($category->name); ?>
                         </a>
                     <?php endforeach; ?>

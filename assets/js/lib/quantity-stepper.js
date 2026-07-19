@@ -10,7 +10,8 @@ function quantityStepper() {
 
     const setQty = (value) => {
       const min = parseInt(input.min, 10) || 1;
-      input.value = String(Math.max(min, value));
+      const max = parseInt(input.max, 10) || Infinity;
+      input.value = String(Math.min(max, Math.max(min, value)));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     };
 
@@ -24,8 +25,12 @@ function quantityStepper() {
 
     input.addEventListener('input', () => {
       const min = parseInt(input.min, 10) || 1;
-      if ((parseInt(input.value, 10) || 0) < min) {
+      const max = parseInt(input.max, 10) || Infinity;
+      const value = parseInt(input.value, 10) || 0;
+      if (value < min) {
         input.value = String(min);
+      } else if (value > max) {
+        input.value = String(max);
       }
     });
   });

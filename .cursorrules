@@ -1,4 +1,4 @@
-# .cursorrules — WordPress ACF Theme Development
+# .cursorrules — Sweet Munchies WordPress ACF Theme
 
 ## Design Source of Truth
 - Reference the design artifact at https://claude.ai/code/artifact/1c02bcb5-f44b-4b70-8d6d-687c17e185c6?org=41ad3a15-ecd2-4a86-b036-ce0d96dba095 for all visual/structural decisions
@@ -10,14 +10,12 @@
 
 ## CRITICAL: Build One Block Per Session
 
+All 13 current blocks are built and reviewed — this workflow applies to any NEW block.
+
 ### Workflow (NON-NEGOTIABLE)
 1. Build ONE block only (ACF registration + template + SCSS + JS if needed)
 2. STOP and wait for explicit approval from human
-3. Wait for human to:
-   - Review the code
-   - Test in WordPress admin
-   - Verify on mobile/tablet/desktop
-   - Confirm the design matches
+3. Wait for human to review the code, test in wp-admin, verify on mobile/tablet/desktop, confirm the design matches
 4. Only after human says "build next" proceed to the next block
 
 ### Never Do This
@@ -26,256 +24,122 @@
 - ❌ Skip testing/review cycle
 - ❌ Auto-commit without human review
 
-**Do NOT proceed to the next block until human explicitly says "build [next block name]"**
-
 ---
 
-## ACF Block Architecture
+## Architecture Snapshot
 
-- All blocks are flexible content blocks
+- All page/post content is the ACF flexible content field `content_sections`, rendered by `sweetmunchies_render_flexible_content()` (inc/acf.php). Layout name (underscores) maps to `inc/blocks/{name}.php` (hyphens). The classic editor is removed — pages without blocks render empty.
+- **WooCommerce: the theme owns ALL WC markup — no `woocommerce_*` hook soup.** Routing: `woocommerce.php` (theme root) sends shop/category archives to `woocommerce/archive-product.php`; single product renders `woocommerce/content-single-product.php`; the cart is `page-cart.php`. Product cards live in `woocommerce/content-product.php`, shared via `inc/template-parts/product-grid.php`.
+- **There is no on-site checkout or account.** Orders are confirmed on WhatsApp (cart builds a `wa.me` message). `/checkout/` and `/my-account/` redirect to the cart (inc/woocommerce.php) — do not build checkout flows or link to those pages.
+- Products with an empty price are quote-on-request (POA): no cart form, a WhatsApp enquiry box instead.
+- Gift-message add-on (inc/woocommerce-cart.php): +$ surcharge from Theme Settings, message capped at 500 chars (textarea maxlength AND server-side). Quantities are capped at 99 (input `max` AND server-side).
+- The cart's nonce-less, session-scoped AJAX endpoints are deliberate — they mirror WC core's own add_to_cart/remove_from_cart convention and are documented in inc/woocommerce-cart.php. Don't "fix" this without discussion.
 
 ---
 
 ## PHP Standards & Security
 
 ### File Headers
-Every PHP file must start with:
-```php
-<?php
-declare(strict_types=1);
-
-/**
- * Block: [Block Name]
- * Description of what this block does
- */
-```
+Every PHP file starts with `<?php`, then `declare(strict_types=1);`, THEN the file docblock (this order is deliberate — phpcs.xml.dist accounts for it).
 
 ### Inside Block Templates
-- ONLY use `get_sub_field()` inside flexible content loops — NEVER `get_field()`
-- Always escape output:
-  - Text/HTML: `esc_html()` or `wp_kses_post()`
-  - URLs: `esc_url()`
-  - Attributes: `esc_attr()`
-  - Data attributes: `wp_json_encode()` then `esc_attr()`
-- Example:
-```php
-  <?php
-  $heading = get_sub_field('heading');
-  $image = get_sub_field('background_image');
-  ?>
-  <section class="block block--hero">
-    <h1 class="block__heading"><?php echo esc_html($heading); ?></h1>
-    <img 
-      src="<?php echo esc_url($image['url']); ?>" 
-      alt="<?php echo esc_attr($image['alt']); ?>"
-      class="block__image"
-    />
-  </section>
-```
+- ONLY `get_sub_field()` inside flexible content loops — NEVER `get_field()` for layout fields. Options are read with `get_field('name', 'option')`.
+- Escape at echo time, not at assignment:
+  - Text: `esc_html()` · Rich text: `wp_kses_post()` · URLs: `esc_url()` · Attributes: `esc_attr()`
+- Deliberately unescaped output requires a `// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- <reason>` on the echo line.
+- **Images: always `wp_get_attachment_image($id, $size, false, ['loading' => ..., 'sizes' => ...])`** — never a raw `<img src="$image['url']">` (loses srcset/alt/dimensions). Pick a registered size that matches the rendered slot.
+
+### Defensive patterns (all established in this codebase — keep them)
+- `function_exists()` guard around every plugin-provided function (`wpforms()`, `wc_*`)
+- `is_wp_error()` check on `get_term_link()` before `esc_url()`
+- `get_field(..., 'option') ?: []` — option fields return null until the options page is saved once; provide PHP fallbacks for copy too
+- Blocks early-return when required data is missing
 
 ### Forbidden Actions — STOP & ASK
 - Do NOT modify `wp-config.php`, `.htaccess` without explicit approval
 - Do NOT create custom post types, taxonomies, or metaboxes
 - Do NOT install new plugins
 - Do NOT modify git remote URLs or commit version numbers automatically
-- Do NOT add inline styles (use CSS classes only)
+- Do NOT add inline styles — enumerated choices (e.g. a background_color select) become modifier classes; the ONLY inline-style exception is an editor-uploaded background-image
 - Do NOT use `eval()`, `extract()`, or variable variables
 
 ---
 
-## JavaScript Standards
+## Linting & QA (run before calling anything done)
 
-### File Structure
-- Block-specific JS: `assets/js/blocks/[block-name].js`
-- Shared utilities: `assets/js/lib/[utility-name].js`
-- Main entry point: `assets/js/main.js` (imports and initializes all blocks)
-- Enqueue block JS via ACF `enqueue_assets` callback (same as CSS)
-
-### Vanilla JS Only
-- NO jQuery, NO frameworks, NO build tools beyond SCSS
-- Use native DOM APIs: `querySelector`, `addEventListener`, `classList`
-- ES6+ syntax OK (const, let, arrow functions, destructuring)
-- Avoid polyfills for modern browsers
+- `composer install` once per machine (installs phpcs + WPCS 3; the `dealerdirect` plugin is allow-listed in composer.json).
+- **Every PHP change:** `php -l` on the file AND `vendor/bin/phpcs` must pass clean. A pre-commit hook runs parallel-lint + phpcs on staged PHP files (`git commit --no-verify` to bypass in emergencies). `vendor/bin/phpcbf <file>` auto-fixes most formatting complaints.
+- `phpcs.xml.dist` is tuned on purpose: security/escaping/i18n/prefixing/PHP-compat are enforced; wp.org whitespace style (space-padded parens, tabs-only, Yoda, long arrays) is excluded because this codebase is PSR-ish. Don't re-add those sniffs and don't fight the excluded styles.
+- **Every SCSS/JS change:** `cd assets && npx gulp build` (ESLint runs inside the JS build; single quotes enforced). `dist/` IS committed on purpose — this deploys to shared hosting with no build step, so rebuild before committing.
+- **Verify in the browser after EVERY CSS change, not just the first** — specificity interactions have silently undone earlier fixes here before. Check mobile (390), tablet (768), desktop (1440).
+- Local test site: https://localhost/sweetmunchies_wordpresscms/
 
 ---
 
-## SCSS/CSS Standards
+## JavaScript
 
-### Structure
-- Design tokens in `_variables.scss`
-- Colours in `_colors.scss` (reference these ONLY)
-- Block styles in `assets/scss/components/`
-
-### BEM Naming
-- Block: `.block`, `.block--[name]` (e.g., `.block--hero-section`)
-- Element: `.block__[element]` (e.g., `.block__heading`, `.block__image`)
-- Modifier: `.block--[modifier]` (e.g., `.block--hero-section--dark`)
-- NO utility classes, NO nested selectors deeper than 2 levels
-- Example:
-```scss
-  .block--hero-section {
-    padding: var(--spacing-lg);
-    background-color: var(--color-primary);
-
-    &__heading {
-      font-size: var(--font-size-xl);
-      color: var(--color-text-light);
-    }
-
-    &__image {
-      width: 100%;
-      object-fit: cover;
-    }
-  }
-```
-
-### Responsive Breakpoints
-- Use SCSS variables only: `@media (max-width: var(--breakpoint-tablet))`
-- Breakpoints defined in `_variables.scss`:
-  - `--breakpoint-mobile`: 576px
-  - `--breakpoint-tablet`: 768px
-  - `--breakpoint-desktop`: 1024px
-  - `--breakpoint-wide`: 1440px
-- Mobile-first: base styles are mobile, add `@media` for larger screens
-- Never hardcode pixel values for spacing/font-size — use CSS variables
+- Vanilla ES6 modules in `assets/js/lib/`, imported and initialized in `assets/js/main.js` (DOMContentLoaded), bundled by webpack via gulp. Each module early-returns when its root element is absent.
+- Configuration flows through `data-*` attributes on the markup — no inline handlers, no localized script objects unless WC provides them.
+- **One exception to "no jQuery":** `window.jQuery(document.body).trigger('added_to_cart'|'removed_from_cart', ...)` for WooCommerce fragment interop (header cart badge via wc-cart-fragments). Guard with `if (window.jQuery)`.
+- WC's add_to_cart AJAX reports failure as `{error: true}` with HTTP 200 — always check it before showing success.
+- Heavy per-block assets (e.g. a carousel lib): register in `sweetmunchies_block_assets()` (functions.php) — they enqueue only on pages using that layout. Do NOT add separate enqueue callbacks.
+- No `console.log` in committed code.
 
 ---
 
-## Block Development Workflow
+## SCSS/CSS
 
-### Before Building
-- Look at design artifact and desing folder (assets are also there) for the component
+### Structure & Tokens
+- Block partials in `assets/scss/components/_{block-name}.scss`, `@use`-d in `style.scss`
+- Spacing: `--spacer-4/8/16/24/32/48/64/96` — no raw px for spacing
+- Colours: `--color-primary` / `--color-primary-dark` (pink CTA + hover), `--color-secondary` (dark green), `--color-white`, tints `--color-pink-tint` / `--color-green-tint` / `--color-cream-alt`, text `--color-text` / `--color-text-muted` (see abstracts/_variables.scss + base/_colors.scss) — no raw hex except rgba() shadows
+- Fonts are **self-hosted** (`/fonts/` + `base/_fonts.scss` @font-face, latin subset, `font-display: swap`). Never re-add Google Fonts CDN links, in PHP or SCSS.
 
-### Template Build Steps
-1. Write ACF fields
-2. Create block template
-3. Create SCSS file
-4. Add SCSS import to style.scss
-5. Register enqueue callback for block-specific assets
-6. Test in WordPress admin - https://localhost/sweetmunchies_wordpresscms/ (create page - if not existing, add the block, fill fields)
-7. Verify on mobile, tablet, desktop breakpoints
-8. Compare rendered output to design artifact
+### Responsive
+- **Mobile-first via the SCSS mixin**: base styles are mobile, then `@include min-breakpoint(mobile|tablet|desktop|wide)` (576 / 768 / 1024 / 1440, defined in abstracts/_mixins.scss)
+- Never `max-width` media queries, never hardcoded breakpoint values, and CSS custom properties do NOT work in media queries — use the mixin
 
-### Field Group Registration Checklist
-- [ ] Block name in kebab-case
-- [ ] ACF field group created with correct location rule
-- [ ] All fields have clear labels and help text
-- [ ] Field names match design intent (e.g., if design shows "CTA Button", field is `cta_link`)
-- [ ] Required fields marked appropriately
-- [ ] Repeater fields have min/max counts (if applicable)
-- [ ] Flexible content layout slug matches block name
+### BEM
+- `.block`, `.block__element`, `.block--modifier` / `.block__element--modifier`; max nesting depth 2; no utility classes
 
-### Template Checklist
-- [ ] get_sub_field() used ONLY (never get_field())
-- [ ] All text output escaped (esc_html, esc_url, etc.)
-- [ ] CSS classes follow BEM strictly
-- [ ] No inline styles
-- [ ] No hardcoded colours/spacing (use CSS variables)
-- [ ] Responsive attributes set (e.g., width, height, srcset)
-- [ ] Images have alt text (pulled from ACF image field)
-- [ ] No console errors when rendered
-
-### SCSS Checklist
-- [ ] Uses only colours from _colors.scss
-- [ ] Uses only spacing from _variables.scss
-- [ ] Responsive breakpoints use @media (max-width: var(--breakpoint-X))
-- [ ] Mobile-first approach (base styles first, media queries for larger screens)
-- [ ] BEM naming followed strictly
-- [ ] Max nesting depth: 2 levels
-- [ ] All selectors namespaced under .block--[name]
+### Known gotchas (learned the hard way — keep these guards)
+- `.xxx-page > .container { padding-top: ... }` ALSO matches the breadcrumb strip — it carries `.container` and is a direct child of the same `<main>`, and the two-class child selector out-specifies the breadcrumb's own modifier. Keep `:not(.page-banner__breadcrumb)` on such selectors.
+- The header logo deliberately overhangs below the header bar. Pages without a hero image need the breadcrumb's `--no-hero` top clearance (see _page-banner.scss) — don't reduce it based on the header bar's box alone; check the rendered logo.
 
 ---
 
-## Common Mistakes — PREVENTION MODE
+## ACF
 
-### Mistake: Using get_field() inside flexible content loop
-**WRONG:**
-```php
-<?php
-while (have_rows('page_content')) : the_row();
-  $heading = get_field('heading'); // ❌ WRONG
-endwhile;
-?>
-```
-**RIGHT:**
-```php
-<?php
-while (have_rows('page_content')) : the_row();
-  $heading = get_sub_field('heading'); // ✅ CORRECT
-endwhile;
-?>
-```
+- Field groups live as local JSON in `acf-json/` — when editing JSON directly, bump the group's `"modified"` timestamp so wp-admin offers a sync
+- Every field gets an `instructions` line an editor can act on ("Leave empty to hide.", format notes for load-bearing values like the WhatsApp number)
+- Repeaters/galleries get min/max when the layout constrains them (trust bar 4, feature grid 6, testimonials 6, hero gallery 2); leave genuinely unbounded lists (FAQ) uncapped
+- Flexible content layout slug matches the block template name
 
-### Mistake: Hardcoding colours or spacing
-**WRONG:**
-```scss
-.block--hero {
-  padding: 32px 16px; // ❌ Hardcoded
-  background-color: #0066cc; // ❌ Hardcoded
-}
-```
-**RIGHT:**
-```scss
-.block--hero {
-  padding: var(--spacing-lg) var(--spacing-sm);
-  background-color: var(--color-primary);
-}
-```
+---
 
-### Mistake: Forgetting to escape output
-**WRONG:**
-```php
-<h1><?php echo $heading; ?></h1> <!-- ❌ XSS vulnerability -->
-```
-**RIGHT:**
-```php
-<h1><?php echo esc_html($heading); ?></h1>
-```
+## Environment Notes
 
-### Mistake: Deep nesting in SCSS
-**WRONG:**
-```scss
-.block--hero {
-  .container {
-    .row {
-      .col {
-        padding: 1rem; // ❌ 4 levels deep
-      }
-    }
-  }
-}
-```
-**RIGHT:**
-```scss
-.block--hero {
-  padding: var(--spacing-md);
-
-  &__content {
-    padding: var(--spacing-md); // ✅ Max 2 levels
-  }
-}
-```
+- Local XAMPP PHP has **no webp support in GD** — uploads get zero thumbnail sizes (so no srcset) until regenerated with a webp-capable PHP (Homebrew PHP works: load wp-load.php + `wp_generate_attachment_metadata`). Production hosting with webp GD/Imagick is unaffected, but re-check after bulk local uploads.
 
 ---
 
 ## Git Commits
 
-- One block per commit
-- Commit message format: `feat(blocks): Add [block-name] block with ACF fields`
-- Include both PHP and SCSS changes in same commit
+- One logical change per commit (one block, one fix batch)
+- Commit message format: `feat(blocks): Add [block-name] block with ACF fields` / `fix(...)`, `chore(...)`
+- Include PHP + SCSS + rebuilt dist/ in the same commit
 - Never auto-bump version numbers
-- Never push I will do it myself
+- Never push — I will do it myself
 
 ---
 
 ## Success Criteria
 
-A block is "done" when:
-- ✅ ACF field group is registered and editable
-- ✅ Block template renders without errors
-- ✅ Output matches design artifact (spacing, colours, typography)
-- ✅ Responsive on mobile (576px), tablet (768px), desktop (1024px+)
-- ✅ All text escaped, no inline styles, no console errors
-- ✅ Reference block pattern followed (ACF registration, template structure, SCSS organization)
+A change is "done" when:
+- ✅ Renders without errors and matches the design artifact (spacing, colours, typography)
+- ✅ Responsive at 390 / 768 / 1440, re-verified in the browser after the final edit
+- ✅ All output escaped, no inline styles, no console errors
+- ✅ `php -l` + `vendor/bin/phpcs` clean, `gulp build` clean
+- ✅ Empty/missing-field states handled (block hides or degrades, never fatals)
 - ✅ Code reviewed by human (you)
-- ✅ Committed with clear message
+- ✅ Committed with a clear message

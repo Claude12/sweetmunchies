@@ -129,6 +129,20 @@ function cartPage() {
     }
   };
 
+  // Debounced per row: a burst of stepper clicks sends one request carrying
+  // the final quantity, so out-of-order responses can't persist a stale value.
+  const pendingSyncs = new Map();
+  const queueQuantitySync = (row) => {
+    clearTimeout(pendingSyncs.get(row));
+    pendingSyncs.set(row, setTimeout(() => {
+      pendingSyncs.delete(row);
+      const input = row.querySelector('.cart-page__qty-input');
+      if (input) {
+        updateQuantity(row.dataset.cartItemKey, input.value);
+      }
+    }, 400));
+  };
+
   const removeItem = async (row) => {
     const cartItemKey = row.dataset.cartItemKey;
     const itemName = row.querySelector('.cart-page__item-name')?.textContent.trim();
@@ -136,6 +150,10 @@ function cartPage() {
     if (!removeUrl || !cartItemKey) {
       return;
     }
+
+    // A queued quantity sync for this row would re-target a removed item.
+    clearTimeout(pendingSyncs.get(row));
+    pendingSyncs.delete(row);
 
     const formData = new FormData();
     formData.set('cart_item_key', cartItemKey);
@@ -174,17 +192,18 @@ function cartPage() {
 
     const input = row.querySelector('.cart-page__qty-input');
     const min = parseInt(input?.min, 10) || 1;
+    const max = parseInt(input?.max, 10) || Infinity;
 
     if (event.target.closest('[data-qty-decrease]')) {
       input.value = String(Math.max(min, (parseInt(input.value, 10) || 1) - 1));
     } else if (event.target.closest('[data-qty-increase]')) {
-      input.value = String((parseInt(input.value, 10) || 1) + 1);
+      input.value = String(Math.min(max, (parseInt(input.value, 10) || 1) + 1));
     } else {
       return;
     }
 
     updateTotals();
-    updateQuantity(row.dataset.cartItemKey, input.value);
+    queueQuantitySync(row);
   });
 
   itemsList.addEventListener('change', (event) => {
@@ -196,12 +215,16 @@ function cartPage() {
     }
 
     const min = parseInt(input.min, 10) || 1;
-    if ((parseInt(input.value, 10) || 0) < min) {
+    const max = parseInt(input.max, 10) || Infinity;
+    const value = parseInt(input.value, 10) || 0;
+    if (value < min) {
       input.value = String(min);
+    } else if (value > max) {
+      input.value = String(max);
     }
 
     updateTotals();
-    updateQuantity(row.dataset.cartItemKey, input.value);
+    queueQuantitySync(row);
   });
 
   updateTotals();
