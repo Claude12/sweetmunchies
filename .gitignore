@@ -10,6 +10,10 @@ error_log
 assets/node_modules/
 npm-debug.log*
 
+# PHP dev tooling — installed by `composer install` (phpcs + WPCS; see
+# phpcs.xml.dist and the pre-commit hook). Not needed at runtime.
+vendor/
+
 # Editor
 .vscode/
 .idea/

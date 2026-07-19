@@ -25,25 +25,31 @@ function animations() {
 
   // ─── IntersectionObserver path (modern browsers) ──────────
   function initObserver(elements) {
+    // One observer per distinct threshold, shared by every element that
+    // uses it — instead of an observer per element.
+    const observers = new Map();
+
     elements.forEach((el) => {
       const offset = numAttr(el, 'animate-offset');
       const threshold = offset !== undefined ? offset : DEFAULTS.offset;
 
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            trigger(entry.target);
-            if (DEFAULTS.once) {
-              obs.unobserve(entry.target);
+      if (!observers.has(threshold)) {
+        observers.set(threshold, new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              trigger(entry.target);
+              if (DEFAULTS.once) {
+                obs.unobserve(entry.target);
+              }
+            } else if (!DEFAULTS.once) {
+              // re-entering: remove class so it can replay
+              entry.target.classList.remove('animated');
             }
-          } else if (!DEFAULTS.once) {
-            // re-entering: remove class so it can replay
-            entry.target.classList.remove('animated');
-          }
-        });
-      }, { threshold });
+          });
+        }, { threshold }));
+      }
 
-      observer.observe(el);
+      observers.get(threshold).observe(el);
     });
   }
 
@@ -88,15 +94,6 @@ function animations() {
   const elements = Array.from(document.querySelectorAll('[animate]'));
 
   if (!elements.length) return;
-
-  // Apply any animate-delay helpers that match CSS classes
-  elements.forEach((el) => {
-    const delay = numAttr(el, 'animate-delay');
-    const dur = numAttr(el, 'animate-duration');
-
-    if (delay !== undefined) el.style.animationDelay = `${delay}ms`;
-    if (dur !== undefined) el.style.animationDuration = `${dur}ms`;
-  });
 
   if ('IntersectionObserver' in window) {
     initObserver(elements);

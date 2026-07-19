@@ -23,7 +23,7 @@ if (!$items) {
 }
 ?>
 
-<section class="feature-grid feature-grid--<?php echo esc_attr($style); ?>"<?php echo $background_color ? ' style="background-color: var(--color-' . esc_attr($background_color) . ');"' : ''; ?>>
+<section class="feature-grid feature-grid--<?php echo esc_attr($style); ?><?php echo $background_color ? ' feature-grid--bg-' . esc_attr($background_color) : ''; ?>">
     <?php if ($style === 'numbered'): ?>
         <img class="feature-grid__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
     <?php endif; ?>

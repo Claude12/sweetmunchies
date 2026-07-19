@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+// phpcs:disable WordPress.Security.NonceVerification.Missing -- deliberate for this file: the add-to-cart capture and the wc_ajax cart endpoints mirror WooCommerce core's own nonce-less add_to_cart/remove_from_cart AJAX actions. All mutations are scoped to the visitor's own session cart, and every input is sanitized on read.
+
 /**
  * Flat surcharge for the "Add a photo & message" add-on, CMS-managed via
  * Theme Settings → Shop → Gift Message Price (falls back to $2 if unset).

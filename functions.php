@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 if (!defined('_S_VERSION')) {
 	// Replace the version number of the theme on each release.
-	define('_S_VERSION', '1.0.0');
+	define('_S_VERSION', '1.0.0'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- _s starter-theme constant, referenced throughout.
 }
 
 /**
@@ -139,17 +139,16 @@ add_action('widgets_init', 'sweetmunchies_widgets_init');
  */
 function sweetmunchies_scripts()
 {
-	$css_version = filemtime(get_template_directory() . '/dist/css/style.css');
-	$js_version  = filemtime(get_template_directory() . '/dist/js/main.js');
+	// Fall back to the theme version if dist/ hasn't been built yet — a
+	// missing file would make filemtime() emit a warning on every request.
+	$css_file    = get_template_directory() . '/dist/css/style.css';
+	$js_file     = get_template_directory() . '/dist/js/main.js';
+	$css_version = file_exists($css_file) ? filemtime($css_file) : _S_VERSION;
+	$js_version  = file_exists($js_file) ? filemtime($js_file) : _S_VERSION;
 
-	wp_enqueue_style(
-		'google-fonts',
-		'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap',
-		array(),
-		null
-	);
-
-	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array('google-fonts'), $css_version);
+	// Fonts are self-hosted — @font-face rules live in the compiled
+	// stylesheet (assets/scss/base/_fonts.scss), files in /fonts/.
+	wp_enqueue_style('theme-style', get_template_directory_uri() . '/dist/css/style.css', array(), $css_version);
 
 	wp_enqueue_script('theme-script', get_template_directory_uri() . '/dist/js/main.js', array(), $js_version, true);
 
@@ -161,7 +160,7 @@ function sweetmunchies_scripts()
 				$style['handle'],
 				get_template_directory_uri() . $style['src'],
 				$style['deps'] ?? array(),
-				null
+				$style['version'] ?? _S_VERSION
 			);
 		}
 
@@ -170,7 +169,7 @@ function sweetmunchies_scripts()
 				$script['handle'],
 				get_template_directory_uri() . $script['src'],
 				$script['deps'] ?? array(),
-				null,
+				$script['version'] ?? _S_VERSION,
 				$script['in_footer'] ?? true
 			);
 		}
@@ -228,6 +227,10 @@ add_action('wp', function () {
 	$GLOBALS['sweetmunchies_needed_block_assets'] = array_keys($needed);
 });
 
+/**
+ * The block layouts on the current page that have assets registered in
+ * sweetmunchies_block_assets() — detected on the 'wp' action above.
+ */
 function sweetmunchies_needed_block_assets(): array
 {
 	return $GLOBALS['sweetmunchies_needed_block_assets'] ?? array();
@@ -310,7 +313,7 @@ remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 
 // Splide defer strategy — re-enable alongside the enqueue block above when a carousel block is built.
 // add_action('wp_enqueue_scripts', function () {
-// 	wp_script_add_data('splide-js', 'strategy', 'defer');
+//  wp_script_add_data('splide-js', 'strategy', 'defer');
 // }, 20);
 
 /**
@@ -324,6 +327,5 @@ function sweetmunchies_security_headers()
 	header("Referrer-Policy: no-referrer-when-downgrade");
 	header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 	header("Cross-Origin-Opener-Policy: same-origin");
-	header("X-XSS-Protection: 1; mode=block");
 }
 add_action('send_headers', 'sweetmunchies_security_headers');

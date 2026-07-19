@@ -25,18 +25,13 @@ $stats             = get_sub_field('stats');
 $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
 ?>
 
-<section class="image-text-block"<?php echo $background_color ? ' style="background-color: var(--color-' . esc_attr($background_color) . ');"' : ''; ?>>
+<section class="image-text-block<?php echo $background_color ? ' image-text-block--bg-' . esc_attr($background_color) : ''; ?>">
     <div class="container">
         <div class="image-text-block__content" animate="slide-in-up">
             <div class="image-text-block__side">
                 <?php if ($left_type === 'image' && $left_image): ?>
-                    <img
-                        src="<?php echo esc_url($left_image['url']); ?>"
-                        alt="<?php echo esc_attr($left_image['alt']); ?>"
-                        width="<?php echo esc_attr($left_image['width']); ?>"
-                        height="<?php echo esc_attr($left_image['height']); ?>"
-                        loading="<?php echo esc_attr($img_loading); ?>"
-                        decoding="async" />
+                    <?php // wp_get_attachment_image over a raw <img>: emits srcset/sizes so a 50% column doesn't download the full-size original. ?>
+                    <?php echo wp_get_attachment_image((int) $left_image['ID'], 'large', false, array('loading' => $img_loading, 'decoding' => 'async')); ?>
                 <?php elseif ($left_type === 'text' && $left_text): ?>
                     <?php if ($eyebrow): ?>
                         <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>
@@ -62,13 +57,7 @@ $img_loading       = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'la
             </div>
             <div class="image-text-block__side">
                 <?php if ($right_type === 'image' && $right_image): ?>
-                    <img
-                        src="<?php echo esc_url($right_image['url']); ?>"
-                        alt="<?php echo esc_attr($right_image['alt']); ?>"
-                        width="<?php echo esc_attr($right_image['width']); ?>"
-                        height="<?php echo esc_attr($right_image['height']); ?>"
-                        loading="<?php echo esc_attr($img_loading); ?>"
-                        decoding="async" />
+                    <?php echo wp_get_attachment_image((int) $right_image['ID'], 'large', false, array('loading' => $img_loading, 'decoding' => 'async')); ?>
                 <?php elseif ($right_type === 'text' && $right_text): ?>
                     <?php if ($eyebrow): ?>
                         <p class="image-text-block__eyebrow"><?php echo esc_html($eyebrow); ?></p>

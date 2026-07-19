@@ -61,12 +61,15 @@ if (!$categories) {
             <ul class="shop-by-occasion__list">
                 <?php foreach ($categories as $index => $category): ?>
                     <?php
+                    $term_link = get_term_link($category);
+                    if (is_wp_error($term_link)) {
+                        continue;
+                    }
                     $icon     = get_field('category_icon', $category);
                     $bg_color = $bg_colors[$index % count($bg_colors)];
                     ?>
                     <li>
-                        <a href="<?php echo esc_url(get_term_link($category)); ?>" class="shop-by-occasion__card"
-                            style="background-color: var(--color-<?php echo esc_attr($bg_color); ?>);">
+                        <a href="<?php echo esc_url($term_link); ?>" class="shop-by-occasion__card shop-by-occasion__card--<?php echo esc_attr($bg_color); ?>">
                             <?php if ($icon): ?>
                                 <span class="shop-by-occasion__icon" aria-hidden="true"><?php echo esc_html($icon); ?></span>
                             <?php endif; ?>

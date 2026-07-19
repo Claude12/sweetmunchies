@@ -55,7 +55,7 @@ $icons = '<span class="product-card__quick-add-icon product-card__quick-add-icon
     . '</span>';
 
 echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- all dynamic parts are individually escaped above; $icons is static, theme-authored markup.
-    'woocommerce_loop_add_to_cart_link',
+    'woocommerce_loop_add_to_cart_link', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core's own filter, applied here because this template overrides WC's loop button.
     sprintf(
         '<a href="%s" %s data-quantity="%s" class="%s" %s><span class="screen-reader-text">%s</span>%s</a>',
         esc_url($product->add_to_cart_url()),

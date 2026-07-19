@@ -34,7 +34,7 @@ if (!$whatsapp || !$button_text) {
                     <p class="whatsapp-cta__subtext"><?php echo esc_html($subtext); ?></p>
                 <?php endif; ?>
             </div>
-            <a href="https://wa.me/<?php echo esc_attr($whatsapp); ?>" class="whatsapp-cta__button" target="_blank" rel="noopener noreferrer">
+            <a href="<?php echo esc_url('https://wa.me/' . $whatsapp); ?>" class="whatsapp-cta__button" target="_blank" rel="noopener noreferrer">
                 <?php echo esc_html($button_text); ?>
             </a>
         </div>

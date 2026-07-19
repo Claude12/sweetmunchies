@@ -48,14 +48,22 @@ if (!$gallery) {
         <div class="ig-strip__grid">
             <?php foreach ($gallery as $image): ?>
                 <div class="ig-strip__frame">
-                    <img
-                        src="<?php echo esc_url($image['sizes']['medium'] ?? $image['url']); ?>"
-                        alt="<?php echo esc_attr($image['alt']); ?>"
-                        width="<?php echo esc_attr($image['width']); ?>"
-                        height="<?php echo esc_attr($image['height']); ?>"
-                        loading="lazy"
-                        decoding="async"
-                        class="ig-strip__img" />
+                    <?php
+                    // wp_get_attachment_image emits srcset; sizes mirrors the
+                    // auto-fit grid (tiles are ~150px wide on desktop, wider
+                    // as columns collapse on small screens).
+                    echo wp_get_attachment_image(
+                        (int) $image['ID'],
+                        'medium',
+                        false,
+                        array(
+                            'class'    => 'ig-strip__img',
+                            'loading'  => 'lazy',
+                            'decoding' => 'async',
+                            'sizes'    => '(min-width: 768px) 150px, 45vw',
+                        )
+                    );
+                    ?>
                 </div>
             <?php endforeach; ?>
         </div>

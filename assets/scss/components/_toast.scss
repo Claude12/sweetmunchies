@@ -15,7 +15,9 @@
   background: var(--color-text);
   color: var(--color-white);
   padding: 12px 14px 12px 22px;
-  border-radius: 100px;
+  // Softer corners on narrow screens where the message can wrap to two
+  // lines; the full pill shape needs a single-line toast to look right.
+  border-radius: 20px;
   font-size: 13.5px;
   font-weight: 600;
   z-index: 60;
@@ -34,8 +36,8 @@
     transform: translate(-50%, 8px);
   }
 
-  @media (max-width: 480px) {
-    border-radius: 20px;
+  @include min-breakpoint(mobile) {
+    border-radius: 100px;
   }
 }
 

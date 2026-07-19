@@ -15,6 +15,10 @@ declare(strict_types=1);
 $heading = get_sub_field('heading');
 $items   = get_sub_field('items');
 
+// Namespaces panel IDs per block instance so two FAQ blocks on one page
+// don't emit duplicate IDs (which would break the aria-controls pairing).
+$block_index = (int) get_query_var('block_index', 0);
+
 if (!$items) {
     return;
 }
@@ -29,7 +33,7 @@ if (!$items) {
         <div class="faq-accordion__list">
             <?php foreach ($items as $index => $item): ?>
                 <?php
-                $panel_id  = 'faq-panel-' . $index;
+                $panel_id  = 'faq-' . $block_index . '-panel-' . $index;
                 $is_open   = $index === 0;
                 ?>
                 <div class="faq-accordion__item<?php echo $is_open ? ' is-open' : ''; ?>">

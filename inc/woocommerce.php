@@ -43,6 +43,8 @@ add_filter('loop_shop_columns', function () {
 /**
  * Product queries for the homepage's Featured Products / Best Sellers blocks
  * (see inc/blocks/featured-products.php, inc/blocks/best-sellers.php).
+ *
+ * @param int $limit Maximum number of products to return.
  */
 function sweetmunchies_get_featured_products(int $limit = 4): array
 {
@@ -58,6 +60,9 @@ function sweetmunchies_get_featured_products(int $limit = 4): array
 /**
  * Related products for the single product page's "You may also like" grid
  * (see woocommerce/content-single-product.php).
+ *
+ * @param int $product_id Product to find related products for.
+ * @param int $limit      Maximum number of products to return.
  */
 function sweetmunchies_get_related_products(int $product_id, int $limit = 4): array
 {

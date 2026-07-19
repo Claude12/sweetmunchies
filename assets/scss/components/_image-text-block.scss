@@ -3,6 +3,24 @@
 .image-text-block {
   padding: 60px 0;
 
+  // Background variants — one class per choice of the block's
+  // background_color ACF select (default choice adds no class).
+  &--bg-pink-tint {
+    background-color: var(--color-pink-tint);
+  }
+
+  &--bg-green-tint {
+    background-color: var(--color-green-tint);
+  }
+
+  &--bg-cream-alt {
+    background-color: var(--color-cream-alt);
+  }
+
+  &--bg-white {
+    background-color: var(--color-white);
+  }
+
   &__content {
     display: flex;
     align-items: center;

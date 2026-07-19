@@ -29,7 +29,7 @@
                             "name": "background_color",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "Section background. \"Default\" uses the page’s cream background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -61,7 +61,7 @@
                             "name": "left_type",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "What the left column shows.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -90,7 +90,7 @@
                             "name": "left_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Shown when the left column type is Image. Displayed as a square crop.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -124,7 +124,7 @@
                             "name": "left_text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Shown when the left column type is Text. Use Heading 2 for the section title.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -153,7 +153,7 @@
                             "name": "right_type",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "What the right column shows.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -182,7 +182,7 @@
                             "name": "right_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Shown when the right column type is Image. Displayed as a square crop.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -216,7 +216,7 @@
                             "name": "right_text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Shown when the right column type is Text. Use Heading 2 for the section title.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -359,7 +359,7 @@
                             "name": "badge_text",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Small pill above the heading. Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -380,7 +380,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Plain text. The word \"sweet\" is styled with a decorative pink underline in the template \u2014 keep it in the heading if you want that flourish to show.",
+                            "instructions": "Plain text. The word \"sweet\" is styled with a decorative pink underline in the template — keep it in the heading if you want that flourish to show.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -401,7 +401,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "textarea",
-                            "instructions": "",
+                            "instructions": "One or two short sentences under the heading.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -409,7 +409,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Beautifully packed snack boxes, chocolate bouquets and custom hampers \u2014 ready to order in minutes and delivered with care across Mutare.",
+                            "default_value": "Beautifully packed snack boxes, chocolate bouquets and custom hampers — ready to order in minutes and delivered with care across Mutare.",
                             "maxlength": "",
                             "allow_in_bindings": 0,
                             "placeholder": "",
@@ -422,7 +422,7 @@
                             "name": "primary_cta",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "e.g. \"Shop Snack Boxes\" \u2192 Shop page.",
+                            "instructions": "e.g. \"Shop Snack Boxes\" → Shop page.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -439,7 +439,7 @@
                             "name": "secondary_cta",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "e.g. \"Our Story\" \u2192 About page.",
+                            "instructions": "e.g. \"Our Story\" → About page.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -456,7 +456,7 @@
                             "name": "trust_line",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Reassurance line under the buttons, e.g. \"Trusted local business\". Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -464,7 +464,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Trusted local business \u00b7 packed fresh to order",
+                            "default_value": "Trusted local business · packed fresh to order",
                             "maxlength": "",
                             "allow_in_bindings": 0,
                             "placeholder": "",
@@ -535,7 +535,7 @@
                             "name": "items",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Shown as a single row on desktop — 4 indicators fit best.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -545,7 +545,7 @@
                             },
                             "layout": "block",
                             "min": 0,
-                            "max": 0,
+                            "max": 4,
                             "collapsed": "",
                             "button_label": "Add Trust Item",
                             "rows_per_page": 20,
@@ -565,7 +565,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "default_value": "\ud83d\ude9a",
+                                    "default_value": "🚚",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
                                     "placeholder": "",
@@ -578,7 +578,7 @@
                                     "name": "label",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Short indicator text, e.g. \"Free CBD delivery\".",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -609,7 +609,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -630,7 +630,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -651,7 +651,7 @@
                             "name": "product_limit",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "How many featured products to show. Defaults to 4.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -674,7 +674,7 @@
                             "name": "view_all_link",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "Optional \u2014 leave blank to hide.",
+                            "instructions": "Optional — leave blank to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -699,7 +699,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -720,7 +720,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -773,7 +773,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -794,7 +794,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -851,7 +851,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -872,7 +872,7 @@
                             "name": "items",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Displayed as a card grid — up to 6.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -882,7 +882,7 @@
                             },
                             "layout": "block",
                             "min": 0,
-                            "max": 0,
+                            "max": 6,
                             "collapsed": "",
                             "button_label": "Add Testimonial",
                             "rows_per_page": 20,
@@ -894,7 +894,7 @@
                                     "name": "quote",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "PLACEHOLDER CONTENT \u2014 mockup quote from the design file, not a real customer review. Replace with a real testimonial before/after launch.",
+                                    "instructions": "PLACEHOLDER CONTENT — mockup quote from the design file, not a real customer review. Replace with a real testimonial before/after launch.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -915,7 +915,7 @@
                                     "name": "name",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "PLACEHOLDER CONTENT \u2014 not a real customer name.",
+                                    "instructions": "PLACEHOLDER CONTENT — not a real customer name.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -936,7 +936,7 @@
                                     "name": "stars",
                                     "aria-label": "",
                                     "type": "number",
-                                    "instructions": "",
+                                    "instructions": "1–5. Defaults to 5 when empty.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -969,7 +969,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -990,7 +990,7 @@
                             "name": "gallery",
                             "aria-label": "",
                             "type": "gallery",
-                            "instructions": "Manually curated photos \u2014 not a live Instagram feed.",
+                            "instructions": "Manually curated photos — not a live Instagram feed.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1019,7 +1019,7 @@
                             "name": "link_text",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Links out to the profile URL set below in Theme Settings \u2192 Header \u2192 Socials, for whichever platform is chosen.",
+                            "instructions": "Links out to the profile URL set below in Theme Settings → Header → Socials, for whichever platform is chosen.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1027,7 +1027,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Follow along \u2192",
+                            "default_value": "Follow along →",
                             "maxlength": "",
                             "allow_in_bindings": 0,
                             "placeholder": "",
@@ -1040,7 +1040,7 @@
                             "name": "platform",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "Which Theme Settings \u2192 Socials URL the header link/button points to.",
+                            "instructions": "Which Theme Settings → Socials URL the header link/button points to.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1078,7 +1078,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1099,7 +1099,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1120,7 +1120,7 @@
                             "name": "button_text",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Links to the WhatsApp number set in Theme Settings \u2192 Header \u2192 Socials \u2192 WhatsApp.",
+                            "instructions": "Links to the WhatsApp number set in Theme Settings → Header → Socials → WhatsApp.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1149,7 +1149,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1170,7 +1170,7 @@
                             "name": "background_color",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "Section background. \"Default\" uses the page’s cream background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1231,7 +1231,7 @@
                             "name": "items",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "One card per feature/step — up to 6.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1241,7 +1241,7 @@
                             },
                             "layout": "block",
                             "min": 0,
-                            "max": 0,
+                            "max": 6,
                             "collapsed": "",
                             "button_label": "Add Item",
                             "rows_per_page": 20,
@@ -1274,7 +1274,7 @@
                                     "name": "title",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Short card title.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1295,7 +1295,7 @@
                                     "name": "subtext",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "One or two short sentences.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1326,7 +1326,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Required — the block doesn’t render without it.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1347,7 +1347,7 @@
                             "name": "subtext",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1368,7 +1368,7 @@
                             "name": "button",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "",
+                            "instructions": "Required — the block doesn’t render without a button URL.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1445,7 +1445,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Leave empty to hide.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1488,7 +1488,7 @@
                                     "name": "question",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Shown as the clickable accordion row.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1509,7 +1509,7 @@
                                     "name": "answer",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "",
+                                    "instructions": "Plain text, shown when expanded. The first item starts expanded.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1562,5 +1562,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784387678
+    "modified": 1784454869
 }

@@ -36,13 +36,20 @@ $render_frame = static function ($image, int $slot) use ($img_loading, $price_ba
 	?>
 	<div class="home-hero__frame home-hero__frame--<?php echo (int) $slot; ?>">
 		<div class="home-hero__frame-inner">
-			<img
-				src="<?php echo esc_url($image['sizes']['medium'] ?? $image['url']); ?>"
-				alt="<?php echo esc_attr($image['alt']); ?>"
-				width="<?php echo esc_attr($image['width']); ?>"
-				height="<?php echo esc_attr($image['height']); ?>"
-				loading="<?php echo esc_attr($img_loading); ?>"
-				decoding="async" />
+			<?php
+			// wp_get_attachment_image emits srcset; sizes mirrors the frame's
+			// rendered width (220px fixed on desktop, 42% of the row on mobile).
+			echo wp_get_attachment_image(
+				(int) $image['ID'],
+				'medium_large',
+				false,
+				array(
+					'loading'  => $img_loading,
+					'decoding' => 'async',
+					'sizes'    => '(min-width: 1240px) 220px, 42vw',
+				)
+			);
+			?>
 		</div>
 		<?php if (1 === $slot && $price_badge_text): ?>
 			<span class="home-hero__price-badge"><?php echo esc_html($price_badge_text); ?></span>
@@ -67,13 +74,19 @@ $render_frame = static function ($image, int $slot) use ($img_loading, $price_ba
 
 			<?php if ($heading): ?>
 				<?php
-				$highlight = '<span class="home-hero__highlight">sweet'
-					. '<svg viewBox="0 0 120 14" class="home-hero__highlight-underline" aria-hidden="true">'
+				// \b keeps partial matches like "sweetest" unwrapped, and $m[0]
+				// keeps the editor's casing ("Sweet" stays "Sweet").
+				$highlight_underline = '<svg viewBox="0 0 120 14" class="home-hero__highlight-underline" aria-hidden="true">'
 					. '<path d="M2 9c20-8 96-8 116 0" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" />'
-					. '</svg></span>';
+					. '</svg>';
+				$heading_html = preg_replace_callback(
+					'/\bsweet\b/i',
+					fn ($m) => '<span class="home-hero__highlight">' . $m[0] . $highlight_underline . '</span>',
+					esc_html($heading)
+				);
 				?>
-				<?php // wp_kses_post would strip the <svg> underline; $heading is already esc_html'd and $highlight is a fixed literal, so raw output here is safe. ?>
-				<h1 class="home-hero__heading"><?php echo str_ireplace('sweet', $highlight, esc_html($heading)); ?></h1>
+				<?php // wp_kses_post would strip the <svg> underline; $heading is esc_html'd before the replace and the injected markup is a fixed literal, so raw output here is safe. ?>
+				<h1 class="home-hero__heading"><?php echo $heading_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- see comment above. ?></h1>
 			<?php endif; ?>
 
 			<?php if ($subtext): ?>

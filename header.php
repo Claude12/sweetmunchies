@@ -30,22 +30,14 @@ if (function_exists('WC') && WC()->cart) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 
-	<!-- Font preconnect (reduces DNS + TLS latency before wp_head loads font CSS) -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<!-- Self-hosted fonts (see assets/scss/base/_fonts.scss) — preload the two
+		weights used above the fold on every page (body copy + headings) so
+		they start downloading before the stylesheet is parsed. -->
+	<link rel="preload" href="<?php echo esc_url(get_template_directory_uri() . '/fonts/poppins-400.woff2'); ?>" as="font" type="font/woff2" crossorigin>
+	<link rel="preload" href="<?php echo esc_url(get_template_directory_uri() . '/fonts/poppins-800.woff2'); ?>" as="font" type="font/woff2" crossorigin>
 
 	<!-- WordPress Head -->
 	<?php wp_head(); ?>
-
-	<!-- Fonts (async load, noscript fallback) -->
-	<link rel="preload"
-		href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@400;700&display=swap"
-		as="style" onload="this.onload=null;this.rel='stylesheet'" />
-	<noscript>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@400;700&display=swap"
-			rel="stylesheet" />
-	</noscript>
 
 </head>
 

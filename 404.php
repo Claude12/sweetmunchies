@@ -20,14 +20,14 @@ $categories = get_terms([
     'number'     => 6,
 ]);
 $categories = is_wp_error($categories) ? [] : $categories;
-$deco_src   = esc_url(get_template_directory_uri() . '/images/candy-icon.webp');
+$deco_src   = get_template_directory_uri() . '/images/candy-icon.webp';
 ?>
 
 <main id="primary" class="site-main error-404">
-    <img class="error-404__deco error-404__deco--1" src="<?php echo $deco_src; ?>" alt="" aria-hidden="true" />
-    <img class="error-404__deco error-404__deco--2" src="<?php echo $deco_src; ?>" alt="" aria-hidden="true" />
-    <img class="error-404__deco error-404__deco--3" src="<?php echo $deco_src; ?>" alt="" aria-hidden="true" />
-    <img class="error-404__deco error-404__deco--4" src="<?php echo $deco_src; ?>" alt="" aria-hidden="true" />
+    <img class="error-404__deco error-404__deco--1" src="<?php echo esc_url($deco_src); ?>" alt="" aria-hidden="true" />
+    <img class="error-404__deco error-404__deco--2" src="<?php echo esc_url($deco_src); ?>" alt="" aria-hidden="true" />
+    <img class="error-404__deco error-404__deco--3" src="<?php echo esc_url($deco_src); ?>" alt="" aria-hidden="true" />
+    <img class="error-404__deco error-404__deco--4" src="<?php echo esc_url($deco_src); ?>" alt="" aria-hidden="true" />
 
     <div class="container">
         <div class="error-404__inner" animate="fade-in-up">

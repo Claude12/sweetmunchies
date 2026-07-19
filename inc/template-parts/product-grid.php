@@ -27,7 +27,9 @@ if (empty($products)) {
     <?php
     foreach ($products as $product) {
         $post_object = get_post($product->get_id());
-        setup_postdata($GLOBALS['post'] = $post_object);
+        // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- temporary loop context for content-product.php, restored by wp_reset_postdata() below.
+        $GLOBALS['post'] = $post_object;
+        setup_postdata($post_object);
         wc_get_template_part('content', 'product');
     }
     wp_reset_postdata();

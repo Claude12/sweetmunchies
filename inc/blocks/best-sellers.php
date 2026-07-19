@@ -19,7 +19,9 @@ $heading      = get_sub_field('heading');
 $subtext      = get_sub_field('subtext');
 $product_ids  = get_sub_field('products') ?: array();
 
-$products = array_filter(array_map('wc_get_product', $product_ids));
+$products = function_exists('wc_get_product')
+    ? array_filter(array_map('wc_get_product', $product_ids))
+    : array();
 
 if (!$products) {
     return;

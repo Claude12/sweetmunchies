@@ -67,6 +67,19 @@
     &:hover {
       transform: translateY(-3px);
     }
+
+    // Tile background variants — cycled per card in shop-by-occasion.php.
+    &--pink-tint {
+      background-color: var(--color-pink-tint);
+    }
+
+    &--green-tint {
+      background-color: var(--color-green-tint);
+    }
+
+    &--cream-alt {
+      background-color: var(--color-cream-alt);
+    }
   }
 
   &__icon {

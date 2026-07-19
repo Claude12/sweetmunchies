@@ -77,7 +77,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Limited time: 10% off your first order \u2014 code <strong>SWEET10</strong> \u00b7 Free delivery within Mutare CBD",
+            "default_value": "Limited time: 10% off your first order — code <strong>SWEET10</strong> · Free delivery within Mutare CBD",
             "maxlength": "",
             "allow_in_bindings": 1,
             "placeholder": "",
@@ -124,7 +124,7 @@
                     "name": "whatsapp",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Digits only, international format without + or spaces (e.g. 263776620294) — used to build wa.me chat links.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -259,7 +259,7 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Free delivery within Mutare CBD. Home delivery outside CBD from $2. Nationwide delivery available via courier or bus \u2014 transport cost covered by the customer.",
+            "default_value": "Free delivery within Mutare CBD. Home delivery outside CBD from $2. Nationwide delivery available via courier or bus — transport cost covered by the customer.",
             "maxlength": "",
             "allow_in_bindings": 0,
             "placeholder": "",
@@ -375,7 +375,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Not currently displayed anywhere \u2014 reserved for future use.",
+                    "instructions": "Not currently displayed anywhere — reserved for future use.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -419,7 +419,7 @@
                     "name": "phone_display",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "e.g. 0776 620 294 \u2014 shown as text; the WhatsApp link itself uses the Socials \u2192 WhatsApp number.",
+                    "instructions": "e.g. 0776 620 294 — shown as text; the WhatsApp link itself uses the Socials → WhatsApp number.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -483,7 +483,7 @@
             "name": "footer_credit",
             "aria-label": "",
             "type": "link",
-            "instructions": "Only this link text is clickable \u2014 it appears after the fixed \"Website designed and developed by\" label at the bottom of the footer. Leave blank to hide the whole line.",
+            "instructions": "Only this link text is clickable — it appears after the fixed \"Website designed and developed by\" label at the bottom of the footer. Leave blank to hide the whole line.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -516,5 +516,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784369285
+    "modified": 1784454869
 }

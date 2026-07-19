@@ -48,8 +48,45 @@
 	<rule ref="WordPress">
 		<!-- This rule does not apply here since the _s prefix should be changed by the theme author. -->
 		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+
+		<!-- This codebase's established style (see .cursorrules) is PSR-ish:
+			 4-space indentation in block templates, short array syntax, no
+			 space padding inside parentheses, no Yoda conditions, short
+			 ternaries, declare(strict_types=1) above the file docblock.
+			 phpcs holds the line on security, escaping, i18n, prefixing and
+			 PHP compatibility — not on whitespace/style choices that differ
+			 from wp.org formatting defaults. -->
+		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<exclude name="WordPress.PHP.YodaConditions"/>
+		<exclude name="PEAR.Functions.FunctionCallSignature"/>
+		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+		<exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
+		<exclude name="WordPress.WhiteSpace.CastStructureSpacing"/>
+		<exclude name="Squiz.ControlStructures.ControlSignature"/>
+		<exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing"/>
+		<exclude name="Generic.Formatting.MultipleStatementAlignment"/>
+		<exclude name="WordPress.Arrays.MultipleStatementAlignment"/>
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing"/>
+		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+		<exclude name="NormalizedArrays.Arrays.ArrayBraceSpacing"/>
+		<exclude name="Generic.WhiteSpace.ArbitraryParenthesesSpacing"/>
+		<exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
+		<exclude name="Generic.ControlStructures.InlineControlStructure"/>
+		<exclude name="PSR2.Methods.FunctionClosingBrace"/>
+		<exclude name="Squiz.Strings.DoubleQuoteUsage"/>
+		<exclude name="Universal.Operators.DisallowShortTernary"/>
+		<exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement"/>
+		<exclude name="Squiz.Commenting.FileComment"/>
+		<exclude name="PSR12.Files.FileHeader"/>
+		<!-- Comment punctuation/casing style, not substance. -->
+		<exclude name="Squiz.Commenting.InlineComment"/>
+		<exclude name="Generic.Commenting.DocComment.ShortNotCapital"/>
+		<!-- Template-scope variables in block/partial templates are not
+			 globals in practice; function/constant/hook prefixing is still
+			 enforced. -->
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound"/>
 	</rule>
-	<rule ref="WPThemeReview"/>
 
 	<!--
 	#############################################################################
@@ -61,7 +98,9 @@
 		 Multiple valid text domains can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="sweetmunchies"/>
+			<property name="text_domain" type="array">
+				<element value="sweetmunchies"/>
+			</property>
 		</properties>
 	</rule>
 
@@ -89,11 +128,23 @@
 		</properties>
 	</rule>
 
+	<!-- WooCommerce's wc_clean() is a sanitizer — recognize it so sanitized
+		 $_POST reads in the cart AJAX handlers don't false-positive. -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput">
+		<properties>
+			<property name="customSanitizingFunctions" type="array">
+				<element value="wc_clean"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- Verify that everything in the global namespace is prefixed with a theme specific prefix.
 		 Multiple valid prefixes can be provided as a comma-delimited list. -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
-			<property name="prefixes" type="array" value="sweetmunchies" />
+			<property name="prefixes" type="array">
+				<element value="sweetmunchies"/>
+			</property>
 		</properties>
 	</rule>
 
