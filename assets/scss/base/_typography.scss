@@ -9,18 +9,51 @@
 $font-body: "Poppins", sans-serif; // body copy, UI, headings
 $font-script: "Caveat", cursive; // script accents only (callouts, badges) — never body copy
 
-// Font sizes — the design uses fluid clamp() sizing for headings; the tiers
-// below approximate the sizes actually used across the export. Treat these
-// as a starting scale, not a hard limit — a heading can still use its own
-// clamp() when the design calls for a size between tiers.
-$font-size-xs: 12px; // meta text, tags
-$font-size-sm: 13px; // secondary labels, badges
-$font-size-base: 15px; // body copy
-$font-size-md: 18px; // large body / small subheading
-$font-size-lg: 22px; // subheading
-$font-size-xl: 26px; // section heading
+// Font sizes — the design uses fluid clamp() sizing for headings; a bespoke
+// clamp() on a single heading is still fine (there's no tier for every fluid
+// range). Fixed sizes are a different story: every fixed font-size in a
+// component MUST reference one of the tokens below, never a raw px/rem value
+// — this is the one place the whole scale lives, so resizing type sitewide
+// (or auditing what sizes exist at all) means editing this file only. If a
+// value you need isn't here, add a token here first, then use it — don't
+// inline it at the call site.
+$font-size-10: 10px; // smallest UI micro-text (cart count badge)
+$font-size-10-5: 10.5px;
+$font-size-11-5: 11.5px;
+$font-size-12: 12px; // meta text, tags
+$font-size-12-5: 12.5px;
+$font-size-12-8: 12.8px;
+$font-size-13: 13px; // secondary labels, badges
+$font-size-13-5: 13.5px;
+$font-size-14: 14px;
+$font-size-14-5: 14.5px;
+$font-size-15: 15px; // body copy
+$font-size-15-5: 15.5px;
+$font-size-16: 16px;
+$font-size-17: 17px;
+$font-size-18: 18px; // large body / small subheading
+$font-size-20: 20px;
+$font-size-22: 22px; // subheading
+$font-size-26: 26px; // section heading
+$font-size-28: 28px;
+
+// Aliases for the tiers above — prefer these names at call sites, they read
+// better than the numeric tokens for the most commonly reused sizes.
+$font-size-xs: $font-size-12;
+$font-size-sm: $font-size-13;
+$font-size-base: $font-size-15;
+$font-size-md: $font-size-18;
+$font-size-lg: $font-size-22;
+$font-size-xl: $font-size-26;
 $font-size-2xl: clamp(26px, 4vw, 38px); // large section heading
 $font-size-3xl: clamp(34px, 5.4vw, 58px); // hero heading
+
+// Every ACF flexible-content block's own section heading (Testimonials,
+// FAQ, Shop by Occasion, Feature Grid, Featured/Best-Sellers products,
+// IG Strip, WhatsApp CTA, CTA Banner) shares this one size — consistency
+// across blocks matters more here than a per-block bespoke clamp. Don't
+// give an individual block its own heading clamp; change this instead.
+$font-size-block-heading: clamp(24px, 3vw, 32px);
 
 // Font weights
 $font-weight-regular: 400;
@@ -30,8 +63,14 @@ $font-weight-bold: 700;
 $font-weight-black: 800;
 
 // Line heights
+$line-height-none: 0; // icon-only flex children, kills the box's own line-box height
+$line-height-single: 1; // tight numerals/labels with no descenders to clear
+$line-height-display: 1.04; // large fluid display headings only
 $line-height-tight: 1.4; // headings
+$line-height-snug: 1.5;
 $line-height-base: 1.6; // body copy
+$line-height-relaxed: 1.7;
+$line-height-loose: 1.9;
 
 // Letter spacing
 $letter-spacing-wide: 0.06em; // uppercase labels/badges

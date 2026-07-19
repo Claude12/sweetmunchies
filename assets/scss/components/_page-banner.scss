@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .page-banner {
   position: relative;
@@ -31,15 +32,15 @@
 .page-banner__eyebrow {
   font-family: "Caveat", cursive;
   color: var(--color-accent);
-  font-weight: 700;
-  font-size: 22px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-lg;
   margin: 0 0 4px;
 }
 
 .page-banner__heading {
   color: var(--color-white);
   font-size: clamp(1.8rem, 4vw, 2.75rem);
-  font-weight: 800;
+  font-weight: $font-weight-black;
   margin: 0;
 }
 
@@ -59,7 +60,7 @@
   }
 
   .rank-math-breadcrumb {
-    font-size: 13.5px;
+    font-size: $font-size-13-5;
     color: var(--color-text-muted);
   }
 

@@ -208,7 +208,7 @@
   right: 2px;
   background: var(--color-primary);
   color: var(--color-white);
-  font-size: 10px;
+  font-size: $font-size-10;
   font-weight: $font-weight-bold;
   width: 17px;
   height: 17px;
@@ -445,7 +445,7 @@
   border: none;
   border-radius: 100px;
   box-shadow: none;
-  font-size: 16px;
+  font-size: $font-size-16;
   font-family: $font-body;
   color: var(--color-text);
 
@@ -458,7 +458,7 @@
 .search-overlay__close {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: $font-size-20;
   cursor: pointer;
   color: var(--color-text-muted);
   padding: 4px;

@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .error-404 {
   position: relative;
@@ -76,13 +77,13 @@
   align-items: center;
   justify-content: center;
   gap: clamp(4px, 1.5vw, 14px);
-  line-height: 1;
+  line-height: $line-height-single;
   margin: 0 0 8px;
 }
 
 .error-404__digit {
   font-size: clamp(64px, 14vw, 140px);
-  font-weight: 800;
+  font-weight: $font-weight-black;
   color: var(--color-primary);
   letter-spacing: -0.02em;
 }
@@ -104,7 +105,7 @@
 
 .error-404__eyebrow {
   font-family: "Caveat", cursive;
-  font-weight: 700;
+  font-weight: $font-weight-bold;
   font-size: clamp(20px, 2.6vw, 26px);
   color: #c99400; // darkened $color-accent for AA contrast on cream bg
   margin: 0 0 6px;
@@ -113,14 +114,14 @@
 .error-404__heading {
   color: var(--color-secondary);
   font-size: clamp(24px, 3.4vw, 34px);
-  font-weight: 800;
+  font-weight: $font-weight-black;
   margin: 0 0 12px;
 }
 
 .error-404__subtext {
   color: var(--color-text-muted);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: $font-size-16;
+  line-height: $line-height-base;
   max-width: 460px;
   margin: 0 auto 32px;
 }
@@ -140,8 +141,8 @@
   gap: 8px;
   padding: var(--spacer-16) var(--spacer-32);
   border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.9375rem;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 
@@ -176,8 +177,8 @@
 }
 
 .error-404__categories-label {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: $font-size-13-5;
+  font-weight: $font-weight-semibold;
   color: var(--color-text-muted);
   margin: 0 0 var(--spacer-16);
 }
@@ -195,8 +196,8 @@
   border: 1px solid var(--color-border);
   border-radius: 100px;
   padding: 8px 18px;
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: $font-size-13-5;
+  font-weight: $font-weight-semibold;
   color: var(--color-text);
   text-decoration: none;
   transition: background 0.15s, border-color 0.15s;
@@ -219,7 +220,7 @@
 }
 
 .error-404__whatsapp-text {
-  font-size: 14px;
+  font-size: $font-size-14;
   color: var(--color-text);
   margin: 0;
 }
@@ -232,8 +233,8 @@
   border-radius: 999px;
   background: var(--color-whatsapp);
   color: var(--color-white);
-  font-weight: 700;
-  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-13-5;
   white-space: nowrap;
   text-decoration: none;
   transition: filter 0.15s ease;

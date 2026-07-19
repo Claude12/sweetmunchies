@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .testimonials {
   background: var(--color-pink-tint);
@@ -18,8 +19,8 @@
 
   &__heading {
     text-align: center;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
+    font-size: $font-size-block-heading;
+    font-weight: $font-weight-black;
     margin: 0 0 var(--spacer-32);
   }
 
@@ -52,16 +53,16 @@
 
   &__quote {
     font-family: "Caveat", cursive;
-    font-size: 20px;
+    font-size: $font-size-20;
     color: var(--color-text);
-    line-height: 1.4;
+    line-height: $line-height-tight;
     margin: 0 0 14px;
   }
 
   &__name {
     margin: 0;
-    font-weight: 700;
-    font-size: 13.5px;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-13-5;
     color: var(--color-secondary);
   }
 }

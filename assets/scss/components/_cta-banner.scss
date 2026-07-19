@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .cta-banner {
   padding: 60px 0;
@@ -14,15 +15,15 @@
 
   &__heading {
     color: var(--color-white);
-    font-size: clamp(20px, 2.4vw, 26px);
-    font-weight: 800;
+    font-size: $font-size-block-heading;
+    font-weight: $font-weight-black;
     margin: 0 0 8px;
   }
 
   &__subtext {
     color: var(--color-cta-box-text);
-    font-size: 14.5px;
-    line-height: 1.6;
+    font-size: $font-size-14-5;
+    line-height: $line-height-base;
     margin: 0 0 20px;
   }
 
@@ -34,8 +35,8 @@
     border-radius: 999px;
     background: var(--color-primary);
     color: var(--color-white);
-    font-weight: 700;
-    font-size: 14px;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-14;
     text-decoration: none;
     transition: background-color 0.15s ease;
 

@@ -1,3 +1,5 @@
+@use "base/typography" as *;
+
 .shop-by-occasion {
   padding: 60px 0;
 
@@ -6,14 +8,14 @@
   }
 
   &__heading {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800;
+    font-size: $font-size-block-heading;
+    font-weight: $font-weight-black;
     margin: 0 0 6px;
   }
 
   &__subtext {
     color: var(--color-text-muted);
-    font-size: 15px;
+    font-size: $font-size-base;
     margin: 0;
   }
 
@@ -84,15 +86,15 @@
 
   &__icon {
     display: block;
-    font-size: 26px;
-    line-height: 1;
+    font-size: $font-size-xl;
+    line-height: $line-height-single;
     margin-bottom: 10px;
   }
 
   &__name {
     display: block;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-base;
     color: var(--color-text);
   }
 }

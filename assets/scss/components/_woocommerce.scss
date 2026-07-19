@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 // WooCommerce's own stylesheet is disabled (see inc/woocommerce.php) so the
 // plugin's default markup is unstyled by default — build up product/cart/
@@ -71,7 +72,7 @@
 
   .product-card__quick-add-icon {
     display: none;
-    line-height: 0;
+    line-height: $line-height-none;
 
     svg {
       width: 14px;
@@ -211,8 +212,8 @@
   display: inline-block;
   background: var(--color-accent);
   color: var(--color-text);
-  font-weight: 700;
-  font-size: 11.5px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-11-5;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding: 5px 12px;
@@ -222,13 +223,13 @@
 
 .product-page__title {
   font-size: clamp(26px, 3.4vw, 36px);
-  font-weight: 800;
+  font-weight: $font-weight-black;
   margin: 0 0 6px;
 }
 
 .product-page__tagline {
   color: var(--color-text-muted);
-  font-size: 15px;
+  font-size: $font-size-base;
   margin: 0 0 14px;
 }
 
@@ -241,19 +242,19 @@
 }
 
 .product-page__price {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: $font-size-28;
+  font-weight: $font-weight-black;
   color: var(--color-primary);
 }
 
 .product-page__price--poa {
   color: var(--color-text-muted);
-  font-size: 20px;
+  font-size: $font-size-20;
 }
 
 .product-page__meta {
   color: var(--color-text-muted);
-  font-size: 14px;
+  font-size: $font-size-14;
 }
 
 .product-page__info-box {
@@ -269,7 +270,7 @@
 .product-page__info-row {
   display: flex;
   gap: 10px;
-  font-size: 13.5px;
+  font-size: $font-size-13-5;
   color: var(--color-text);
 
   svg {
@@ -285,8 +286,8 @@
   gap: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: $font-size-14;
+  font-weight: $font-weight-semibold;
 
   input {
     width: 18px;
@@ -301,7 +302,7 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: $font-size-14;
   margin-bottom: 8px;
   resize: vertical;
   font-family: inherit;
@@ -309,9 +310,9 @@
 
 .product-page__gift-hint {
   color: var(--color-text-muted);
-  font-size: 12.5px;
+  font-size: $font-size-12-5;
   margin: 0 0 16px;
-  line-height: 1.5;
+  line-height: $line-height-snug;
 }
 
 // Quote-on-request products (see woocommerce/content-single-product.php) —
@@ -319,8 +320,8 @@
 .product-page__poa-label {
   display: block;
   color: var(--color-text-muted);
-  font-size: 13.5px;
-  line-height: 1.5;
+  font-size: $font-size-13-5;
+  line-height: $line-height-snug;
   margin-bottom: 10px;
 }
 
@@ -330,7 +331,7 @@
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: $font-size-14;
   margin-bottom: 14px;
   resize: vertical;
   font-family: inherit;
@@ -343,8 +344,8 @@
   border: none;
   padding: 17px;
   border-radius: 100px;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-16;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -379,7 +380,7 @@
   height: 38px;
   border: none;
   background: var(--color-white);
-  font-size: 18px;
+  font-size: $font-size-md;
   cursor: pointer;
   color: var(--color-text);
   transition: background-color 0.15s;
@@ -392,11 +393,11 @@
 .product-page__qty-input {
   width: 36px;
   text-align: center;
-  font-weight: 700;
+  font-weight: $font-weight-bold;
   border: none;
   background: none;
   -moz-appearance: textfield;
-  font-size: 14px;
+  font-size: $font-size-14;
   color: var(--color-text);
 
   &::-webkit-outer-spin-button,
@@ -408,7 +409,7 @@
 
 .product-page__total {
   color: var(--color-text-muted);
-  font-size: 14px;
+  font-size: $font-size-14;
 
   strong {
     color: var(--color-text);
@@ -422,8 +423,8 @@
   border: none;
   padding: 17px;
   border-radius: 100px;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-16;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -441,7 +442,7 @@
 
   .product-page__add-to-cart-icon {
     display: none;
-    line-height: 0;
+    line-height: $line-height-none;
 
     svg {
       width: 18px;
@@ -465,8 +466,8 @@
   margin-top: 16px;
   flex-wrap: wrap;
   color: var(--color-text-muted);
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: $font-size-12-5;
+  font-weight: $font-weight-semibold;
 }
 
 .product-page__tabs {
@@ -487,8 +488,8 @@
   background: none;
   border: none;
   padding: 0 0 12px;
-  font-weight: 700;
-  font-size: 13.5px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-13-5;
   cursor: pointer;
   color: var(--color-text-muted);
   border-bottom: 2px solid transparent;
@@ -507,8 +508,8 @@
 .product-page__tab-panel {
   display: none;
   color: var(--color-text-muted);
-  line-height: 1.7;
-  font-size: 14.5px;
+  line-height: $line-height-relaxed;
+  font-size: $font-size-14-5;
 
   &.is-active {
     display: block;
@@ -522,7 +523,7 @@
 .product-page__inside-list {
   margin: 0;
   padding-left: 20px;
-  line-height: 1.9;
+  line-height: $line-height-loose;
 }
 
 .product-page__related {
@@ -545,8 +546,8 @@
 }
 
 .product-page__related-heading {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-black;
   margin: 0 0 22px;
 }
 
@@ -571,13 +572,13 @@
 }
 
 .product-page__sticky-cta-total {
-  font-weight: 800;
-  font-size: 17px;
+  font-weight: $font-weight-black;
+  font-size: $font-size-17;
   color: var(--color-primary);
 }
 
 .product-page__sticky-cta-name {
-  font-size: 11.5px;
+  font-size: $font-size-11-5;
   color: var(--color-text-muted);
 }
 
@@ -587,8 +588,8 @@
   border: none;
   padding: 13px 26px;
   border-radius: 100px;
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-14;
   cursor: pointer;
   transition: opacity 0.15s;
 
@@ -604,13 +605,13 @@
 
 .cart-page__heading {
   font-size: clamp(26px, 3.4vw, 34px);
-  font-weight: 800;
+  font-weight: $font-weight-black;
   margin: 0 0 6px;
 }
 
 .cart-page__subtext {
   color: var(--color-text-muted);
-  font-size: 15px;
+  font-size: $font-size-base;
   margin: 0 0 var(--spacer-24);
 }
 
@@ -670,10 +671,10 @@
 }
 
 .cart-page__item-name {
-  font-weight: 700;
+  font-weight: $font-weight-bold;
   color: var(--color-text);
   text-decoration: none;
-  font-size: 15px;
+  font-size: $font-size-base;
 
   &:hover {
     color: var(--color-primary);
@@ -697,8 +698,8 @@
 .cart-page__item-tag {
   display: inline-block;
   color: var(--color-primary);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
   margin-top: 2px;
 }
 
@@ -723,7 +724,7 @@
   height: 30px;
   border: none;
   background: var(--color-white);
-  font-size: 15px;
+  font-size: $font-size-base;
   cursor: pointer;
   color: var(--color-text);
   transition: background-color 0.15s;
@@ -736,11 +737,11 @@
 .cart-page__qty-input {
   width: 30px;
   text-align: center;
-  font-weight: 700;
+  font-weight: $font-weight-bold;
   border: none;
   background: none;
   -moz-appearance: textfield;
-  font-size: 13.5px;
+  font-size: $font-size-13-5;
   color: var(--color-text);
 
   &::-webkit-outer-spin-button,
@@ -751,9 +752,9 @@
 }
 
 .cart-page__item-price {
-  font-weight: 800;
+  font-weight: $font-weight-black;
   color: var(--color-primary);
-  font-size: 15px;
+  font-size: $font-size-base;
 }
 
 .cart-page__totals {
@@ -769,15 +770,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 0;
-  font-size: 14.5px;
+  font-size: $font-size-14-5;
   color: var(--color-text-muted);
 
   &--total {
     border-top: 1px dashed var(--color-border);
     margin-top: 6px;
     padding-top: 14px;
-    font-weight: 800;
-    font-size: 17px;
+    font-weight: $font-weight-black;
+    font-size: $font-size-17;
     color: var(--color-text);
 
     span:last-child {
@@ -808,17 +809,17 @@
 }
 
 .cart-page__whatsapp-heading {
-  font-size: 22px;
-  font-weight: 800;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-black;
   margin: 0 0 8px;
 }
 
 .cart-page__whatsapp-text {
   color: rgba(255, 255, 255, 0.78);
-  font-size: 14px;
+  font-size: $font-size-14;
   max-width: 440px;
   margin: 0 auto 22px;
-  line-height: 1.6;
+  line-height: $line-height-base;
 }
 
 .cart-page__whatsapp-button {
@@ -829,8 +830,8 @@
   border-radius: 999px;
   background: var(--color-whatsapp);
   color: var(--color-white);
-  font-weight: 700;
-  font-size: 15px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
   text-decoration: none;
   transition: transform 0.15s ease;
 
@@ -841,7 +842,7 @@
 
 .cart-page__whatsapp-note {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 12px;
+  font-size: $font-size-xs;
   margin: 18px 0 0;
 }
 
@@ -849,7 +850,7 @@
   display: block;
   text-align: center;
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: $font-weight-bold;
   text-decoration: none;
   margin-top: var(--spacer-24);
 
@@ -898,7 +899,7 @@
 
   &__heading {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 800;
+    font-weight: $font-weight-black;
     margin: 0 0 var(--spacer-8);
   }
 
@@ -913,8 +914,8 @@
     border-radius: 100px;
     padding: 10px 20px;
     text-align: center;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-14;
     max-width: fit-content;
     margin: 0 auto var(--spacer-32);
   }
@@ -939,8 +940,8 @@
     border: 1px solid var(--color-border);
     border-radius: 100px;
     padding: 8px 18px;
-    font-size: 13.5px;
-    font-weight: 600;
+    font-size: $font-size-13-5;
+    font-weight: $font-weight-semibold;
     color: var(--color-text);
     text-decoration: none;
     transition: background 0.15s, color 0.15s, border-color 0.15s;
@@ -967,8 +968,8 @@
       border: 1px solid var(--color-border);
       border-radius: 100px;
       padding: 8px 40px 8px 16px;
-      font-size: 13.5px;
-      font-weight: 600;
+      font-size: $font-size-13-5;
+      font-weight: $font-weight-semibold;
       color: var(--color-text);
       background: var(--color-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23241C1A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 16px center;
       cursor: pointer;
@@ -1011,8 +1012,8 @@
       border: 1px solid var(--color-border);
       color: var(--color-text);
       text-decoration: none;
-      font-size: 13.5px;
-      font-weight: 600;
+      font-size: $font-size-13-5;
+      font-weight: $font-weight-semibold;
 
       &:hover {
         border-color: var(--color-primary);
@@ -1036,7 +1037,7 @@
     display: inline-block;
     margin-top: var(--spacer-16);
     color: var(--color-primary);
-    font-weight: 700;
+    font-weight: $font-weight-bold;
     text-decoration: none;
 
     &:hover {

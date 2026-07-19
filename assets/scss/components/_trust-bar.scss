@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .trust-bar {
   background: var(--color-white);
@@ -18,13 +19,13 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: $font-size-14;
+    font-weight: $font-weight-semibold;
     color: var(--color-text);
   }
 
   &__icon {
-    font-size: 22px;
-    line-height: 1;
+    font-size: $font-size-lg;
+    line-height: $line-height-single;
   }
 }

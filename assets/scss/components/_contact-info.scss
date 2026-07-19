@@ -1,4 +1,5 @@
 @use "abstracts/mixins" as *;
+@use "base/typography" as *;
 
 .contact-info {
   padding: 60px 0;
@@ -37,8 +38,8 @@
 }
 
 .contact-info__card-title {
-  font-size: 17px;
-  font-weight: 800;
+  font-size: $font-size-17;
+  font-weight: $font-weight-black;
   margin: 0 0 14px;
 }
 
@@ -68,13 +69,13 @@
   }
 
   strong {
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-base;
   }
 
   small {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
     opacity: 0.9;
   }
 
@@ -85,9 +86,9 @@
 
 .contact-info__line {
   display: block;
-  font-size: 14.5px;
+  font-size: $font-size-14-5;
   color: var(--color-text-muted);
-  line-height: 1.6;
+  line-height: $line-height-base;
   margin: 0 0 8px;
   text-decoration: none;
 
@@ -132,8 +133,8 @@ p.contact-info__line:hover {
   .wpforms-field-label,
   legend.wpforms-field-label {
     display: block;
-    font-size: 13.5px;
-    font-weight: 700;
+    font-size: $font-size-13-5;
+    font-weight: $font-weight-bold;
     margin: 0 0 6px;
   }
 
@@ -148,7 +149,7 @@ p.contact-info__line:hover {
 
   .wpforms-field-sublabel {
     display: block;
-    font-size: 12px;
+    font-size: $font-size-xs;
     color: var(--color-text-muted);
     margin-top: 4px;
   }
@@ -161,7 +162,7 @@ p.contact-info__line:hover {
     border: 1px solid var(--color-border);
     border-radius: 12px;
     background: var(--color-white);
-    font-size: 14.5px;
+    font-size: $font-size-14-5;
     font-family: inherit;
     color: inherit;
     transition: border-color 0.15s ease;
@@ -190,8 +191,8 @@ p.contact-info__line:hover {
     border-radius: 999px;
     background: var(--color-primary);
     color: var(--color-white);
-    font-weight: 700;
-    font-size: 14px;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-14;
     cursor: pointer;
     transition: background-color 0.15s ease;
 
