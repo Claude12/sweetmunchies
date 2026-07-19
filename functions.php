@@ -267,6 +267,13 @@ if (defined('JETPACK__VERSION')) {
 }
 
 /**
+ * RankMath SEO integration.
+ */
+if (defined('RANK_MATH_VERSION')) {
+	require get_template_directory() . '/inc/rank-math.php';
+}
+
+/**
  * Remove the default content editor from pages and posts — all content is
  * managed via ACF flexible content blocks.
  */

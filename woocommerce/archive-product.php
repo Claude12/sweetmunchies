@@ -37,6 +37,15 @@ $products = array_values(array_filter(array_map(
     <?php get_template_part('inc/template-parts/page-banner', null, ['hero' => false]); ?>
 
     <div class="container">
+        <?php if ($queried_term): ?>
+            <?php $term_description = term_description($queried_term); ?>
+            <?php if ($term_description): ?>
+                <div class="shop-page__intro">
+                    <?php echo wp_kses_post($term_description); ?>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <div class="shop-page__toolbar">
             <?php if ($categories): ?>
                 <div class="shop-page__pills">

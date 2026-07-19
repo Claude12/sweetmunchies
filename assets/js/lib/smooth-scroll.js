@@ -1,5 +1,9 @@
+// Sticky header height — shared with shop-archive-scroll.js so both modules
+// land content at the same spot just below the header, not two independently
+// tuned magic numbers.
+export const HEADER_SCROLL_OFFSET = 123;
+
 function smoothScroll() {
-  const OFFSET = 123;
   const scrollToTop = document.getElementById('scroll-to-top');
 
   // Anchor links — native smooth scroll with header offset.
@@ -24,7 +28,7 @@ function smoothScroll() {
       }
       if (!target) return;
 
-      const top = target.getBoundingClientRect().top + window.scrollY - OFFSET;
+      const top = target.getBoundingClientRect().top + window.scrollY - HEADER_SCROLL_OFFSET;
       window.scrollTo({ top, behavior: 'smooth' });
     });
   });

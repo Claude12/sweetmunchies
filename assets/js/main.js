@@ -9,6 +9,7 @@ import productTabs from './lib/product-tabs';
 import productAddToCart from './lib/product-add-to-cart';
 import productPoa from './lib/product-poa';
 import cartPage from './lib/cart-page';
+import pageOpenScroll from './lib/page-open-scroll';
 
 document.addEventListener('DOMContentLoaded', () => {
   smoothScroll();
@@ -22,4 +23,5 @@ document.addEventListener('DOMContentLoaded', () => {
   productAddToCart();
   productPoa();
   cartPage();
+  pageOpenScroll();
 });
