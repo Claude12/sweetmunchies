@@ -6,9 +6,10 @@ declare(strict_types=1);
  * Block: Home Hero
  * ACF flexible content layout `home_hero` — the homepage's top section:
  * badge, heading, subtext, two CTAs, a trust line, and a rotated photo
- * collage (2 fixed groups on desktop either side of the text, a 3-photo
- * row on mobile). Rendered inside the have_rows()/the_row() loop in
- * sweetmunchies_render_flexible_content() (see inc/acf.php).
+ * pair (one large portrait photo either side of the text on desktop,
+ * the same two stacked in a row on mobile). Rendered inside the
+ * have_rows()/the_row() loop in sweetmunchies_render_flexible_content()
+ * (see inc/acf.php).
  *
  * Matches wp-content/themes/design/Sweet Munchies.dc.html lines 145-212.
  *
@@ -25,22 +26,16 @@ $collage_images   = get_sub_field('collage_images');
 $price_badge_text = get_sub_field('price_badge_text');
 $img_loading      = (int) get_query_var('block_index', 1) === 0 ? 'eager' : 'lazy';
 
-$collage_images = $collage_images ? array_slice($collage_images, 0, 4) : array();
+$collage_images = $collage_images ? array_slice($collage_images, 0, 2) : array();
 
-/**
- * Slot 0/2 are the tall (3:4) frames, slot 1/3 are the square (1:1) frames.
- * Slot 3 (bottom-right) carries the price badge and is dropped from the
- * mobile row — matches the design 1:1.
- */
-$slot_shape = array(0 => 'portrait', 1 => 'square', 2 => 'portrait', 3 => 'square');
-
-$render_frame = static function ($image, int $slot) use ($slot_shape, $img_loading, $price_badge_text) {
+// Slot 1 (right-hand photo) carries the price badge.
+$render_frame = static function ($image, int $slot) use ($img_loading, $price_badge_text) {
 	if (!$image) {
 		return;
 	}
 	?>
 	<div class="home-hero__frame home-hero__frame--<?php echo (int) $slot; ?>">
-		<div class="home-hero__frame-inner home-hero__frame-inner--<?php echo esc_attr($slot_shape[$slot]); ?>">
+		<div class="home-hero__frame-inner">
 			<img
 				src="<?php echo esc_url($image['sizes']['medium'] ?? $image['url']); ?>"
 				alt="<?php echo esc_attr($image['alt']); ?>"
@@ -49,7 +44,7 @@ $render_frame = static function ($image, int $slot) use ($slot_shape, $img_loadi
 				loading="<?php echo esc_attr($img_loading); ?>"
 				decoding="async" />
 		</div>
-		<?php if (3 === $slot && $price_badge_text): ?>
+		<?php if (1 === $slot && $price_badge_text): ?>
 			<span class="home-hero__price-badge"><?php echo esc_html($price_badge_text); ?></span>
 		<?php endif; ?>
 	</div>
@@ -113,25 +108,18 @@ $render_frame = static function ($image, int $slot) use ($slot_shape, $img_loadi
 			<?php endif; ?>
 		</div>
 
-		<?php if (count($collage_images) === 4): ?>
+		<?php if (count($collage_images) === 2): ?>
 			<div class="home-hero__photo-group home-hero__photo-group--left" animate="fade-in-left">
-				<?php
-				$render_frame($collage_images[0], 0);
-				$render_frame($collage_images[1], 1);
-				?>
+				<?php $render_frame($collage_images[0], 0); ?>
 			</div>
 			<div class="home-hero__photo-group home-hero__photo-group--right" animate="fade-in-right">
-				<?php
-				$render_frame($collage_images[2], 2);
-				$render_frame($collage_images[3], 3);
-				?>
+				<?php $render_frame($collage_images[1], 1); ?>
 			</div>
 
 			<div class="home-hero__photo-mobile">
 				<?php
 				$render_frame($collage_images[0], 0);
 				$render_frame($collage_images[1], 1);
-				$render_frame($collage_images[2], 2);
 				?>
 			</div>
 		<?php endif; ?>

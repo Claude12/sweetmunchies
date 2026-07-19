@@ -177,39 +177,21 @@ $hero-photos-breakpoint: 1240px;
   // Split in two: __frame handles position/rotation only, __frame-inner
   // clips the photo — kept separate so the price badge (a sibling of
   // __frame-inner, not a child) can hang outside the clipped photo edge.
+  // Each slot is vertically centered in its column since it's now the
+  // only photo in that column (no smaller photo stacked below it).
   &__frame {
     position: absolute;
+    top: 50%;
+    width: 220px;
 
     &--0 {
-      left: -2%;
-      top: 6%;
-      width: 190px;
-      transform: rotate(-9deg);
-      z-index: 1;
+      left: 6%;
+      transform: translateY(-50%) rotate(-9deg);
     }
 
     &--1 {
-      left: 9%;
-      bottom: -2%;
-      width: 140px;
-      transform: rotate(7deg);
-      z-index: 2;
-    }
-
-    &--2 {
-      right: -2%;
-      top: 4%;
-      width: 190px;
-      transform: rotate(8deg);
-      z-index: 1;
-    }
-
-    &--3 {
-      right: 9%;
-      bottom: -6%;
-      width: 150px;
-      transform: rotate(-6deg);
-      z-index: 2;
+      right: 6%;
+      transform: translateY(-50%) rotate(8deg);
     }
   }
 
@@ -217,23 +199,14 @@ $hero-photos-breakpoint: 1240px;
     overflow: hidden;
     border: 6px solid var(--color-white);
     box-shadow: 0 20px 38px -16px rgba(36, 63, 28, 0.4);
+    aspect-ratio: 3 / 4;
+    border-radius: 22px;
 
     img {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
-    }
-
-    &--portrait {
-      aspect-ratio: 3 / 4;
-      border-radius: 22px;
-    }
-
-    &--square {
-      aspect-ratio: 1 / 1;
-      border-radius: 18px;
-      box-shadow: 0 16px 30px -14px rgba(36, 63, 28, 0.4);
     }
   }
 
@@ -279,14 +252,14 @@ $hero-photos-breakpoint: 1240px;
     }
   }
 
-  // Mobile: a plain flex row of the first 3 photos, statically positioned.
+  // Mobile: a plain flex row of both photos, statically positioned.
   &__photo-mobile {
     position: relative;
     z-index: 2;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: var(--spacer-16);
+    gap: var(--spacer-24);
     margin-top: var(--spacer-32);
     padding-top: 10px;
 
@@ -296,20 +269,16 @@ $hero-photos-breakpoint: 1240px;
 
     .home-hero__frame {
       position: static;
-      width: 30%;
-      max-width: 150px;
+      width: 42%;
+      max-width: 190px;
+      top: auto;
 
       &--0 {
         transform: rotate(-6deg);
       }
 
       &--1 {
-        transform: rotate(4deg);
-        margin-top: 18px;
-      }
-
-      &--2 {
-        transform: rotate(-3deg);
+        transform: rotate(5deg);
       }
     }
 
@@ -323,8 +292,5 @@ $hero-photos-breakpoint: 1240px;
         border-radius: 13px;
       }
     }
-
-    // Slot 3 (the price-badge photo) is intentionally dropped on mobile —
-    // matches the design, so it's simply never rendered into this group.
   }
 }

@@ -477,7 +477,7 @@
                             "name": "collage_images",
                             "aria-label": "",
                             "type": "gallery",
-                            "instructions": "Up to 4 photos shown floating around the hero on desktop.",
+                            "instructions": "2 photos shown floating around the hero on desktop.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -488,7 +488,7 @@
                             "return_format": "array",
                             "library": "all",
                             "min": "",
-                            "max": "",
+                            "max": "2",
                             "min_width": "",
                             "min_height": "",
                             "min_size": "",
