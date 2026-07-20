@@ -11,6 +11,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $items = get_sub_field('items');
 
 if (!$items) {

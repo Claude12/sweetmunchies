@@ -12,6 +12,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $heading = get_sub_field('heading');
 $items   = get_sub_field('items');
 
@@ -25,6 +27,7 @@ if (!$items) {
 ?>
 
 <section class="faq-accordion">
+    <img class="faq-accordion__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
     <div class="container">
         <?php if ($heading): ?>
             <h2 class="faq-accordion__heading"><?php echo esc_html($heading); ?></h2>

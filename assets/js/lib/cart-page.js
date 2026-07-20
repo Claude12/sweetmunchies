@@ -51,6 +51,7 @@ function cartPage() {
   const updateUrl = whatsappBox.dataset.ajaxUpdateUrl;
   const removeUrl = whatsappBox.dataset.ajaxRemoveUrl;
   const whatsappNumber = whatsappBox.dataset.whatsappNumber;
+  const nonce = whatsappBox.dataset.nonce;
 
   const currencySymbol =
     root.querySelector('.woocommerce-Price-currencySymbol')?.textContent || '$';
@@ -118,6 +119,7 @@ function cartPage() {
     const formData = new FormData();
     formData.set('cart_item_key', cartItemKey);
     formData.set('quantity', String(quantity));
+    formData.set('nonce', nonce);
 
     try {
       const response = await fetch(updateUrl, { method: 'POST', body: formData, credentials: 'same-origin' });
@@ -157,6 +159,7 @@ function cartPage() {
 
     const formData = new FormData();
     formData.set('cart_item_key', cartItemKey);
+    formData.set('nonce', nonce);
 
     try {
       const response = await fetch(removeUrl, { method: 'POST', body: formData, credentials: 'same-origin' });

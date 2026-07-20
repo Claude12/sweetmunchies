@@ -14,6 +14,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $heading    = get_sub_field('heading');
 $gallery    = get_sub_field('gallery');
 $link_text  = get_sub_field('link_text');

@@ -44,7 +44,10 @@ $aria_describedby = isset($args['aria-describedby_text'])
     ? sprintf('aria-describedby="woocommerce_loop_add_to_cart_link_describedby_%s"', esc_attr($product->get_id()))
     : '';
 
-$icons = '<span class="product-card__quick-add-icon product-card__quick-add-icon--idle" aria-hidden="true">'
+$tooltip = '<span class="product-card__quick-add-tooltip" aria-hidden="true">' . esc_html($product->add_to_cart_text()) . '</span>';
+
+$icons = $tooltip
+    . '<span class="product-card__quick-add-icon product-card__quick-add-icon--idle" aria-hidden="true">'
     . '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>'
     . '</span>'
     . '<span class="product-card__quick-add-icon product-card__quick-add-icon--loading" aria-hidden="true">'
@@ -54,7 +57,7 @@ $icons = '<span class="product-card__quick-add-icon product-card__quick-add-icon
     . '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>'
     . '</span>';
 
-echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- all dynamic parts are individually escaped above; $icons is static, theme-authored markup.
+echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- all dynamic parts are individually escaped above; $icons is theme-authored markup, its only dynamic value (the tooltip text) already run through esc_html().
     'woocommerce_loop_add_to_cart_link', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce core's own filter, applied here because this template overrides WC's loop button.
     sprintf(
         '<a href="%s" %s data-quantity="%s" class="%s" %s><span class="screen-reader-text">%s</span>%s</a>',

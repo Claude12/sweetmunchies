@@ -15,6 +15,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 get_header();
 ?>
 

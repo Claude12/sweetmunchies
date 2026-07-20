@@ -2,6 +2,21 @@
 
 .shop-by-occasion {
   padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+
+  // Mirrors featured-products' top-right icon (see _product-grid.scss) on
+  // the opposite corner — this block sits right after it on the homepage,
+  // so alternating sides keeps the two from feeling like a repeat.
+  &__deco {
+    position: absolute;
+    top: 20px;
+    left: 6%;
+    width: 130px;
+    opacity: 0.15;
+    transform: rotate(-20deg);
+    pointer-events: none;
+  }
 
   &__header {
     margin-bottom: 26px;

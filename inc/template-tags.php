@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 if ( ! function_exists( 'sweetmunchies_posted_on' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time.

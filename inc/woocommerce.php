@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 /**
  * The theme owns product/shop markup via woocommerce.php + this file, so the
  * plugin's own frontend stylesheet is not needed — style from assets/scss

@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 if ( ! is_active_sidebar( 'sidebar-1' ) ) {
 	return;
 }

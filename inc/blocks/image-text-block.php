@@ -12,6 +12,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $background_color = get_sub_field('background_color');
 $left_type         = get_sub_field('left_type');
 $left_image        = get_sub_field('left_image');

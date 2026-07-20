@@ -15,6 +15,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 get_header();
 
 $cart = WC()->cart;
@@ -38,6 +40,7 @@ $items = $cart ? $cart->get_cart() : array();
 	<div class="container">
 		<?php if (! $items): ?>
 			<div class="cart-page__empty">
+				<img class="cart-page__empty-deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
 				<h1 class="cart-page__heading">Your Cart</h1>
 				<p class="cart-page__subtext"><?php esc_html_e("Your cart is empty — let's fix that.", 'sweetmunchies'); ?></p>
 				<a href="<?php echo esc_url(wc_get_page_permalink('shop')); ?>" class="cart-page__continue cart-page__continue--solid"><?php esc_html_e('Continue Shopping', 'sweetmunchies'); ?></a>
@@ -101,7 +104,7 @@ $items = $cart ? $cart->get_cart() : array();
 							<div class="cart-page__item-bottom">
 								<div class="cart-page__qty-stepper">
 									<button type="button" class="cart-page__qty-btn" data-qty-decrease aria-label="<?php esc_attr_e('Decrease quantity', 'sweetmunchies'); ?>">&minus;</button>
-									<input type="number" class="cart-page__qty-input" value="<?php echo esc_attr((string) $cart_item['quantity']); ?>" min="1" max="99" inputmode="numeric" />
+									<input type="number" class="cart-page__qty-input" value="<?php echo esc_attr((string) $cart_item['quantity']); ?>" min="1" max="99" inputmode="numeric" aria-label="<?php esc_attr_e('Quantity', 'sweetmunchies'); ?>" />
 									<button type="button" class="cart-page__qty-btn" data-qty-increase aria-label="<?php esc_attr_e('Increase quantity', 'sweetmunchies'); ?>">+</button>
 								</div>
 								<span class="cart-page__item-price" data-line-total><?php echo wp_kses_post(wc_price($unit * (int) $cart_item['quantity'])); ?></span>
@@ -122,7 +125,8 @@ $items = $cart ? $cart->get_cart() : array();
 				</div>
 			</div>
 
-			<div class="cart-page__whatsapp" data-ajax-update-url="<?php echo esc_url(WC_AJAX::get_endpoint('sweetmunchies_update_cart_item')); ?>" data-ajax-remove-url="<?php echo esc_url(WC_AJAX::get_endpoint('sweetmunchies_remove_cart_item')); ?>" data-whatsapp-number="<?php echo esc_attr($whatsapp); ?>">
+			<div class="cart-page__whatsapp" data-ajax-update-url="<?php echo esc_url(WC_AJAX::get_endpoint('sweetmunchies_update_cart_item')); ?>" data-ajax-remove-url="<?php echo esc_url(WC_AJAX::get_endpoint('sweetmunchies_remove_cart_item')); ?>" data-whatsapp-number="<?php echo esc_attr($whatsapp); ?>" data-nonce="<?php echo esc_attr(wp_create_nonce('sweetmunchies_cart_action')); ?>">
+				<img class="cart-page__whatsapp-deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
 				<span class="cart-page__whatsapp-icon">
 					<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm0 18a7.9 7.9 0 0 1-4.03-1.1l-.29-.17-3 .79.8-2.93-.19-.3A7.93 7.93 0 1 1 12 20Zm4.36-5.96c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.46-.39-.4-.54-.4-.14 0-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z"/></svg>
 				</span>

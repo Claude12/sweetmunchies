@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $show_hero = $args['hero'] ?? true;
 
 if ($show_hero) :

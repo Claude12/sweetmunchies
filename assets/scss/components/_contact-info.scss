@@ -3,6 +3,18 @@
 
 .contact-info {
   padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+
+  &__deco {
+    position: absolute;
+    top: 20px;
+    right: 6%;
+    width: 130px;
+    opacity: 0.15;
+    transform: rotate(20deg);
+    pointer-events: none;
+  }
 }
 
 .contact-info__grid {
@@ -167,8 +179,11 @@ p.contact-info__line:hover {
     color: inherit;
     transition: border-color 0.15s ease;
 
+    // Default browser focus outline is kept (not overridden) so keyboard
+    // users get a clearly visible indicator — the border-color change alone
+    // is too subtle a cue on its own (see assets/scss/base/_reset.scss,
+    // which doesn't strip outlines anywhere else in the theme).
     &:focus {
-      outline: none;
       border-color: var(--color-primary);
     }
   }

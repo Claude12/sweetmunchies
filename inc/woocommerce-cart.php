@@ -10,7 +10,9 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
-// phpcs:disable WordPress.Security.NonceVerification.Missing -- deliberate for this file: the add-to-cart capture and the wc_ajax cart endpoints mirror WooCommerce core's own nonce-less add_to_cart/remove_from_cart AJAX actions. All mutations are scoped to the visitor's own session cart, and every input is sanitized on read.
+defined('ABSPATH') || exit;
+
+// phpcs:disable WordPress.Security.NonceVerification.Missing -- deliberate here: this mirrors WooCommerce core's own nonce-less add-to-cart form submission (product forms don't carry a nonce either), and the value is sanitized on read. The wc_ajax cart endpoints further down this file DO verify a nonce (see check_ajax_referer() calls below) since those are same-origin fetch() calls this theme controls, not a third-party form submission WC core has to stay compatible with.
 
 /**
  * Flat surcharge for the "Add a photo & message" add-on, CMS-managed via
@@ -90,14 +92,22 @@ add_action('woocommerce_checkout_create_order_line_item', function (WC_Order_Ite
 	$item->add_meta_data(__('Photo & message added', 'sweetmunchies'), $values['gift_message']);
 }, 10, 3);
 
+// phpcs:enable WordPress.Security.NonceVerification.Missing -- the two actions below verify their own nonce via check_ajax_referer().
+
 /**
  * Cart-page quantity/remove AJAX actions (see page-cart.php and
  * assets/js/lib/cart-page.js). No built-in WC_AJAX action updates quantity,
  * so this mirrors the endpoint convention WC_AJAX::add_to_cart/remove_from_cart
- * already use — no nonce, ends with the same get_refreshed_fragments() JSON
- * shape so the header cart-count badge stays in sync via wc-cart-fragments.js.
+ * already use, ending with the same get_refreshed_fragments() JSON shape so
+ * the header cart-count badge stays in sync via wc-cart-fragments.js. Unlike
+ * that WC core convention, these DO require a nonce (see the data-nonce
+ * attribute in page-cart.php) since, unlike core's add-to-cart form, there's
+ * no reason a third party would ever need to submit to these endpoints
+ * without having loaded the cart page first.
  */
 add_action('wc_ajax_sweetmunchies_update_cart_item', function (): void {
+	check_ajax_referer('sweetmunchies_cart_action', 'nonce');
+
 	$cart_item_key = isset($_POST['cart_item_key']) ? wc_clean(wp_unslash($_POST['cart_item_key'])) : '';
 	// 99 cap matches the qty inputs' max (see content-single-product.php /
 	// page-cart.php) — enforced here too for hand-crafted POSTs.
@@ -111,6 +121,8 @@ add_action('wc_ajax_sweetmunchies_update_cart_item', function (): void {
 });
 
 add_action('wc_ajax_sweetmunchies_remove_cart_item', function (): void {
+	check_ajax_referer('sweetmunchies_cart_action', 'nonce');
+
 	$cart_item_key = isset($_POST['cart_item_key']) ? wc_clean(wp_unslash($_POST['cart_item_key'])) : '';
 
 	if ($cart_item_key) {

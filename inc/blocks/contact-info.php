@@ -13,6 +13,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $delivery_text = get_sub_field('delivery_text');
 $form_id       = (int) get_sub_field('form_id');
 $contact_info  = get_field('contact_info', 'option') ?: array();
@@ -24,6 +26,7 @@ $location      = $contact_info['location'] ?? '';
 ?>
 
 <section class="contact-info">
+    <img class="contact-info__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
     <div class="container contact-info__grid">
         <div class="contact-info__left">
             <div class="contact-info__card contact-info__card--reach">

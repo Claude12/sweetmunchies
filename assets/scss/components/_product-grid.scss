@@ -5,11 +5,11 @@
 // inc/blocks/best-sellers.php.
 .product-grid {
   padding: 60px 0;
-  position: relative;
 
   &--featured {
-    background: var(--color-pink-tint);
+    position: relative;
     overflow: hidden;
+    background: var(--color-pink-tint);
   }
 
   &--best-sellers .product-grid__header {
@@ -145,8 +145,8 @@
   }
 
   // Extra top padding (vs. the 16px used elsewhere) reserves room for the
-  // always-visible WhatsApp tooltip (see _woocommerce.scss) to sit above its
-  // icon without reaching up into &__name on single-line-title cards.
+  // hover/touch-revealed WhatsApp tooltip (see _woocommerce.scss) to sit above
+  // its icon without reaching up into &__name on single-line-title cards.
   &__footer {
     margin-top: auto;
     padding: 32px 16px 18px;

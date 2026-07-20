@@ -8,6 +8,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 /**
  * Adds custom classes to the array of body classes.
  *
@@ -38,3 +40,18 @@ function sweetmunchies_pingback_header() {
 	}
 }
 add_action( 'wp_head', 'sweetmunchies_pingback_header' );
+
+/**
+ * Allow `fetchpriority` through wp_kses_post() on <img> tags — core's own
+ * allowlist doesn't include it yet. Needed so the eager-loaded LCP product
+ * image (see woocommerce/content-product.php) keeps its fetchpriority="high"
+ * hint instead of being silently stripped by the wp_kses_post() wrapper
+ * around $product->get_image().
+ */
+add_filter('wp_kses_allowed_html', function (array $tags, string $context): array {
+	if ('post' === $context && isset($tags['img'])) {
+		$tags['img']['fetchpriority'] = true;
+	}
+
+	return $tags;
+}, 10, 2);

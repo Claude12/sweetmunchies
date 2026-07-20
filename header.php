@@ -12,6 +12,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 // Global settings from ACF Options Page
 $site_logo = get_field('site_logo', 'option'); // Logo stored in options
 $promo_text = get_field('promo_text', 'option');
@@ -43,6 +45,7 @@ if (function_exists('WC') && WC()->cart) {
 
 <body <?php body_class(); ?>>
 	<?php wp_body_open(); ?>
+	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e('Skip to content', 'sweetmunchies'); ?></a>
 	<div id="page" class="site">
 
 		<?php if ($promo_text): ?>

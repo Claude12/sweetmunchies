@@ -16,6 +16,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $badge_text       = get_sub_field('badge_text');
 $heading          = get_sub_field('heading');
 $subtext          = get_sub_field('subtext');

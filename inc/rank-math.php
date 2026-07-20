@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 /**
  * FAQPage schema for the Contact page, built from the same `faq_accordion`
  * ACF rows that render the visible accordion (see inc/blocks/faq-accordion.php)

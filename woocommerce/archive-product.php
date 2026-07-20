@@ -37,6 +37,7 @@ $products = array_values(array_filter(array_map(
     <?php get_template_part('inc/template-parts/page-banner', null, ['hero' => false]); ?>
 
     <div class="container">
+        <img class="shop-page__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
         <?php if ($queried_term): ?>
             <?php $term_description = term_description($queried_term); ?>
             <?php if ($term_description): ?>
@@ -74,7 +75,7 @@ $products = array_values(array_filter(array_map(
         </div>
 
         <?php if ($products): ?>
-            <?php get_template_part('inc/template-parts/product-grid', null, ['products' => $products]); ?>
+            <?php get_template_part('inc/template-parts/product-grid', null, ['products' => $products, 'eager_first' => true]); ?>
             <?php woocommerce_pagination(); ?>
         <?php else: ?>
             <div class="shop-page__empty">

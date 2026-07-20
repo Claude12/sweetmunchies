@@ -17,6 +17,8 @@
   visibility: hidden;
   cursor: pointer;
   background: var(--color-primary);
+  border: none;
+  padding: 0;
   border-radius: 50%;
   box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.4);
   transition:
@@ -110,23 +112,6 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.2);
-    }
-  }
-
-  // The branded WhatsApp badge already has its own green circle baked into
-  // the SVG, so the shared translucent background above would just double
-  // up on it (same fix applied to .product-card__whatsapp-link).
-  .footer__whatsapp-link {
-    background: transparent;
-
-    &:hover {
-      background: transparent;
-      transform: scale(1.08);
-    }
-
-    img {
-      width: 34px;
-      height: 34px;
     }
   }
 }

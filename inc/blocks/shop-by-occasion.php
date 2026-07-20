@@ -20,6 +20,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $heading  = get_sub_field('heading');
 $subtext  = get_sub_field('subtext');
 $selected = get_sub_field('featured_categories');
@@ -47,6 +49,7 @@ if (!$categories) {
 ?>
 
 <section class="shop-by-occasion">
+    <img class="shop-by-occasion__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
     <div class="container">
         <div class="shop-by-occasion__header" animate="fade-in">
             <?php if ($heading): ?>

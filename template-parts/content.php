@@ -10,6 +10,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>

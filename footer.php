@@ -12,6 +12,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $site_logo = get_field('site_logo', 'option');
 $socials = get_field('socials', 'option');
 $footer_tagline = get_field('footer_tagline', 'option');
@@ -22,13 +24,13 @@ $footer_credit = get_field('footer_credit', 'option');
 
 ?>
 
-<div id="scroll-to-top" class="scroll-to-top">
+<button type="button" id="scroll-to-top" class="scroll-to-top" aria-label="<?php esc_attr_e('Back to top', 'sweetmunchies'); ?>">
 	<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 		<path d="M12 19V5" stroke="var(--color-white)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
 		<path d="M6 11L12 5L18 11" stroke="var(--color-white)" stroke-width="2.4" stroke-linecap="round"
 			stroke-linejoin="round" />
 	</svg>
-</div>
+</button>
 
 <footer class="footer">
 	<div class="footer__logo-wrap">
@@ -67,8 +69,11 @@ $footer_credit = get_field('footer_credit', 'option');
 					<?php if (!empty($socials['whatsapp'])): ?>
 						<li>
 							<a href="https://wa.me/<?php echo esc_attr($socials['whatsapp']); ?>" target="_blank"
-								rel="noopener noreferrer" aria-label="WhatsApp" class="footer__whatsapp-link">
-								<img src="<?php echo esc_url(get_template_directory_uri() . '/images/whatsapp-icon.svg'); ?>" alt="" width="30" height="30" loading="lazy" decoding="async" />
+								rel="noopener noreferrer" aria-label="WhatsApp">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+									<path
+										d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm0 18a7.9 7.9 0 0 1-4.03-1.1l-.29-.17-3 .79.8-2.93-.19-.3A7.93 7.93 0 1 1 12 20Zm4.36-5.96c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.46-.39-.4-.54-.4-.14 0-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" />
+								</svg>
 							</a>
 						</li>
 					<?php endif; ?>

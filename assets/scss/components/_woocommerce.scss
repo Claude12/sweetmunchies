@@ -46,6 +46,7 @@
 // (0,2,0) still lost to that rule; matching its specificity and declaring
 // this rule later lets source order settle the tie in our favor.
 .product-card__quick-add a.add_to_cart_button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,6 +61,12 @@
   &:hover {
     transform: scale(1.08);
     box-shadow: 0 6px 14px -4px rgba(210, 20, 76, 0.45);
+  }
+
+  &:hover .product-card__quick-add-tooltip,
+  &:focus .product-card__quick-add-tooltip {
+    opacity: 1;
+    transform: scale(1);
   }
 
   &.added {
@@ -107,6 +114,43 @@
   }
 }
 
+// Hidden until the button itself is hovered/focused/touched — same pattern
+// as .product-card__whatsapp-tooltip above, tuned to this button's own
+// primary color instead of the WhatsApp badge's secondary/green. Anchored to
+// the button's right edge (not centred) since this is the rightmost action
+// icon — a centred tooltip here overflows past .product-card's own
+// overflow: hidden and gets clipped; the arrow's `right: 18px` re-centres it
+// under the 36px button instead.
+.product-card__quick-add-tooltip {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  right: 0;
+  transform: scale(0.85);
+  transform-origin: bottom right;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: $font-size-10;
+  font-weight: $font-weight-bold;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow:
+    0 10px 20px -6px rgba(0, 0, 0, 0.5),
+    0 3px 8px -2px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 18px;
+    border: 4px solid transparent;
+    border-top-color: var(--color-primary);
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -132,11 +176,10 @@
   }
 }
 
-// One-tap "Order on WhatsApp" (see woocommerce/content-product.php) — the
-// icon is the full-color WhatsApp badge (images/whatsapp-icon.svg), already
-// self-contained (its own green circle + white glyph), so this wrapper only
-// handles sizing/hover, not a background — a colored circle behind an
-// already-circular colored badge would just double up.
+// One-tap "Order on WhatsApp" (see woocommerce/content-product.php) — same
+// flat circle-button treatment as .product-card__quick-add above, so the two
+// action icons read as one consistent button style instead of a vector
+// button next to a raster logo badge.
 .product-card__whatsapp-link {
   position: relative;
   display: flex;
@@ -144,30 +187,28 @@
   justify-content: center;
   width: 36px;
   height: 36px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: var(--color-white);
   transition: transform 0.18s ease;
 
   &:hover {
     transform: scale(1.1);
   }
-
-  // The badge SVG's own drop-shadow silhouette sits just inside its viewBox
-  // edge, so filling this to the same size as the solid-color cart/POA
-  // circles above (rather than leaving a few px of margin) is what makes the
-  // green circle actually read as the same size as those, not smaller.
-  img {
-    width: 36px;
-    height: 36px;
-  }
 }
 
-// Always-visible callout (not a hover tooltip — hover never fires on mobile)
-// telling shoppers what the icon does. Sits above the icon, centred; the
-// footer's extra top padding (see &__footer in _product-grid.scss) is what
-// keeps this clear of the title/meta text above it.
+// Hidden until the icon itself is interacted with (not the whole card).
+// Mobile browsers apply :hover from a tap (and hold it until the next tap
+// elsewhere), so :hover alone covers desktop and touch; :focus covers
+// keyboard use, since .product-card__whatsapp-link is itself focusable.
+// Sits above the icon, centred; the footer's extra top padding (see
+// &__footer in _product-grid.scss) is what keeps this clear of the
+// title/meta text above it.
 .product-card__whatsapp-tooltip {
   position: absolute;
   bottom: calc(100% + 7px);
   left: 50%;
+  transform: translateX(-50%) scale(0.85);
   transform-origin: bottom center;
   background: var(--color-secondary);
   color: var(--color-promo-text);
@@ -178,10 +219,11 @@
   border-radius: 5px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   pointer-events: none;
+  opacity: 0;
   box-shadow:
     0 10px 20px -6px rgba(0, 0, 0, 0.5),
     0 3px 8px -2px rgba(0, 0, 0, 0.35);
-  animation: whatsapp-tooltip-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &::after {
     content: "";
@@ -194,16 +236,10 @@
   }
 }
 
-@keyframes whatsapp-tooltip-pop {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) scale(0.7);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
+.product-card__whatsapp-link:hover .product-card__whatsapp-tooltip,
+.product-card__whatsapp-link:focus .product-card__whatsapp-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
 // WooCommerce injects a "View cart" link next to the button after any
@@ -573,6 +609,8 @@
 }
 
 .product-page__related {
+  position: relative;
+  overflow: hidden;
   margin-top: 70px;
 
   // Overrides .product-grid__list's auto-fit columns, which stretch a single
@@ -589,6 +627,19 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
+}
+
+// Sits above the "You may also like" grid — the rest of this page (gallery,
+// price, add-to-cart form) is deliberately left undecorated so nothing
+// competes with the purchase decision.
+.product-page__deco {
+  position: absolute;
+  top: 0;
+  right: 6%;
+  width: 110px;
+  opacity: 0.15;
+  transform: rotate(20deg);
+  pointer-events: none;
 }
 
 .product-page__related-heading {
@@ -662,12 +713,24 @@
 }
 
 .cart-page__empty {
+  position: relative;
+  overflow: hidden;
   text-align: center;
   padding: var(--spacer-48) 0;
 
   .cart-page__heading {
     margin-top: 0;
   }
+}
+
+.cart-page__empty-deco {
+  position: absolute;
+  top: 0;
+  right: 6%;
+  width: 130px;
+  opacity: 0.15;
+  transform: rotate(20deg);
+  pointer-events: none;
 }
 
 .cart-page__items {
@@ -834,12 +897,26 @@
 }
 
 .cart-page__whatsapp {
+  position: relative;
+  overflow: hidden;
   background: var(--color-secondary);
   color: var(--color-white);
   border-radius: 18px;
   padding: 34px 26px;
   margin-top: var(--spacer-32);
   text-align: center;
+}
+
+// Bleeds past the card edge, clipped by this card's own overflow:hidden —
+// same treatment the solid-color CTA cards use elsewhere on the site.
+.cart-page__whatsapp-deco {
+  position: absolute;
+  bottom: -14px;
+  right: -14px;
+  width: 130px;
+  opacity: 0.16;
+  transform: rotate(15deg);
+  pointer-events: none;
 }
 
 .cart-page__whatsapp-icon {
@@ -934,7 +1011,19 @@
   // direct child of this same <main>, which would otherwise win over its
   // own padding-top with higher specificity.
   > .container:not(.page-banner__breadcrumb) {
+    position: relative;
+    overflow: hidden;
     padding-top: var(--spacer-24);
+  }
+
+  &__deco {
+    position: absolute;
+    top: 20px;
+    right: 6%;
+    width: 130px;
+    opacity: 0.15;
+    transform: rotate(20deg);
+    pointer-events: none;
   }
 
   &__header {

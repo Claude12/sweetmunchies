@@ -161,7 +161,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                         <div class="product-page__qty-row">
                             <div class="product-page__qty-stepper">
                                 <button type="button" class="product-page__qty-btn" data-qty-decrease aria-label="<?php esc_attr_e('Decrease quantity', 'sweetmunchies'); ?>">&minus;</button>
-                                <input type="number" name="quantity" class="product-page__qty-input" value="1" min="1" max="99" inputmode="numeric" />
+                                <input type="number" name="quantity" class="product-page__qty-input" value="1" min="1" max="99" inputmode="numeric" aria-label="<?php esc_attr_e('Quantity', 'sweetmunchies'); ?>" />
                                 <button type="button" class="product-page__qty-btn" data-qty-increase aria-label="<?php esc_attr_e('Increase quantity', 'sweetmunchies'); ?>">+</button>
                             </div>
                             <span class="product-page__total"><?php esc_html_e('Total:', 'sweetmunchies'); ?> <strong data-total-display><?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?></strong></span>
@@ -219,6 +219,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
 
         <?php if ($related_products): ?>
             <div class="product-page__related">
+                <img class="product-page__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
                 <h2 class="product-page__related-heading"><?php esc_html_e('You may also like', 'sweetmunchies'); ?></h2>
                 <?php get_template_part('inc/template-parts/product-grid', null, ['products' => $related_products]); ?>
             </div>

@@ -13,6 +13,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $heading       = get_sub_field('heading');
 $subtext       = get_sub_field('subtext');
 $product_limit = (int) (get_sub_field('product_limit') ?: 4);

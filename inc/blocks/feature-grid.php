@@ -13,6 +13,8 @@ declare(strict_types=1);
  * @package sweetmunchies
  */
 
+defined('ABSPATH') || exit;
+
 $heading           = get_sub_field('heading');
 $background_color  = get_sub_field('background_color');
 $style              = get_sub_field('style') ?: 'icon';
