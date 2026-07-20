@@ -47,24 +47,49 @@ if (!$gallery) {
 
         <div class="ig-strip__grid">
             <?php foreach ($gallery as $image): ?>
-                <div class="ig-strip__frame">
-                    <?php
-                    // wp_get_attachment_image emits srcset; sizes mirrors the
-                    // auto-fit grid (tiles are ~150px wide on desktop, wider
-                    // as columns collapse on small screens).
-                    echo wp_get_attachment_image(
-                        (int) $image['ID'],
-                        'medium',
-                        false,
-                        array(
-                            'class'    => 'ig-strip__img',
-                            'loading'  => 'lazy',
-                            'decoding' => 'async',
-                            'sizes'    => '(min-width: 768px) 150px, 45vw',
-                        )
-                    );
-                    ?>
-                </div>
+                <?php
+                // wp_get_attachment_image emits srcset. The grid's auto-fit
+                // columns (see __grid) stretch tiles to fill leftover row
+                // space when there are fewer photos than fit at the 130px
+                // minimum — e.g. 4 photos in a 1180px container end up
+                // ~286px wide, not 150px — so "medium" (300px) with a
+                // 150px sizes hint was underselling the needed resolution
+                // and coming out soft, especially on retina screens. "large"
+                // plus a wider sizes hint gives enough headroom for that
+                // worst-case stretch.
+                $img_html = wp_get_attachment_image(
+                    (int) $image['ID'],
+                    'large',
+                    false,
+                    array(
+                        'class'    => 'ig-strip__img',
+                        'loading'  => 'lazy',
+                        'decoding' => 'async',
+                        'sizes'    => '(min-width: 768px) 300px, 45vw',
+                    )
+                );
+                ?>
+                <?php if ($social_url): ?>
+                    <a href="<?php echo esc_url($social_url); ?>" class="ig-strip__frame" target="_blank" rel="noopener noreferrer">
+                        <?php
+                        // wp_kses_post() would strip srcset/sizes/decoding
+                        // (not in its allowed-attributes list), defeating the
+                        // point of this responsive markup — $img_html is
+                        // trusted, WP-core-generated output, not user input.
+                        echo $img_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        ?>
+                    </a>
+                <?php else: ?>
+                    <div class="ig-strip__frame">
+                        <?php
+                        // wp_kses_post() would strip srcset/sizes/decoding
+                        // (not in its allowed-attributes list), defeating the
+                        // point of this responsive markup — $img_html is
+                        // trusted, WP-core-generated output, not user input.
+                        echo $img_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        ?>
+                    </div>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

@@ -20,12 +20,7 @@ if (!is_a($product, WC_Product::class) || !$product->is_visible()) {
 $product_id     = $product->get_id();
 $badge_label    = get_field('badge_label', $product_id);
 $tagline        = trim(wp_strip_all_tags($product->get_short_description()));
-$servings_short = get_field('servings_short', $product_id);
-$treats_count   = get_field('treats_count', $product_id);
-$allergens      = get_field('allergens', $product_id);
-$lead_time      = get_field('lead_time', $product_id);
 $whats_inside   = get_field('whats_inside', $product_id);
-$meta_parts     = array_filter([$servings_short, $treats_count]);
 $gift_price         = sweetmunchies_gift_message_price();
 $gift_price_display = html_entity_decode(get_woocommerce_currency_symbol(), ENT_QUOTES)
     . rtrim(rtrim(number_format($gift_price, 2), '0'), '.');
@@ -108,27 +103,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                     <?php else: ?>
                         <span class="product-page__price"><?php echo wp_kses_post($product->get_price_html()); ?></span>
                     <?php endif; ?>
-                    <?php if ($meta_parts): ?>
-                        <span class="product-page__meta"><?php echo esc_html(implode(' · ', $meta_parts)); ?></span>
-                    <?php endif; ?>
                 </div>
-
-                <?php if ($allergens || $lead_time): ?>
-                    <div class="product-page__info-box">
-                        <?php if ($allergens): ?>
-                            <div class="product-page__info-row">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z" stroke="currentColor" stroke-width="1.6" /></svg>
-                                <span><strong><?php esc_html_e('Allergens:', 'sweetmunchies'); ?></strong> <?php echo esc_html($allergens); ?></span>
-                            </div>
-                        <?php endif; ?>
-                        <?php if ($lead_time): ?>
-                            <div class="product-page__info-row">
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" /><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
-                                <span><strong><?php esc_html_e('Lead time:', 'sweetmunchies'); ?></strong> <?php echo esc_html($lead_time); ?></span>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
 
                 <?php if ($is_poa): ?>
                     <div

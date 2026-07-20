@@ -1086,7 +1086,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Get 10% off your first order",
+                            "default_value": "Order your gift box on WhatsApp",
                             "maxlength": "",
                             "allow_in_bindings": 0,
                             "placeholder": "",
@@ -1107,7 +1107,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "Message us on WhatsApp for gifting ideas, quick ordering and 10% off your first box.",
+                            "default_value": "Message us on WhatsApp for gifting ideas, quick ordering and friendly help along the way.",
                             "maxlength": "",
                             "allow_in_bindings": 0,
                             "placeholder": "",
