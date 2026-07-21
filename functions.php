@@ -320,11 +320,6 @@ remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10);
 remove_action('wp_head', 'rest_output_link_wp_head', 10);
 remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
 
-// Splide defer strategy — re-enable alongside the enqueue block above when a carousel block is built.
-// add_action('wp_enqueue_scripts', function () {
-//  wp_script_add_data('splide-js', 'strategy', 'defer');
-// }, 20);
-
 /**
  * Security Headers.
  */

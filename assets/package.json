@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.21.8",
-    "@splidejs/splide": "^4.1.4",
     "postcss": "^8.4.23",
     "webpack": "^5.82.0"
   }
