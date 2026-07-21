@@ -540,6 +540,96 @@
   &.is-added .product-page__add-to-cart-icon--added {
     display: block;
   }
+
+  &:disabled {
+    background: var(--color-border);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+}
+
+// One-tap "Order on WhatsApp" alternative to the cart form above (see
+// woocommerce/content-single-product.php) — same treatment as the POA
+// WhatsApp button and the cart page's WhatsApp CTA, for one consistent
+// WhatsApp-button look across the site.
+.product-page__whatsapp-order {
+  width: 100%;
+  background: var(--color-whatsapp);
+  color: var(--color-white);
+  border: none;
+  padding: 17px;
+  border-radius: 100px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-16;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  margin-top: 10px;
+  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.94);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  &.is-disabled {
+    background: var(--color-border);
+    color: var(--color-text-muted);
+    pointer-events: none;
+
+    &:hover {
+      filter: none;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
+
+// Size picker (variable products — Small/Medium/Large) — reuses the same
+// pill shape as .product-page__qty-stepper and the tab underline treatment
+// from .product-page__tab so it reads as part of the same control family.
+.product-page__size-picker {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.product-page__size-option {
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text);
+  padding: 10px 20px;
+  border-radius: 100px;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-14;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  &.is-selected {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+  }
+}
+
+.product-page__size-hint {
+  margin: 0 0 10px;
+  font-size: $font-size-12-5;
+  color: var(--color-text-muted);
 }
 
 .product-page__trust {

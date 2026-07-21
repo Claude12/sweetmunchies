@@ -31,7 +31,28 @@ $gift_price_display = html_entity_decode(get_woocommerce_currency_symbol(), ENT_
 // field for this). Skip the cart form entirely and let the customer describe
 // what they want, then hand off straight to WhatsApp.
 $is_poa           = !$product->is_purchasable();
-$whatsapp_number  = $is_poa ? (get_field('socials', 'option')['whatsapp'] ?? '') : '';
+$whatsapp_number  = get_field('socials', 'option')['whatsapp'] ?? '';
+
+// Variable products (size options — see wp-content/themes/sweetmunchies's
+// product-conversion script) show a size picker instead of one fixed price;
+// the price row reads "From $X" (lowest variation price) until a size is
+// picked, and both CTAs stay disabled until then so an order can't go out
+// without a size attached.
+$is_variable = $product->is_type('variable');
+$size_variations = [];
+
+if ($is_variable) {
+    foreach ($product->get_available_variations() as $variation_data) {
+        $size_slug  = $variation_data['attributes']['attribute_pa_size'] ?? '';
+        $size_term  = $size_slug ? get_term_by('slug', $size_slug, 'pa_size') : false;
+
+        $size_variations[] = [
+            'variation_id' => $variation_data['variation_id'],
+            'label'        => $size_term ? $size_term->name : ucfirst($size_slug),
+            'price'        => $variation_data['display_price'],
+        ];
+    }
+}
 $poa_default_text = $is_poa
     ? sprintf(
         /* translators: %s: product name */
@@ -39,6 +60,23 @@ $poa_default_text = $is_poa
         get_the_title()
     )
     : '';
+
+// One-tap "Order on WhatsApp" for regular priced products — mirrors the
+// product-card quick-order link (see woocommerce/content-product.php),
+// pre-filled for qty 1/no gift message; product-add-to-cart.js keeps the
+// href in sync as the shopper changes quantity or adds a gift message.
+$whatsapp_order_url = '';
+
+if (!$is_poa && $whatsapp_number) {
+    $price_text = html_entity_decode(wp_strip_all_tags(wc_price(wc_get_price_to_display($product))), ENT_QUOTES);
+    $whatsapp_order_message = "Hi Sweet Munchies! I'd like to order:\n\n"
+        . '- 1x ' . get_the_title() . ' — ' . $price_text
+        . "\n\nTotal: " . $price_text
+        . "\n\nI'll share my delivery details and the photo (if any) here."
+        . "\n\nIf everything above looks correct, please hit send to confirm your order!";
+
+    $whatsapp_order_url = 'https://wa.me/' . rawurlencode($whatsapp_number) . '?text=' . rawurlencode($whatsapp_order_message);
+}
 
 // ACF option fields return null until the options page has been saved at
 // least once in wp-admin (default_value only pre-fills the edit form, it's
@@ -100,6 +138,10 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                 <div class="product-page__price-row">
                     <?php if ($is_poa): ?>
                         <span class="product-page__price product-page__price--poa"><?php esc_html_e('Price on request', 'sweetmunchies'); ?></span>
+                    <?php elseif ($is_variable): ?>
+                        <span class="product-page__price" data-price-display>
+                            <?php esc_html_e('From', 'sweetmunchies'); ?> <?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?>
+                        </span>
                     <?php else: ?>
                         <span class="product-page__price"><?php echo wp_kses_post($product->get_price_html()); ?></span>
                     <?php endif; ?>
@@ -139,6 +181,24 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                         data-base-price="<?php echo esc_attr((string) wc_get_price_to_display($product)); ?>"
                         data-gift-price="<?php echo esc_attr((string) $gift_price); ?>"
                     >
+                        <?php if ($is_variable): ?>
+                            <div class="product-page__size-picker" role="radiogroup" aria-label="<?php esc_attr_e('Size', 'sweetmunchies'); ?>">
+                                <?php foreach ($size_variations as $variation): ?>
+                                    <button
+                                        type="button"
+                                        class="product-page__size-option"
+                                        data-variation-id="<?php echo esc_attr((string) $variation['variation_id']); ?>"
+                                        data-price="<?php echo esc_attr((string) $variation['price']); ?>"
+                                        data-size-label="<?php echo esc_attr($variation['label']); ?>"
+                                        aria-pressed="false"
+                                    >
+                                        <?php echo esc_html($variation['label']); ?>
+                                    </button>
+                                <?php endforeach; ?>
+                            </div>
+                            <p class="product-page__size-hint" data-size-hint><?php esc_html_e('Please select a size to continue.', 'sweetmunchies'); ?></p>
+                        <?php endif; ?>
+
                         <label class="product-page__gift-toggle">
                             <input type="checkbox" name="gift_message_enabled" class="product-page__gift-checkbox" value="1" />
                             <?php
@@ -167,7 +227,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                             <span class="product-page__total"><?php esc_html_e('Total:', 'sweetmunchies'); ?> <strong data-total-display><?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?></strong></span>
                         </div>
 
-                        <button type="submit" class="product-page__add-to-cart">
+                        <button type="submit" class="product-page__add-to-cart" <?php echo $is_variable ? 'disabled' : ''; ?>>
                             <span class="product-page__add-to-cart-icon product-page__add-to-cart-icon--loading" aria-hidden="true">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="40" stroke-dashoffset="10" /></svg>
                             </span>
@@ -176,6 +236,22 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                             </span>
                             <span data-add-to-cart-label><?php esc_html_e('Add to Cart', 'sweetmunchies'); ?></span>
                         </button>
+
+                        <?php if ($whatsapp_order_url): ?>
+                            <a
+                                href="<?php echo esc_attr($whatsapp_order_url); ?>"
+                                class="product-page__whatsapp-order<?php echo $is_variable ? ' is-disabled' : ''; ?>"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                data-whatsapp-order
+                                data-whatsapp-number="<?php echo esc_attr($whatsapp_number); ?>"
+                                data-product-name="<?php echo esc_attr(get_the_title()); ?>"
+                                <?php echo $is_variable ? 'aria-disabled="true" tabindex="-1"' : ''; ?>
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm0 18a7.9 7.9 0 0 1-4.03-1.1l-.29-.17-3 .79.8-2.93-.19-.3A7.93 7.93 0 1 1 12 20Zm4.36-5.96c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.42-1.33-1.66-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.46-.39-.4-.54-.4-.14 0-.3-.01-.46-.01-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.42-.58 1.62-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" /></svg>
+                                <?php esc_html_e('Order on WhatsApp', 'sweetmunchies'); ?>
+                            </a>
+                        <?php endif; ?>
                     </form>
                 <?php endif; ?>
 
@@ -232,7 +308,7 @@ $related_products = function_exists('sweetmunchies_get_related_products')
                 <div class="product-page__sticky-cta-total" data-sticky-total><?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?></div>
                 <div class="product-page__sticky-cta-name"><?php echo esc_html(get_the_title()); ?></div>
             </div>
-            <button type="button" class="product-page__sticky-cta-button" data-sticky-add-to-cart><?php esc_html_e('Add to Cart', 'sweetmunchies'); ?></button>
+            <button type="button" class="product-page__sticky-cta-button" data-sticky-add-to-cart <?php echo $is_variable ? 'disabled' : ''; ?>><?php esc_html_e('Add to Cart', 'sweetmunchies'); ?></button>
         </div>
     <?php endif; ?>
 </main><!-- #main -->

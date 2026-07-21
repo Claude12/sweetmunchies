@@ -33,12 +33,15 @@ $is_eager_card   = (bool) get_query_var('product_card_eager', false);
 // who already know they want this exact box. Quote-on-request products
 // (not purchasable) already route to their own product page WhatsApp quote
 // flow via the "view product" arrow link above, so this is scoped to
-// regular priced products only. Message format matches the cart page's
-// (see page-cart.php) so admin sees one consistent order shape either way.
+// single-priced products only — variable products (size options) don't have
+// one fixed price to quote from the card, so shoppers pick a size on the
+// product page instead, where its own WhatsApp order link takes over.
+// Message format matches the cart page's (see page-cart.php) so admin sees
+// one consistent order shape either way.
 $whatsapp_number = get_field('socials', 'option')['whatsapp'] ?? '';
 $whatsapp_url    = '';
 
-if ($whatsapp_number && $product->is_purchasable()) {
+if ($whatsapp_number && $product->is_purchasable() && !$product->is_type('variable')) {
     $price_text = html_entity_decode(wp_strip_all_tags(wc_price($product->get_price())), ENT_QUOTES);
     $whatsapp_message = "Hi Sweet Munchies! I'd like to order:\n\n"
         . '- 1x ' . $product->get_name() . ' — ' . $price_text
@@ -67,7 +70,13 @@ if ($whatsapp_number && $product->is_purchasable()) {
         </div>
     </a>
     <div class="product-card__footer">
-        <span class="product-card__price"><?php echo $product->get_price_html() ? wp_kses_post($product->get_price_html()) : esc_html__('POA', 'sweetmunchies'); ?></span>
+        <span class="product-card__price">
+            <?php if ($product->is_type('variable')): ?>
+                <?php esc_html_e('From', 'sweetmunchies'); ?> <?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?>
+            <?php else: ?>
+                <?php echo $product->get_price_html() ? wp_kses_post($product->get_price_html()) : esc_html__('POA', 'sweetmunchies'); ?>
+            <?php endif; ?>
+        </span>
         <div class="product-card__actions">
             <?php if ($whatsapp_url): ?>
                 <?php // esc_url() strips %0a/%0d (encoded line breaks) as an XSS/header-injection guard, which would mangle this multi-line message — esc_attr() is the correct escape here since $whatsapp_url is built entirely from trusted values (WC product data + the ACF-configured WhatsApp number), not raw user input. ?>
