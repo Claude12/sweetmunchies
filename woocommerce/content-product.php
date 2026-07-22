@@ -70,11 +70,23 @@ if ($whatsapp_number && $product->is_purchasable() && !$product->is_type('variab
         </div>
     </a>
     <div class="product-card__footer">
+        <?php
+        // Quote-on-request products have no price to print (see
+        // woocommerce/content-single-product.php). Shortened to "On request"
+        // rather than the product page's fuller "Price on request" — and rather
+        // than the trade abbreviation POA, which most gift buyers won't know —
+        // because the footer only leaves ~120px beside the action icons at the
+        // narrowest (230px) grid column. It carries no modifier class: it's
+        // styled exactly like a real price, since it is one.
+        $is_poa = !$product->is_type('variable') && !$product->get_price_html();
+        ?>
         <span class="product-card__price">
             <?php if ($product->is_type('variable')): ?>
                 <?php esc_html_e('From', 'sweetmunchies'); ?> <?php echo wp_kses_post(wc_price(wc_get_price_to_display($product))); ?>
+            <?php elseif ($is_poa): ?>
+                <?php esc_html_e('On request', 'sweetmunchies'); ?>
             <?php else: ?>
-                <?php echo $product->get_price_html() ? wp_kses_post($product->get_price_html()) : esc_html__('POA', 'sweetmunchies'); ?>
+                <?php echo wp_kses_post($product->get_price_html()); ?>
             <?php endif; ?>
         </span>
         <div class="product-card__actions">

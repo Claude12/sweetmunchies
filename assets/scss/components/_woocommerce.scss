@@ -357,9 +357,13 @@
   color: var(--color-primary);
 }
 
+// Inherits both the size and the pink `--color-primary` of .product-page__price
+// on purpose — "Price on request" is a price, so it sits at the same weight in
+// the hierarchy as a currency figure rather than being visually demoted.
+// Uppercased here rather than in the template so the source string stays
+// sentence-case and translatable (see woocommerce/content-single-product.php).
 .product-page__price--poa {
-  color: var(--color-text-muted);
-  font-size: $font-size-20;
+  text-transform: uppercase;
 }
 
 .product-page__gift-toggle {
