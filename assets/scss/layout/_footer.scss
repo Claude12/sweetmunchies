@@ -60,6 +60,10 @@
   margin-top: -80px;
 }
 
+// The grid collapses to a single column below the `mobile` breakpoint, where a
+// left-aligned stack reads as ragged against the centred logo above it — so the
+// whole footer centres on phones and returns to left alignment from 576px up,
+// once there are real columns to align.
 .footer__grid {
   max-width: 1180px;
   margin: var(--spacer-16) auto var(--spacer-32);
@@ -68,6 +72,11 @@
   gap: var(--spacer-32);
   padding-top: var(--spacer-32);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+
+  @include min-breakpoint(mobile) {
+    text-align: left;
+  }
 }
 
 .footer__col-title {
@@ -83,7 +92,13 @@
   line-height: $line-height-base;
   color: var(--color-footer-tagline);
   max-width: 240px;
-  margin: 0 0 16px;
+  // `auto` side margins centre the 240px-capped box itself; text-align alone
+  // would only centre the text inside a box still pinned to the left.
+  margin: 0 auto 16px;
+
+  @include min-breakpoint(mobile) {
+    margin: 0 0 16px;
+  }
 }
 
 .footer__thanks {
@@ -94,10 +109,15 @@
 
 .footer__socials {
   display: flex;
+  justify-content: center;
   gap: 10px;
   list-style: none;
   margin: 0;
   padding: 0;
+
+  @include min-breakpoint(mobile) {
+    justify-content: flex-start;
+  }
 
   a {
     width: 34px;
@@ -143,7 +163,12 @@
 .footer__badges {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
+
+  @include min-breakpoint(mobile) {
+    justify-content: flex-start;
+  }
 }
 
 .footer__badge {
@@ -162,9 +187,15 @@
   font-size: $font-size-12-5;
   color: var(--color-footer-muted);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  text-align: center;
   flex-wrap: wrap;
   gap: 10px;
+
+  @include min-breakpoint(mobile) {
+    justify-content: space-between;
+    text-align: left;
+  }
 
   a {
     color: var(--color-footer-muted);

@@ -216,3 +216,21 @@ p.contact-info__line:hover {
     }
   }
 }
+
+.contact-info__form-privacy {
+  margin: var(--spacer-16) 0 0;
+  font-size: $font-size-xs;
+  line-height: $line-height-snug;
+  color: var(--color-text-muted);
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-primary);
+    }
+  }
+}

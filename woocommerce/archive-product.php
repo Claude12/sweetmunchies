@@ -38,6 +38,20 @@ $products = array_values(array_filter(array_map(
 
     <div class="container">
         <img class="shop-page__deco" src="<?php echo esc_url(get_template_directory_uri() . '/images/candy-icon.webp'); ?>" alt="" aria-hidden="true" />
+
+        <?php
+        // The page-banner above runs in hero=false mode, which skips its <h1>
+        // along with the hero image — so without this the Shop page and all 14
+        // category archives ship no <h1> at all. Prefers the term's/page's ACF
+        // banner_heading (the same field the hero would have used, so an editor
+        // can set a keyword-led heading like "Birthday Gift Boxes in Mutare")
+        // and falls back to the plain term/page title.
+        $archive_heading = $queried_term
+            ? (get_field('banner_heading', $queried_term) ?: $queried_term->name)
+            : (get_field('banner_heading', $shop_page_id) ?: get_the_title($shop_page_id));
+        ?>
+        <h1 class="shop-page__heading"><?php echo esc_html($archive_heading); ?></h1>
+
         <?php if ($queried_term): ?>
             <?php $term_description = term_description($queried_term); ?>
             <?php if ($term_description): ?>

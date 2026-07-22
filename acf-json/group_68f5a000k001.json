@@ -29,7 +29,7 @@
             "name": "banner_heading",
             "aria-label": "",
             "type": "text",
-            "instructions": "Overrides the page title in the banner. Leave blank to use the page title.",
+            "instructions": "Overrides the page title in the banner. On a product category this sets the archive's main heading \u2014 use it for a search-led heading like \"Birthday Gift Boxes in Mutare\". Leave blank to use the page or category title.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,6 +78,13 @@
                 "operator": "==",
                 "value": "page"
             }
+        ],
+        [
+            {
+                "param": "taxonomy",
+                "operator": "==",
+                "value": "product_cat"
+            }
         ]
     ],
     "menu_order": 0,
@@ -92,5 +99,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784390400
+    "modified": 1784734229
 }

@@ -1527,6 +1527,37 @@
                             ]
                         }
                     ]
+                },
+                "layout_68f5c100p001": {
+                    "key": "layout_68f5c100p001",
+                    "name": "rte",
+                    "label": "Rich Text",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_68f5c100p011",
+                            "label": "Content",
+                            "name": "content",
+                            "aria-label": "",
+                            "type": "wysiwyg",
+                            "instructions": "Long-form copy — used for prose pages like the Privacy and Refund policies. Use Heading 2 for section titles and Heading 3 beneath them; the page title is added automatically, so do not repeat it here.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "allow_in_bindings": 0,
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 1,
+                            "delay": 0
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
                 }
             },
             "min": "",
@@ -1562,5 +1593,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1784454869
+    "modified": 1784737288
 }

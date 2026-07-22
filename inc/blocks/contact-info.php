@@ -71,6 +71,25 @@ $location      = $contact_info['location'] ?? '';
             <?php if ($form_id && function_exists('wpforms')): ?>
                 <div class="contact-info__form">
                     <?php wpforms()->frontend->output($form_id); ?>
+
+                    <?php
+                    // The form asks for a phone number, so it needs to say what
+                    // happens to it. get_privacy_policy_url() returns empty until a
+                    // privacy page is both set in Settings > Privacy and published —
+                    // so the notice hides itself rather than linking nowhere.
+                    $privacy_url = get_privacy_policy_url();
+                    ?>
+                    <?php if ($privacy_url): ?>
+                        <p class="contact-info__form-privacy">
+                            <?php
+                            printf(
+                                /* translators: %s: link to the Privacy Policy page */
+                                esc_html__('We only use your details to reply to your enquiry — never for anything else. See our %s.', 'sweetmunchies'),
+                                '<a href="' . esc_url($privacy_url) . '">' . esc_html__('Privacy Policy', 'sweetmunchies') . '</a>'
+                            );
+                            ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>

@@ -104,7 +104,7 @@ $footer_credit = get_field('footer_credit', 'option');
 		</div>
 
 		<div class="footer__col">
-			<h4 class="footer__col-title">Shop</h4>
+			<h4 class="footer__col-title">Quick Links</h4>
 			<?php
 			wp_nav_menu([
 				'theme_location' => 'menu-2',

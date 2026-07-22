@@ -60,6 +60,33 @@ add_filter('rank_math/json_ld', function (array $data, $jsonld) { // phpcs:ignor
 }, 10, 2);
 
 /**
+ * Sweet Munchies is mobile / delivery-only — there is no shopfront, which is why
+ * `local_address.streetAddress` is deliberately blank and the business type is
+ * LocalBusiness rather than Store. A service-area business still has to say
+ * *where* it serves, though, and RankMath has no setting for it, so declare
+ * `areaServed` here. Keep this consistent with the Google Business Profile's
+ * service area — a mismatch between the two is what tends to get SAB profiles
+ * flagged.
+ */
+add_filter('rank_math/json_ld', function (array $data, $jsonld) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- $jsonld required by RankMath's hook signature
+	foreach ($data as $key => $entity) {
+		$type = (array) ($entity['@type'] ?? []);
+
+		if (!array_intersect($type, ['LocalBusiness', 'Organization'])) {
+			continue;
+		}
+
+		$data[$key]['areaServed'] = [
+			['@type' => 'City', 'name' => 'Mutare'],
+			['@type' => 'AdministrativeArea', 'name' => 'Manicaland'],
+			['@type' => 'Country', 'name' => 'Zimbabwe'],
+		];
+	}
+
+	return $data;
+}, 20, 2);
+
+/**
  * RankMath's ACF content analyzer only reads the edit-screen's live field
  * values, not the rendered frontend HTML — and it only wraps a field's
  * content in a real <hN> tag (instead of <p>) if that field's ACF *key* is
@@ -94,4 +121,28 @@ add_filter('rank_math/acf/config', function (array $config): array {
  */
 add_filter('rank_math/sitemap/cache_mode', function () {
 	return 'db';
+});
+
+/**
+ * `brand` is a recommended property on Google's Product structured data, but
+ * RankMath only fills it from the product_brand taxonomy — which this shop
+ * doesn't use, since every product is our own. Point it at the Organization
+ * node RankMath already emits (@id ...#organization) rather than repeating the
+ * name as a string, so the brand and the seller resolve to one entity.
+ */
+add_filter('rank_math/snippet/rich_snippet_product_entity', function (array $entity): array {
+	if (!isset($entity['brand'])) {
+		$entity['brand'] = ['@id' => home_url('/#organization')];
+	}
+
+	// Quote-on-request products (no price set, so not purchasable) make RankMath
+	// emit `"offers": null`. Google reads that as an *invalid value* rather than
+	// an absent field, which is the louder Search Console error of the two — so
+	// drop the key entirely and let the product fall back to a plain, valid
+	// Product node with no offer.
+	if (array_key_exists('offers', $entity) && empty($entity['offers'])) {
+		unset($entity['offers']);
+	}
+
+	return $entity;
 });

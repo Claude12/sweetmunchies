@@ -1,0 +1,71 @@
+@use "abstracts/mixins" as *;
+@use "base/typography" as *;
+
+// Block: Rich Text (`rte` layout, inc/blocks/rte.php) — long-form prose for
+// editorial pages like the Privacy and Refund policies. The measure is capped
+// well below the container width because legal copy is read line by line, and
+// a 1180px line length is punishing to read.
+
+.rte-block {
+  padding-top: var(--spacer-48);
+  padding-bottom: var(--spacer-64);
+
+  &__content {
+    max-width: 68ch;
+    color: var(--color-text);
+    font-size: $font-size-15-5;
+    line-height: $line-height-relaxed;
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: $font-size-block-heading;
+      font-weight: $font-weight-black;
+      line-height: $line-height-tight;
+      margin: var(--spacer-48) 0 var(--spacer-16);
+    }
+
+    h3 {
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      line-height: $line-height-tight;
+      margin: var(--spacer-32) 0 var(--spacer-8);
+    }
+
+    p,
+    ul,
+    ol {
+      margin: 0 0 var(--spacer-16);
+    }
+
+    ul,
+    ol {
+      padding-left: var(--spacer-24);
+    }
+
+    li {
+      margin-bottom: var(--spacer-8);
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover,
+      &:focus-visible {
+        color: var(--color-primary-dark);
+      }
+    }
+
+    strong {
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
