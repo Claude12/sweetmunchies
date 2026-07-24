@@ -1,0 +1,118 @@
+@use "abstracts/mixins" as *;
+@use "base/typography" as *;
+
+// Block: Process Detail (`process_detail` layout, inc/blocks/process-detail.php)
+// — longer explainer copy in the site's card/badge language, rather than
+// raw prose. Sibling of feature-grid's numbered style, but each card holds a
+// full paragraph instead of a one-line subtext.
+
+.process-detail {
+  padding: 60px 0;
+  position: relative;
+
+  // Photo-backed variant — background-image is set inline (per-row, from
+  // the background_image ACF field), this just adds the cover/position
+  // treatment plus the same overlay gradient the page banner uses, so a
+  // photo section always reads consistently across the site.
+  &--has-image {
+    background-size: cover;
+    background-position: center;
+
+    .process-detail__heading,
+    .process-detail__intro {
+      color: var(--color-white);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(36, 63, 28, 0.82), rgba(210, 20, 76, 0.55));
+  }
+
+  &__container {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__heading {
+    text-align: center;
+    font-size: $font-size-block-heading;
+    font-weight: $font-weight-black;
+    margin: 0 0 var(--spacer-16);
+  }
+
+  &__intro {
+    max-width: 60ch;
+    margin: 0 auto var(--spacer-32);
+    text-align: center;
+    color: var(--color-text-muted);
+    line-height: $line-height-relaxed;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacer-24);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    background: var(--color-white);
+    border-radius: 18px;
+    padding: 28px 24px;
+    box-shadow: 0 6px 18px -12px rgba(36, 63, 28, 0.2);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 28px -14px rgba(36, 63, 28, 0.28);
+    }
+  }
+
+  &__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-pink-tint);
+    font-size: $font-size-lg;
+    margin-bottom: 14px;
+  }
+
+  &__item-title {
+    font-size: $font-size-16;
+    font-weight: $font-weight-bold;
+    margin: 0 0 8px;
+  }
+
+  &__item-text {
+    font-size: $font-size-14;
+    color: var(--color-text-muted);
+    line-height: $line-height-relaxed;
+    margin: 0;
+  }
+
+  // Background variants — one class per choice of the block's
+  // background_color ACF select (default choice adds no class), matching
+  // the same convention used by feature-grid and image-text-block.
+  &--bg-pink-tint {
+    background-color: var(--color-pink-tint);
+  }
+
+  &--bg-green-tint {
+    background-color: var(--color-green-tint);
+  }
+
+  &--bg-cream-alt {
+    background-color: var(--color-cream-alt);
+  }
+
+  &--bg-white {
+    background-color: var(--color-white);
+  }
+}

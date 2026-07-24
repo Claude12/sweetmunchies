@@ -55,8 +55,7 @@
 
     a {
       color: var(--color-primary);
-      text-decoration: underline;
-      text-underline-offset: 2px;
+      text-decoration: none;
 
       &:hover,
       &:focus-visible {

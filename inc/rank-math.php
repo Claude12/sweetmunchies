@@ -107,6 +107,8 @@ add_filter('rank_math/acf/config', function (array $config): array {
 		'field_68f5a100l022' => 3, // feature_grid.items.title -> <h3>
 		'field_68f5a200m011' => 2, // cta_banner.heading -> <h2>
 		'field_68f5b200o011' => 2, // faq_accordion.heading -> <h2>
+		'field_68f5d100q011' => 2, // process_detail.heading -> <h2>
+		'field_68f5d100q022' => 3, // process_detail.items.title -> <h3>
 	];
 
 	return $config;
@@ -126,13 +128,23 @@ add_filter('rank_math/sitemap/cache_mode', function () {
 /**
  * `brand` is a recommended property on Google's Product structured data, but
  * RankMath only fills it from the product_brand taxonomy — which this shop
- * doesn't use, since every product is our own. Point it at the Organization
- * node RankMath already emits (@id ...#organization) rather than repeating the
- * name as a string, so the brand and the seller resolve to one entity.
+ * doesn't use, since every product is our own.
+ *
+ * This deliberately inlines `@type` + `name` instead of pointing an `@id` at
+ * the Organization node RankMath already emits. A bare `{"@id": ...}` reference
+ * is legal JSON-LD and does resolve within the graph, but Google's Product
+ * parser does not follow references for `brand` — it reported it as "Invalid
+ * object type for field 'brand'" in Search Console's Merchant listings report.
+ * The `@id` is kept alongside so the node still merges with the Organization
+ * for consumers that *do* resolve references.
  */
 add_filter('rank_math/snippet/rich_snippet_product_entity', function (array $entity): array {
 	if (!isset($entity['brand'])) {
-		$entity['brand'] = ['@id' => home_url('/#organization')];
+		$entity['brand'] = [
+			'@type' => 'Brand',
+			'@id'   => home_url('/#organization'),
+			'name'  => get_bloginfo('name'),
+		];
 	}
 
 	// Quote-on-request products (no price set, so not purchasable) make RankMath
@@ -142,6 +154,20 @@ add_filter('rank_math/snippet/rich_snippet_product_entity', function (array $ent
 	// Product node with no offer.
 	if (array_key_exists('offers', $entity) && empty($entity['offers'])) {
 		unset($entity['offers']);
+	}
+
+	// `validFrom` — the date this offer started being valid — is a Merchant
+	// listing recommendation RankMath doesn't fill. The product's publish date
+	// is the honest answer: prices here are set once when the box is added and
+	// are not run as time-boxed promotions. Guarded to `Offer` because variable
+	// products emit an AggregateOffer, where a single start date would be a
+	// claim about several prices at once.
+	if (isset($entity['offers']['@type']) && 'Offer' === $entity['offers']['@type']) {
+		$published = get_post_datetime(get_queried_object_id());
+
+		if ($published) {
+			$entity['offers']['validFrom'] = $published->format('Y-m-d');
+		}
 	}
 
 	return $entity;

@@ -62,6 +62,15 @@ function sweetmunchies_setup()
 	// Single product page hero image — 4:5 crop (see woocommerce/content-single-product.php).
 	add_image_size('sweetmunchies_product_hero', 960, 1200, true);
 
+	// Proportional (non-cropped) mid-size candidate, ~400px wide. Core's own
+	// sizes jump straight from `medium` (proportional-scaled to ~225-231px
+	// wide for this site's portrait photos) to WooCommerce's
+	// `woocommerce_single` (600px wide) — a gap Lighthouse flagged as wasted
+	// bytes on the home-hero collage photos, since the closest available
+	// srcset candidate for a small mobile display was 600w. Registering this
+	// fills that gap for any non-cropped image on the site, not just the hero.
+	add_image_size('sweetmunchies_srcset_md', 400, 0, false);
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus(
 		array(
@@ -252,6 +261,11 @@ require get_template_directory() . '/inc/template-functions.php';
  * ACF setup: options pages, flexible-content helpers, admin dependency notice.
  */
 require get_template_directory() . '/inc/acf.php';
+
+/**
+ * Frontend performance tweaks.
+ */
+require get_template_directory() . '/inc/performance.php';
 
 /**
  * WooCommerce integration.

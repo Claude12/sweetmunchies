@@ -20,6 +20,33 @@ defined('ABSPATH') || exit;
 add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
 /**
+ * WooCommerce Blocks unconditionally enqueues its `wc-blocks-style` stylesheet
+ * on every front-end request (Notices::enqueue_notice_styles(), hooked to
+ * wp_head with no page check) — "just in case" a WC block needs it. On this
+ * site only the Cart and Checkout pages actually contain WC block markup
+ * (`wp:woocommerce/cart`, `wp:woocommerce/checkout`) — confirmed via a DB
+ * query across every published page/post — so everywhere else this is pure
+ * render-blocking dead weight (flagged by Lighthouse). Dequeue it except on
+ * the two pages that need it, and on any future page that adds a WC block.
+ * Priority 11 runs right after the priority-10 hook that enqueues it.
+ */
+add_action('wp_head', function () {
+	if (is_cart() || is_checkout()) {
+		return;
+	}
+
+	if (is_singular()) {
+		$post = get_queried_object();
+		if ($post instanceof WP_Post && str_contains((string) $post->post_content, 'wp:woocommerce/')) {
+			return;
+		}
+	}
+
+	wp_dequeue_style('wc-blocks-style');
+	wp_deregister_style('wc-blocks-style');
+}, 11);
+
+/**
  * There is no on-site checkout or account area — orders are confirmed over
  * WhatsApp (see page-cart.php). WooCommerce still requires its Checkout and
  * My Account pages to exist, but page.php only renders ACF content sections,
